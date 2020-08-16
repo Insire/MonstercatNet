@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>SoftThorn.MonstercatNet</RootNamespace>
+    <AssemblyName>MonstercatNet</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="refit" Version="5.1.67" />
+  </ItemGroup>
+</Project>
