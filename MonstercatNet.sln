@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30406.217
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonstercatNet", "Monstercat.Net\MonstercatNet.csproj", "{9BD7B974-9FDA-45FA-BECC-B096591073A2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonstercatNet", "MonstercatNet\MonstercatNet.csproj", "{9BD7B974-9FDA-45FA-BECC-B096591073A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
