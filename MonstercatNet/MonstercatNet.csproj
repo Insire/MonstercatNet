@@ -4,9 +4,10 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>SoftThorn.MonstercatNet</RootNamespace>
     <AssemblyName>MonstercatNet</AssemblyName>
+    <UserSecretsId>22e58e80-d842-49c1-99f8-aedad6e52802</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="refit" Version="5.1.67" />
+    <PackageReference Include="refit" Version="5.2.1" />
   </ItemGroup>
 </Project>

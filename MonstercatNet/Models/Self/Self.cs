@@ -2,28 +2,28 @@
 
 namespace SoftThorn.MonstercatNet
 {
-    public class Self
+    public sealed class Self
     {
-        public bool admin { get; set; }
-        public DateTime birthday { get; set; }
-        public DateTime createdAt { get; set; }
-        public string discordId { get; set; }
-        public string email { get; set; }
-        public object[] emailOptins { get; set; }
-        public string emailVerificationStatus { get; set; }
-        public bool freeGold { get; set; }
-        public string googleMapsPlaceId { get; set; }
-        public bool hasDownload { get; set; }
-        public bool hasGold { get; set; }
-        public string id { get; set; }
-        public string lastSeen { get; set; }
-        public int maxLicenses { get; set; }
-        public string placeName { get; set; }
-        public string placeNameFull { get; set; }
-        public string realName { get; set; }
-        public Settings settings { get; set; }
-        public Subscription subscription { get; set; }
-        public string twoFactorState { get; set; }
-        public string username { get; set; }
+        public bool Admin { get; set; }
+        public DateTime Birthday { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public string DiscordId { get; set; }
+        public string Email { get; set; }
+        public object[] EmailOptins { get; set; }
+        public string EmailVerificationStatus { get; set; }
+        public bool FreeGold { get; set; }
+        public string GoogleMapsPlaceId { get; set; }
+        public bool HasDownload { get; set; }
+        public bool HasGold { get; set; }
+        public string Id { get; set; }
+        public string LastSeen { get; set; }
+        public int MaxLicenses { get; set; }
+        public string PlaceName { get; set; }
+        public string PlaceNameFull { get; set; }
+        public string RealName { get; set; }
+        public Settings Settings { get; set; }
+        public Subscription Subscription { get; set; }
+        public string TwoFactorState { get; set; }
+        public string Username { get; set; }
     }
 }
