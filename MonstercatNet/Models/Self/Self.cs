@@ -9,7 +9,7 @@ namespace SoftThorn.MonstercatNet
         public DateTime CreatedAt { get; set; }
         public string DiscordId { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
-        public object[] EmailOptins { get; set; }
+        public object[]? EmailOptins { get; set; }
         public string EmailVerificationStatus { get; set; } = string.Empty;
         public bool FreeGold { get; set; }
         public string GoogleMapsPlaceId { get; set; } = string.Empty;
@@ -21,8 +21,8 @@ namespace SoftThorn.MonstercatNet
         public string PlaceName { get; set; } = string.Empty;
         public string PlaceNameFull { get; set; } = string.Empty;
         public string RealName { get; set; } = string.Empty;
-        public Settings Settings { get; set; }
-        public Subscription Subscription { get; set; }
+        public Settings? Settings { get; set; }
+        public Subscription? Subscription { get; set; }
         public string TwoFactorState { get; set; } = string.Empty;
         public string Username { get; set; } = string.Empty;
     }

@@ -52,9 +52,14 @@ namespace SoftThorn.MonstercatNet
         [Get("/release/{request.ReleaseId}/cover")]
         Task<HttpContent> GetReleaseCover([Query] ReleaseCoverRequest request);
 
-        // /release/[releaseId]/track-stream
+        /// <summary>
+        /// TODO
+        /// </summary>
+        /// <param name="releaseId"><see cref="Release.Id"/></param>
+        [Get("/release/{request.ReleaseId}/download")]
+        Task<HttpContent> DownloadRelease([Query] ReleaseDownloadRequest request);
 
-        // /release/[releaseId]/download
+        // /release/[releaseId]/track-stream
 
         // /release/[releaseId]/track-download/[trackId]
 

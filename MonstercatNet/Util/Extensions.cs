@@ -18,5 +18,19 @@ namespace SoftThorn.MonstercatNet
 
             return await content.ReadAsStreamAsync().ConfigureAwait(false);
         }
+
+        public static async Task<byte[]> DownloadReleaseAsByteArray(this IMonstercatApi api, ReleaseDownloadRequest request)
+        {
+            var content = await api.DownloadRelease(request).ConfigureAwait(false);
+
+            return await content.ReadAsByteArrayAsync().ConfigureAwait(false);
+        }
+
+        public static async Task<Stream> DownloadReleaseAsStream(this IMonstercatApi api, ReleaseDownloadRequest request)
+        {
+            var content = await api.DownloadRelease(request).ConfigureAwait(false);
+
+            return await content.ReadAsStreamAsync().ConfigureAwait(false);
+        }
     }
 }

@@ -1,7 +1,6 @@
 using NUnit.Framework;
 using System;
 using System.IO;
-using System.Net.WebSockets;
 using System.Threading.Tasks;
 
 namespace SoftThorn.MonstercatNet.Tests
@@ -100,17 +99,34 @@ namespace SoftThorn.MonstercatNet.Tests
 
             Assert.IsNotNull(cover);
 
-            using (var ms = new MemoryStream())
+            var result = cover.ToByteArray();
+            Assert.IsTrue(result.Length > 0);
+        }
+
+        [Test, Order(9)]
+        public async Task Test_DownloadReleaseAsByteArray()
+        {
+            var release = await Api.DownloadReleaseAsByteArray(new ReleaseDownloadRequest()
             {
-                var buffer = new byte[16 * 1024];
-                int read;
-                while ((read = cover.Read(buffer, 0, buffer.Length)) > 0)
-                {
-                    ms.Write(buffer, 0, read);
-                }
-                var result = ms.ToArray();
-                Assert.IsTrue(result.Length > 0);
-            }
+                ReleaseId = Guid.Parse("466c62cd-cfa8-457d-9dbf-66db101d73a6"),
+            });
+
+            Assert.IsNotNull(release);
+            Assert.IsTrue(release.Length > 0);
+        }
+
+        [Test, Order(10)]
+        public async Task Test_DownloadReleaseAsStream()
+        {
+            var release = await Api.DownloadReleaseAsStream(new ReleaseDownloadRequest()
+            {
+                ReleaseId = Guid.Parse("466c62cd-cfa8-457d-9dbf-66db101d73a6"),
+            });
+
+            Assert.IsNotNull(release);
+
+            var result = release.ToByteArray();
+            Assert.IsTrue(result.Length > 0);
         }
 
         [Test, Order(999)]

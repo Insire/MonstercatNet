@@ -93,5 +93,10 @@ namespace SoftThorn.MonstercatNet
         {
             return _service.GetReleaseCover(request);
         }
+
+        public Task<HttpContent> DownloadRelease(ReleaseDownloadRequest request)
+        {
+            return _service.DownloadRelease(request);
+        }
     }
 }
