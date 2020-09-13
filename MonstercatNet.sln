@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30406.217
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonstercatNet", "MonstercatNet\MonstercatNet.csproj", "{9BD7B974-9FDA-45FA-BECC-B096591073A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonstercatNet.Tests", "MonstercatNet.Tests\MonstercatNet.Tests.csproj", "{53671388-8198-4012-93D0-300D8E24D842}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonstercatNet.Tests", "MonstercatNet.Tests\MonstercatNet.Tests.csproj", "{53671388-8198-4012-93D0-300D8E24D842}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

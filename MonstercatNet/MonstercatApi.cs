@@ -5,25 +5,20 @@ using System.Threading.Tasks;
 
 namespace SoftThorn.MonstercatNet
 {
+    // https://github.com/defvs/connect-v2-docs/wiki/Log-in-out-and-session
     // TODO auto login-> TODO retrieve cookie expiration
     public sealed class MonstercatApi : IMonstercatApi
     {
+        // v2.0.0 as first release
+        // ignore schema hanges, if they happen and just release a new version
         private const string BaseUrl = "https://connect.monstercat.com/v2/";
 
-        /// <summary>
-        /// Generate the client to be able to interact with the monstercat api. Comes with logging to Debug builtin
-        /// </summary>
-        /// <returns></returns>
-        public static IMonstercatApi Create()
-        {
-            return Create(new HttpClient(new HttpLoggingHandler()));
-        }
+        private static readonly RefitSettings _settings = new RefitSettings(new NewtonsoftJsonContentSerializer(), new DefaultUrlParameterFormatter(), new DefaultFormUrlEncodedParameterFormatter());
 
         /// <summary>
         /// Generate the client to be able to interact with the monstercat api
         /// </summary>
         /// <param name="client">the httpclient to use for all requests</param>
-        /// <returns></returns>
         /// <remarks>
         /// the httpclient stores an sid as cookie, so the instance should be reused for all requests to the api
         /// </remarks>
@@ -36,56 +31,34 @@ namespace SoftThorn.MonstercatNet
 
             client.BaseAddress = new Uri(BaseUrl);
 
-            return new MonstercatApi(RestService.For<IMonstercatApi>(client), client);
+            return new MonstercatApi(RestService.For<IMonstercatApi>(client, _settings));
         }
 
         private readonly IMonstercatApi _service;
-        private readonly HttpClient _httpClient;
 
-        public bool IsLoggedIn { get; private set; }
-
-        private MonstercatApi(IMonstercatApi service, HttpClient httpClient)
+        private MonstercatApi(IMonstercatApi service)
         {
             _service = service ?? throw new ArgumentNullException(nameof(service));
-            _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         }
 
-        public async Task Login([Body(BodySerializationMethod.Serialized)] ApiCredentials credentials)
+        public Task Login([Body(BodySerializationMethod.Serialized)] ApiCredentials credentials)
         {
-            try
-            {
-                await _service.Login(credentials).ConfigureAwait(false);
-                IsLoggedIn = true; // quite the optimistic approach. needs to be expanded to actually checking cookie in the httpclient
-            }
-            catch
-            {
-                IsLoggedIn = false;
-                throw;
-            }
+            return _service.Login(credentials);
         }
 
-        public async Task Logout()
+        public Task Logout()
         {
-            try
-            {
-                await _service.Logout().ConfigureAwait(false);
-                IsLoggedIn = false; // quite the optimistic approach. needs to be expanded to actually checking cookie in the httpclient
-            }
-            catch
-            {
-                IsLoggedIn = true;
-                throw;
-            }
+            return _service.Logout();
         }
 
-        public Task Login2FA(string token)
+        public Task Login(string twoFactorAuthToken)
         {
-            return _service.Login2FA(token);
+            return _service.Login(twoFactorAuthToken);
         }
 
-        public Task Resend2FA(string token)
+        public Task Resend(string twoFactorAuthToken)
         {
-            return _service.Resend2FA(token);
+            return _service.Resend(twoFactorAuthToken);
         }
 
         public Task<Self> GetSelf()
@@ -93,14 +66,27 @@ namespace SoftThorn.MonstercatNet
             return _service.GetSelf();
         }
 
-        public Task<PlaylistBrowseResult> GetSelfPlaylists()
+        public Task<TrackFilters> GetTrackSearchFilters()
         {
-            return _service.GetSelfPlaylists();
+            return _service.GetTrackSearchFilters();
         }
 
-        public Task<ReleaseBrowseResult> GetReleases()
+        /// <summary>
+        /// return tracks in the catalog, in reverse chronological order (newest first)
+        /// </summary>
+        public Task<TrackSearchResult> SearchTracks(TrackSearchRequest request)
         {
-            return _service.GetReleases();
+            return _service.SearchTracks(request);
         }
+
+        //public Task<PlaylistBrowseResult> GetSelfPlaylists()
+        //{
+        //    return _service.GetSelfPlaylists();
+        //}
+
+        //public Task<ReleaseBrowseResult> GetReleases()
+        //{
+        //    return _service.GetReleases();
+        //}
     }
 }

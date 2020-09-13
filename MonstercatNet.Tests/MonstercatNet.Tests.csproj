@@ -6,7 +6,7 @@
     <IsPackable>false</IsPackable>
 
     <AssemblyName>MonstercatNet.Tests</AssemblyName>
-
+    <RootNamespace>SoftThorn.MonstercatNet.Tests</RootNamespace>
     <UserSecretsId>9dfbdf72-99cd-4fca-8738-65ff4a71d20d</UserSecretsId>
   </PropertyGroup>
 

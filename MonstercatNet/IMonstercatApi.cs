@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 
 namespace SoftThorn.MonstercatNet
 {
+    // https://reactiveui.github.io/refit/
     public interface IMonstercatApi
     {
         [Post("/signin")]
@@ -15,26 +16,29 @@ namespace SoftThorn.MonstercatNet
         /// 2FA Authorization
         /// </summary>
         [Post("/signin/token")]
-        Task Login2FA(string token);
+        Task Login(string twoFactorAuthToken);
 
         /// <summary>
         /// resend 2FA Authorization
         /// </summary>
         [Post("/signin/token/resend")]
-        Task Resend2FA(string token);
+        Task Resend(string twoFactorAuthToken);
 
         [Get("/self")]
         Task<Self> GetSelf();
 
-        [Get("/self/playlists")]
-        Task<PlaylistBrowseResult> GetSelfPlaylists();
+        //[Get("/self/playlists")]
+        //Task<PlaylistBrowseResult> GetSelfPlaylists();
 
-        [Get("/releases")]
-        Task<ReleaseBrowseResult> GetReleases();
+        //[Get("/releases")]
+        //Task<ReleaseBrowseResult> GetReleases();
 
-        // /catalog/browse
+        [Get("/catalog/filters")]
+        Task<TrackFilters> GetTrackSearchFilters();
 
-        // /catalog/filters
+        // https://connect.monstercat.com/v2/catalog/browse?type=EP;genre=Dance;tag=Dark
+        [Get("/catalog/browse")]
+        Task<TrackSearchResult> SearchTracks([Query(CollectionFormat = CollectionFormat.Csv)] TrackSearchRequest request);
 
         // /catalog/release/[catalogId]
 

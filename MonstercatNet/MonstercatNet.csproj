@@ -2,12 +2,71 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <OutputType>Library</OutputType>
     <RootNamespace>SoftThorn.MonstercatNet</RootNamespace>
     <AssemblyName>MonstercatNet</AssemblyName>
-    <UserSecretsId>22e58e80-d842-49c1-99f8-aedad6e52802</UserSecretsId>
+    <LangVersion>8.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+
+    <Description>Monstercat.Net is a .Net wrapper around the monstercat REST api.</Description>
+    <PackageTags>C#,Library,.NET,OSS,OpenSource</PackageTags>
+    <Company>SoftThorn</Company>
+    <Authors>Peter Vietense</Authors>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Product>Monstercat.Net</Product>
+    <RepositoryType>git</RepositoryType>
+    <PackageReleaseNotes></PackageReleaseNotes>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <CodeAnalysisRuleSet>..\MonstercatNet.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <!--    NuGet Package creation    -->
+
+  <PropertyGroup Condition="'$(GeneratePackageOnBuild)' == 'True'">
+    <!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+
+    <!-- Optional: Embed source files that are not tracked by the source control manager in the PDB -->
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+
+    <!-- Optional: Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <Target Name="ForceGenerationOfBindingRedirects" AfterTargets="ResolveAssemblyReferences" BeforeTargets="GenerateBindingRedirects" Condition="'$(AutoGenerateBindingRedirects)' == 'True'">
+    <PropertyGroup>
+      <GenerateBindingRedirectsOutputType>True</GenerateBindingRedirectsOutputType>
+    </PropertyGroup>
+  </Target>
 
   <ItemGroup>
     <PackageReference Include="refit" Version="5.2.1" />
+
+    <PackageReference Include="Roslynator.Analyzers" Version="2.3.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+
+    <PackageReference Include="IDisposableAnalyzers" Version="3.4.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+
+    <PackageReference Include="Nerdbank.GitVersioning" Version="3.2.31">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 </Project>

@@ -1,8 +1,8 @@
 ﻿namespace SoftThorn.MonstercatNet
 {
-    public class Subscription
+    public sealed class Subscription
     {
-        public Optins optins { get; set; }
-        public string status { get; set; }
+        public Optins Optins { get; set; }
+        public string Status { get; set; } = string.Empty;
     }
 }
