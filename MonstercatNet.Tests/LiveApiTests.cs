@@ -76,6 +76,18 @@ namespace SoftThorn.MonstercatNet.Tests
             Assert.IsTrue(release.Tracks.Length == 1);
         }
 
+        [Test, Order(7)]
+        public async Task Test_GetReleaseCover()
+        {
+            var cover = await Api.GetReleaseCoverAsByteArray(new ReleaseCoverRequest()
+            {
+                ReleaseId = Guid.Parse("466c62cd-cfa8-457d-9dbf-66db101d73a6"),
+            });
+
+            Assert.IsNotNull(cover);
+            Assert.IsTrue(cover.Length > 0);
+        }
+
         [Test, Order(999)]
         public async Task Test_Logout()
         {
