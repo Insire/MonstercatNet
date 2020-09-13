@@ -1,6 +1,5 @@
 using NUnit.Framework;
 using System;
-using System.IO;
 using System.Threading.Tasks;
 
 namespace SoftThorn.MonstercatNet.Tests
@@ -121,6 +120,36 @@ namespace SoftThorn.MonstercatNet.Tests
             var release = await Api.DownloadReleaseAsStream(new ReleaseDownloadRequest()
             {
                 ReleaseId = Guid.Parse("466c62cd-cfa8-457d-9dbf-66db101d73a6"),
+            });
+
+            Assert.IsNotNull(release);
+
+            var result = release.ToByteArray();
+            Assert.IsTrue(result.Length > 0);
+        }
+
+        // requires active gold subscription
+        [Test, Order(11)]
+        public async Task Test_DownloadTrackAsByteArray()
+        {
+            var release = await Api.DownloadTrackAsByteArray(new TrackDownloadRequest()
+            {
+                ReleaseId = Guid.Parse("09497970-9679-4ea6-930d-e1bf22cfc994"),
+                TrackId = Guid.Parse("c8d3abc3-1668-42de-b832-b58ca6cc883f")
+            });
+
+            Assert.IsNotNull(release);
+            Assert.IsTrue(release.Length > 0);
+        }
+
+        // requires active gold subscription
+        [Test, Order(12)]
+        public async Task Test_DownloadTrackAsStream()
+        {
+            var release = await Api.DownloadTrackAsStream(new TrackDownloadRequest()
+            {
+                ReleaseId = Guid.Parse("09497970-9679-4ea6-930d-e1bf22cfc994"),
+                TrackId = Guid.Parse("c8d3abc3-1668-42de-b832-b58ca6cc883f")
             });
 
             Assert.IsNotNull(release);

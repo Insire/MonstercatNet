@@ -98,5 +98,10 @@ namespace SoftThorn.MonstercatNet
         {
             return _service.DownloadRelease(request);
         }
+
+        public Task<HttpContent> DownloadTrack([Query] TrackDownloadRequest request)
+        {
+            return _service.DownloadTrack(request);
+        }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace SoftThorn.MonstercatNet.Models
+namespace SoftThorn.MonstercatNet
 {
     public enum FileFormat
     {

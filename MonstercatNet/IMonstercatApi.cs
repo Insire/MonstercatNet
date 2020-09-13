@@ -1,5 +1,4 @@
 ﻿using Refit;
-using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -46,18 +45,22 @@ namespace SoftThorn.MonstercatNet
         Task<ReleaseResult> GetRelease([Query] string catalogId);
 
         /// <summary>
-        /// TODO
+        /// returns a jpg
         /// </summary>
-        /// <param name="releaseId"><see cref="Release.Id"/></param>
         [Get("/release/{request.ReleaseId}/cover")]
         Task<HttpContent> GetReleaseCover([Query] ReleaseCoverRequest request);
 
         /// <summary>
-        /// TODO
+        /// returns as zip file as byte array
         /// </summary>
-        /// <param name="releaseId"><see cref="Release.Id"/></param>
         [Get("/release/{request.ReleaseId}/download")]
         Task<HttpContent> DownloadRelease([Query] ReleaseDownloadRequest request);
+
+        /// <summary>
+        /// gold subscription required
+        /// </summary>
+        [Get("/release/{request.ReleaseId}/track-download/{request.TrackId}")]
+        Task<HttpContent> DownloadTrack([Query] TrackDownloadRequest request);
 
         // /release/[releaseId]/track-stream
 

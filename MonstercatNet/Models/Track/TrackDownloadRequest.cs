@@ -3,11 +3,13 @@ using System;
 
 namespace SoftThorn.MonstercatNet
 {
-    public sealed class ReleaseDownloadRequest
+    public sealed class TrackDownloadRequest
     {
         [AliasAs("format")]
         public FileFormat Format { get; set; } = FileFormat.flac;
 
         public Guid ReleaseId { get; set; }
+
+        public Guid TrackId { get; set; }
     }
 }
