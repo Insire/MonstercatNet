@@ -84,9 +84,9 @@ namespace SoftThorn.MonstercatNet
         //    return _service.GetSelfPlaylists();
         //}
 
-        //public Task<ReleaseBrowseResult> GetReleases()
-        //{
-        //    return _service.GetReleases();
-        //}
+        public Task<ReleaseBrowseResult> GetReleases(ReleaseBrowseRequest request)
+        {
+            return _service.GetReleases(request);
+        }
     }
 }

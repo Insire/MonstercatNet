@@ -28,9 +28,9 @@ namespace SoftThorn.MonstercatNet.Tests
             var filters = await Api.GetTrackSearchFilters();
 
             Assert.IsNotNull(filters);
-            Assert.IsNotNull(filters.Genres.Length > 0);
-            Assert.IsNotNull(filters.Tags.Length > 0);
-            Assert.IsNotNull(filters.Types.Length > 0);
+            Assert.IsTrue(filters.Genres.Length > 0);
+            Assert.IsTrue(filters.Tags.Length > 0);
+            Assert.IsTrue(filters.Types.Length > 0);
         }
 
         [Test, Order(4)]
@@ -49,6 +49,20 @@ namespace SoftThorn.MonstercatNet.Tests
             Assert.IsNotNull(tracks);
             Assert.AreEqual(1, tracks.Results.Length);
             Assert.AreEqual(Guid.Parse("c8d3abc3-1668-42de-b832-b58ca6cc883f"), tracks.Results[0].Id);
+        }
+
+        [Test, Order(3)]
+        public async Task Test_GetReleases()
+        {
+            var releases = await Api.GetReleases(new ReleaseBrowseRequest()
+            {
+                Limit = 1,
+                Skip = 0
+            });
+
+            Assert.IsNotNull(releases);
+            Assert.IsTrue(releases.Results.Length == 1);
+            Assert.IsNotNull(releases.Results[0]);
         }
 
         [Test, Order(999)]

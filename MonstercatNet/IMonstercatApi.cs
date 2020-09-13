@@ -30,13 +30,12 @@ namespace SoftThorn.MonstercatNet
         //[Get("/self/playlists")]
         //Task<PlaylistBrowseResult> GetSelfPlaylists();
 
-        //[Get("/releases")]
-        //Task<ReleaseBrowseResult> GetReleases();
+        [Get("/releases")]
+        Task<ReleaseBrowseResult> GetReleases([Query] ReleaseBrowseRequest request);
 
         [Get("/catalog/filters")]
         Task<TrackFilters> GetTrackSearchFilters();
 
-        // https://connect.monstercat.com/v2/catalog/browse?type=EP;genre=Dance;tag=Dark
         [Get("/catalog/browse")]
         Task<TrackSearchResult> SearchTracks([Query(CollectionFormat = CollectionFormat.Csv)] TrackSearchRequest request);
 
