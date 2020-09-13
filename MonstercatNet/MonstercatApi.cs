@@ -94,11 +94,17 @@ namespace SoftThorn.MonstercatNet
             return _service.GetReleaseCover(request);
         }
 
+        /// <summary>
+        /// gold membership required
+        /// </summary>
         public Task<HttpContent> DownloadRelease(ReleaseDownloadRequest request)
         {
             return _service.DownloadRelease(request);
         }
 
+        /// <summary>
+        /// gold membership required
+        /// </summary>
         public Task<HttpContent> DownloadTrack([Query] TrackDownloadRequest request)
         {
             return _service.DownloadTrack(request);

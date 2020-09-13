@@ -102,6 +102,7 @@ namespace SoftThorn.MonstercatNet.Tests
             Assert.IsTrue(result.Length > 0);
         }
 
+        // requires active gold subscription
         [Test, Order(9)]
         public async Task Test_DownloadReleaseAsByteArray()
         {
@@ -114,6 +115,7 @@ namespace SoftThorn.MonstercatNet.Tests
             Assert.IsTrue(release.Length > 0);
         }
 
+        // requires active gold subscription
         [Test, Order(10)]
         public async Task Test_DownloadReleaseAsStream()
         {
