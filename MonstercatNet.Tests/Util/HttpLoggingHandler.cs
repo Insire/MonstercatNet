@@ -99,7 +99,7 @@ namespace SoftThorn.MonstercatNet.Tests
             return response;
         }
 
-        private readonly string[] types = new[] { "html", "text", "xml", "json", "txt", "x-www-form-urlencoded" };
+        private readonly string[] _types = new[] { "html", "text", "xml", "json", "txt", "x-www-form-urlencoded" };
 
         private bool IsTextBasedContentType(HttpHeaders headers)
         {
@@ -110,7 +110,7 @@ namespace SoftThorn.MonstercatNet.Tests
 
             var header = string.Join(" ", values).ToLowerInvariant();
 
-            return types.Any(t => header.Contains(t));
+            return _types.Any(t => header.Contains(t));
         }
     }
 }

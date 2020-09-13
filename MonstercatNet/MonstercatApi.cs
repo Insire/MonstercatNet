@@ -5,12 +5,8 @@ using System.Threading.Tasks;
 
 namespace SoftThorn.MonstercatNet
 {
-    // https://github.com/defvs/connect-v2-docs/wiki/Log-in-out-and-session
-    // TODO auto login-> TODO retrieve cookie expiration
     public sealed class MonstercatApi : IMonstercatApi
     {
-        // v2.0.0 as first release
-        // ignore schema hanges, if they happen and just release a new version
         private const string BaseUrl = "https://connect.monstercat.com/v2/";
 
         private static readonly RefitSettings _settings = new RefitSettings(new NewtonsoftJsonContentSerializer(), new DefaultUrlParameterFormatter(), new DefaultFormUrlEncodedParameterFormatter());

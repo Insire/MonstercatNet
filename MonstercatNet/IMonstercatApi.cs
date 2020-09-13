@@ -4,12 +4,17 @@ using System.Threading.Tasks;
 
 namespace SoftThorn.MonstercatNet
 {
-    // https://reactiveui.github.io/refit/
     public interface IMonstercatApi
     {
+        /// <summary>
+        /// authenticate the given HttpClient instance with the provided credentials
+        /// </summary>
         [Post("/signin")]
         Task Login([Body(BodySerializationMethod.Serialized)] ApiCredentials credentials);
 
+        /// <summary>
+        /// signout
+        /// </summary>
         [Post("/signout")]
         Task Logout();
 
@@ -25,20 +30,32 @@ namespace SoftThorn.MonstercatNet
         [Post("/signin/token/resend")]
         Task Resend(string twoFactorAuthToken);
 
+        /// <summary>
+        /// fetch account info
+        /// </summary>
         [Get("/self")]
         Task<Self> GetSelf();
 
+        /// <summary>
+        /// fetch available filters for track browsing
+        /// </summary>
         [Get("/catalog/filters")]
         Task<TrackFilters> GetTrackSearchFilters();
 
+        /// <summary>
+        /// browse tracks
+        /// </summary>
         [Get("/catalog/browse")]
         Task<TrackSearchResult> SearchTracks([Query(CollectionFormat = CollectionFormat.Csv)] TrackSearchRequest request);
 
+        /// <summary>
+        /// fetch all releases
+        /// </summary>
         [Get("/releases")]
         Task<ReleaseBrowseResult> GetReleases([Query] ReleaseBrowseRequest request);
 
         /// <summary>
-        /// TODO
+        /// fetch a specific release via its id
         /// </summary>
         /// <param name="catalogId"><see cref="Release.CatalogId"/></param>
         [Get("/catalog/release/{catalogId}")]
