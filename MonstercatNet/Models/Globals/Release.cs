@@ -16,6 +16,6 @@ namespace SoftThorn.MonstercatNet
         public string Title { get; set; } = string.Empty;
         public string Type { get; set; } = string.Empty;
         public string Version { get; set; } = string.Empty;
-        public object[]? Links { get; set; }
+        public Link[]? Links { get; set; }
     }
 }

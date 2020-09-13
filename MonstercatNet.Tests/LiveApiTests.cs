@@ -51,7 +51,7 @@ namespace SoftThorn.MonstercatNet.Tests
             Assert.AreEqual(Guid.Parse("c8d3abc3-1668-42de-b832-b58ca6cc883f"), tracks.Results[0].Id);
         }
 
-        [Test, Order(3)]
+        [Test, Order(5)]
         public async Task Test_GetReleases()
         {
             var releases = await Api.GetReleases(new ReleaseBrowseRequest()
@@ -63,6 +63,17 @@ namespace SoftThorn.MonstercatNet.Tests
             Assert.IsNotNull(releases);
             Assert.IsTrue(releases.Results.Length == 1);
             Assert.IsNotNull(releases.Results[0]);
+        }
+
+        [Test, Order(6)]
+        public async Task Test_GetRelease()
+        {
+            var release = await Api.GetRelease("MCRLX001-8");
+
+            Assert.IsNotNull(release);
+            Assert.IsNotNull(release.Release);
+            Assert.IsNotNull(release.Tracks);
+            Assert.IsTrue(release.Tracks.Length == 1);
         }
 
         [Test, Order(999)]

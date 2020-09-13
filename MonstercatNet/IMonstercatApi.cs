@@ -1,4 +1,5 @@
 ﻿using Refit;
+using System;
 using System.Threading.Tasks;
 
 namespace SoftThorn.MonstercatNet
@@ -27,19 +28,17 @@ namespace SoftThorn.MonstercatNet
         [Get("/self")]
         Task<Self> GetSelf();
 
-        //[Get("/self/playlists")]
-        //Task<PlaylistBrowseResult> GetSelfPlaylists();
-
-        [Get("/releases")]
-        Task<ReleaseBrowseResult> GetReleases([Query] ReleaseBrowseRequest request);
-
         [Get("/catalog/filters")]
         Task<TrackFilters> GetTrackSearchFilters();
 
         [Get("/catalog/browse")]
         Task<TrackSearchResult> SearchTracks([Query(CollectionFormat = CollectionFormat.Csv)] TrackSearchRequest request);
 
-        // /catalog/release/[catalogId]
+        [Get("/releases")]
+        Task<ReleaseBrowseResult> GetReleases([Query] ReleaseBrowseRequest request);
+
+        [Get("/catalog/release/{catalogId}")]
+        Task<ReleaseResult> GetRelease([Query] string catalogId);
 
         // /release/[releaseId]/cover
 
@@ -52,5 +51,8 @@ namespace SoftThorn.MonstercatNet
         // /playlist/[playlistId]
 
         // /playlist/[playlistId]/catalog
+
+        //[Get("/self/playlists")]
+        //Task<PlaylistBrowseResult> GetSelfPlaylists();
     }
 }

@@ -79,14 +79,14 @@ namespace SoftThorn.MonstercatNet
             return _service.SearchTracks(request);
         }
 
-        //public Task<PlaylistBrowseResult> GetSelfPlaylists()
-        //{
-        //    return _service.GetSelfPlaylists();
-        //}
-
         public Task<ReleaseBrowseResult> GetReleases(ReleaseBrowseRequest request)
         {
             return _service.GetReleases(request);
+        }
+
+        public Task<ReleaseResult> GetRelease(string catalogId)
+        {
+            return _service.GetRelease(catalogId);
         }
     }
 }
