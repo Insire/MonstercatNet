@@ -1,4 +1,4 @@
-﻿using Refit;
+using Refit;
 
 namespace SoftThorn.MonstercatNet
 {
@@ -14,7 +14,8 @@ namespace SoftThorn.MonstercatNet
         [AliasAs("limit")]
         public int Limit
         {
-            get => _limit; set
+            get { return _limit; }
+            set
             {
                 if (value > MaxLimit)
                 {
@@ -38,7 +39,7 @@ namespace SoftThorn.MonstercatNet
         [AliasAs("skip")]
         public int Skip
         {
-            get => _skip;
+            get { return _skip; }
             set
             {
                 if (Skip < 0)
