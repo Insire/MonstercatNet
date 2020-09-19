@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -17,3 +17,4 @@ using System.Runtime.InteropServices;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("5B5FFAA9-AD1F-4756-A84F-83FFCBF5D46A")]
+[assembly: InternalsVisibleTo("MonstercatNet.Tests")]

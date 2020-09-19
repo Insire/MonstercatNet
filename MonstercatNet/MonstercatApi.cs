@@ -1,4 +1,4 @@
-﻿using Refit;
+using Refit;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -34,11 +34,16 @@ namespace SoftThorn.MonstercatNet
 
         private MonstercatApi(IMonstercatApi service)
         {
-            _service = service ?? throw new ArgumentNullException(nameof(service));
+            _service = service;
         }
 
         public Task Login([Body(BodySerializationMethod.Serialized)] ApiCredentials credentials)
         {
+            if (credentials is null)
+            {
+                throw new ArgumentNullException(nameof(credentials));
+            }
+
             return _service.Login(credentials);
         }
 
@@ -49,11 +54,31 @@ namespace SoftThorn.MonstercatNet
 
         public Task Login(string twoFactorAuthToken)
         {
+            if (twoFactorAuthToken is null)
+            {
+                throw new ArgumentNullException(nameof(twoFactorAuthToken));
+            }
+
+            if (twoFactorAuthToken.Length == 0)
+            {
+                throw new ArgumentNullException(nameof(twoFactorAuthToken));
+            }
+
             return _service.Login(twoFactorAuthToken);
         }
 
         public Task Resend(string twoFactorAuthToken)
         {
+            if (twoFactorAuthToken is null)
+            {
+                throw new ArgumentNullException(nameof(twoFactorAuthToken));
+            }
+
+            if (twoFactorAuthToken.Length == 0)
+            {
+                throw new ArgumentNullException(nameof(twoFactorAuthToken));
+            }
+
             return _service.Resend(twoFactorAuthToken);
         }
 
@@ -72,21 +97,46 @@ namespace SoftThorn.MonstercatNet
         /// </summary>
         public Task<TrackSearchResult> SearchTracks(TrackSearchRequest request)
         {
+            if (request is null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
             return _service.SearchTracks(request);
         }
 
         public Task<ReleaseBrowseResult> GetReleases(ReleaseBrowseRequest request)
         {
+            if (request is null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
             return _service.GetReleases(request);
         }
 
         public Task<ReleaseResult> GetRelease(string catalogId)
         {
+            if (catalogId is null)
+            {
+                throw new ArgumentNullException(nameof(catalogId));
+            }
+
+            if (catalogId.Length == 0)
+            {
+                throw new ArgumentNullException(nameof(catalogId));
+            }
+
             return _service.GetRelease(catalogId);
         }
 
         public Task<HttpContent> GetReleaseCover(ReleaseCoverRequest request)
         {
+            if (request is null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
             return _service.GetReleaseCover(request);
         }
 
@@ -95,6 +145,11 @@ namespace SoftThorn.MonstercatNet
         /// </summary>
         public Task<HttpContent> DownloadRelease(ReleaseDownloadRequest request)
         {
+            if (request is null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
             return _service.DownloadRelease(request);
         }
 
@@ -103,6 +158,11 @@ namespace SoftThorn.MonstercatNet
         /// </summary>
         public Task<HttpContent> DownloadTrack([Query] TrackDownloadRequest request)
         {
+            if (request is null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
             return _service.DownloadTrack(request);
         }
     }

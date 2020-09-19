@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
 using System.Net.Http;
 
@@ -6,7 +6,7 @@ namespace SoftThorn.MonstercatNet.Tests
 {
     public abstract class TestBase
     {
-        public static IMonstercatApi Create()
+        private static IMonstercatApi Create()
         {
             return MonstercatApi.Create(new HttpClient(new HttpLoggingHandler()));
         }

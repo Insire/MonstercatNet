@@ -4,8 +4,9 @@ namespace SoftThorn.MonstercatNet
 {
     public abstract class RequestBase
     {
-        private const int MaxLimit = 50;
-        private const int MinLimit = 1;
+        internal const int MaxLimit = 50;
+        internal const int MinLimit = 1;
+        internal const int MinSkip = 0;
 
         private int _limit = MaxLimit;
         /// <summary>
@@ -35,16 +36,16 @@ namespace SoftThorn.MonstercatNet
             }
         }
 
-        private int _skip;
+        private int _skip = MinSkip;
         [AliasAs("skip")]
         public int Skip
         {
             get { return _skip; }
             set
             {
-                if (Skip < 0)
+                if (value < MinSkip)
                 {
-                    _skip = 0;
+                    _skip = MinSkip;
                 }
                 else
                 {
