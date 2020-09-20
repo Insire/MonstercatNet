@@ -14,7 +14,7 @@
     <Company>SoftThorn</Company>
     <Authors>Peter Vietense</Authors>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Product>Monstercat.Net</Product>
+    <Product>MonstercatNet</Product>
     <RepositoryType>git</RepositoryType>
     <PackageReleaseNotes></PackageReleaseNotes>
   </PropertyGroup>

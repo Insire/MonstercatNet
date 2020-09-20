@@ -18,11 +18,15 @@ namespace SoftThorn.MonstercatNet.Tests
         public void Setup()
         {
             var configuration = new ConfigurationBuilder()
-                .AddUserSecrets<TestBase>()
+                .AddUserSecrets<TestBase>(optional: true)
+                .AddEnvironmentVariables()
                 .Build();
 
             var sectionName = typeof(ApiCredentials).Name;
             var section = configuration.GetSection(sectionName);
+
+            Assert.IsNotNull(section, "no credentials found");
+
             section.Bind(Credentials);
 
             Assert.IsNotNull(Credentials.Email, "For tests to be able to run, you need to provide a monstercat account via the usersecrets of the MonstercatNet.Tests project.");
