@@ -221,6 +221,7 @@ Task("BuildAndPack")
                     .Append($"--output \"{PackagePath}\"")
                     .Append($"-p:PackageVersion={GitVersioningGetVersion().SemVer2}")
                     .Append($"-p:PublicRelease={publicRelease}")
+                    .Append($"-p:DebugType=portable")
                 );
 
             StartProcess("dotnet", settings);
