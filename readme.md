@@ -14,15 +14,83 @@ Since this library relies on [refit](https://github.com/reactiveui/refit) for se
 
 ## Usage
 
-TODO
+### Creating the client
+
+```cs
+using SoftThorn.MonstercatNet;
+
+var httpClient  = new HttpClient().UseMonstercatApiV2();
+var client = MonstercatApi.Create(httpClient);
+```
+
+### signing in
+
+```cs
+using SoftThorn.MonstercatNet;
+
+var credentials = new ApiCredentials()
+{
+    Email = "", // your accoutn e-mail
+    Password = "" // your password
+};
+
+await client.Login(credentials);
+```
+
+### searching for music
+
+```cs
+using SoftThorn.MonstercatNet;
+
+var tracks = await client.SearchTracks(new TrackSearchRequest()
+{
+    Limit = 1,
+    Skip = 0,
+    Creatorfriendly = true,
+    Genres = new[] { "Drumstep" },
+    ReleaseTypes = new[] { "Album" },
+    Tags = new[] { "Uncaged", "Energetic" },
+});
+```
+
+### getting albumns, EPs and singles (releases)
+
+```cs
+using SoftThorn.MonstercatNet;
+
+var releases = await client.GetReleases(new ReleaseBrowseRequest()
+{
+    Limit = 1,
+    Skip = 0
+});
+```
+
+### getting release details
+
+```cs
+using SoftThorn.MonstercatNet;
+
+var release = await client.GetRelease("the release catalogId");
+```
+
+### getting release cover
+
+```cs
+using SoftThorn.MonstercatNet;
+
+var releaseCover = await client.GetReleaseCoverAsByteArray(new ReleaseCoverRequest()
+{
+    ReleaseId = Guid.Parse("the releaseId"),
+};
+```
 
 ## Endpoints
 
-The currently implemented and support endpoints of the monstercat api can be found [here](endpoints.md)
+The currently implemented and supported endpoints can be found [here](endpoints.md)
 
 ## Download
 
-You can find the MonstercatNet nuget package [here](https://www.nuget.org/packages/MonstercatNet/).
+You can find the latest nuget package [here](https://www.nuget.org/packages/MonstercatNet/).
 
 ## Versioning
 
