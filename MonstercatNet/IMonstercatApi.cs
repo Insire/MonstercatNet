@@ -1,4 +1,4 @@
-﻿using Refit;
+using Refit;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -79,9 +79,8 @@ namespace SoftThorn.MonstercatNet
         [Get("/release/{request.ReleaseId}/track-download/{request.TrackId}")]
         Task<HttpContent> DownloadTrack([Query] TrackDownloadRequest request);
 
-        // /release/[releaseId]/track-stream
-
-        // /release/[releaseId]/track-download/[trackId]
+        [Get("/release/{request.ReleaseId}/track-stream/{request.TrackId}")]
+        Task<HttpContent> StreamTrack([Query] TrackStreamRequest request);
 
         // /playlist/[playlistId]
 

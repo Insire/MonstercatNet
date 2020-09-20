@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
@@ -9,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SoftThorn.MonstercatNet.Tests
 {
-    internal sealed class HttpLoggingHandler : DelegatingHandler
+    public sealed class HttpLoggingHandler : DelegatingHandler
     {
         public HttpLoggingHandler(HttpMessageHandler innerHandler = null)
             : base(innerHandler ?? new HttpClientHandler())
@@ -103,7 +102,7 @@ namespace SoftThorn.MonstercatNet.Tests
 
         private bool IsTextBasedContentType(HttpHeaders headers)
         {
-            if (!headers.TryGetValues("Content-Type", out IEnumerable<string> values))
+            if (!headers.TryGetValues("Content-Type", out var values))
             {
                 return false;
             }

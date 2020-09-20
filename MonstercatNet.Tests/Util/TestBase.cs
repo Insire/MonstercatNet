@@ -8,7 +8,7 @@ namespace SoftThorn.MonstercatNet.Tests
     {
         private static IMonstercatApi Create()
         {
-            return MonstercatApi.Create(new HttpClient(new HttpLoggingHandler()));
+            return MonstercatApi.Create(new HttpClient(new HttpLoggingHandler()).UseMonstercatApiV2());
         }
 
         protected internal IMonstercatApi Api { get; private set; }

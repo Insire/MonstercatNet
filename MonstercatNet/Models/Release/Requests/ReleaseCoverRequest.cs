@@ -1,4 +1,4 @@
-﻿using Refit;
+using Refit;
 using System;
 
 namespace SoftThorn.MonstercatNet
@@ -9,5 +9,10 @@ namespace SoftThorn.MonstercatNet
         public int Width { get; set; } = 512;
 
         public Guid ReleaseId { get; set; }
+
+        public ReleaseCoverRequest()
+        {
+            ReleaseId = Guid.Empty;
+        }
     }
 }

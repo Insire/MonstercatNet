@@ -1,4 +1,4 @@
-﻿using Refit;
+using Refit;
 using System;
 
 namespace SoftThorn.MonstercatNet
@@ -11,5 +11,11 @@ namespace SoftThorn.MonstercatNet
         public Guid ReleaseId { get; set; }
 
         public Guid TrackId { get; set; }
+
+        public TrackDownloadRequest()
+        {
+            ReleaseId = Guid.Empty;
+            TrackId = Guid.Empty;
+        }
     }
 }

@@ -5,7 +5,58 @@ namespace SoftThorn.MonstercatNet.Tests
 {
     public sealed class InMemoryTests
     {
-        public sealed class RequestValidation
+        public sealed class LoginRequestValidation : TestBase
+        {
+            [Test]
+            public void Test_NullEmail()
+            {
+                var request = new ApiCredentials()
+                {
+                    Email = null,
+                    Password = "something"
+                };
+
+                Assert.Throws<ArgumentNullException>(() => Api.Login(request));
+            }
+
+            [Test]
+            public void Test_EmptyEmail()
+            {
+                var request = new ApiCredentials()
+                {
+                    Email = "",
+                    Password = "something"
+                };
+
+                Assert.Throws<ArgumentNullException>(() => Api.Login(request));
+            }
+
+            [Test]
+            public void Test_NullPassword()
+            {
+                var request = new ApiCredentials()
+                {
+                    Email = "something",
+                    Password = null
+                };
+
+                Assert.Throws<ArgumentNullException>(() => Api.Login(request));
+            }
+
+            [Test]
+            public void Test_EmptyPassword()
+            {
+                var request = new ApiCredentials()
+                {
+                    Email = "something",
+                    Password = null
+                };
+
+                Assert.Throws<ArgumentNullException>(() => Api.Login(request));
+            }
+        }
+
+        public sealed class RequestBaseValidation
         {
             [Test]
             public void Test_LimitCantExceedMaxLimit()
@@ -44,6 +95,9 @@ namespace SoftThorn.MonstercatNet.Tests
 
         public sealed class NullValidation : TestBase
         {
+            // there is no resource for this on the monstercat api - or atleast i didnt care to check
+            private const string RandomInvalidGuid = "0788CAB5-4F38-4BEA-B7A0-F15D5A16888A";
+
             [Test]
             public void Test_CtorArgsForNull()
             {
@@ -117,9 +171,27 @@ namespace SoftThorn.MonstercatNet.Tests
             }
 
             [Test]
+            public void Test_GetReleaseCoverAsByteArrayRequestForNullReleaseId()
+            {
+                Assert.ThrowsAsync<ArgumentException>(() => Api.GetReleaseCoverAsByteArray(new ReleaseCoverRequest()
+                {
+                    ReleaseId = Guid.Empty
+                }));
+            }
+
+            [Test]
             public void Test_DownloadReleaseAsByteArrayRequestForNull()
             {
                 Assert.ThrowsAsync<ArgumentNullException>(() => Api.DownloadReleaseAsByteArray(null));
+            }
+
+            [Test]
+            public void Test_DownloadReleaseAsByteArrayRequestForNullReleaseId()
+            {
+                Assert.ThrowsAsync<ArgumentException>(() => Api.DownloadReleaseAsByteArray(new ReleaseDownloadRequest()
+                {
+                    ReleaseId = Guid.Empty
+                }));
             }
 
             [Test]
@@ -135,9 +207,55 @@ namespace SoftThorn.MonstercatNet.Tests
             }
 
             [Test]
+            public void Test_DownloadTrackAsByteArrayRequestForNullReleaseId()
+            {
+                Assert.ThrowsAsync<ArgumentException>(() => Api.DownloadTrackAsByteArray(new TrackDownloadRequest()
+                {
+                    ReleaseId = Guid.Empty,
+                    TrackId = Guid.Parse(RandomInvalidGuid)
+                }));
+            }
+
+            [Test]
+            public void Test_DownloadTrackAsByteArrayRequestForNullTrackId()
+            {
+                Assert.ThrowsAsync<ArgumentException>(() => Api.DownloadTrackAsByteArray(new TrackDownloadRequest()
+                {
+                    ReleaseId = Guid.Parse(RandomInvalidGuid),
+                    TrackId = Guid.Empty
+                }));
+            }
+
+            [Test]
             public void Test_DownloadTrackAsStreamRequestForNull()
             {
                 Assert.ThrowsAsync<ArgumentNullException>(() => Api.DownloadTrackAsStream(null));
+            }
+
+            [Test]
+            public void Test_StreamTrackAsStreamRequestForNull()
+            {
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.StreamTrackAsStream(null));
+            }
+
+            [Test]
+            public void Test_StreamTrackAsStreamRequestForNullReleaseId()
+            {
+                Assert.ThrowsAsync<ArgumentException>(() => Api.StreamTrackAsStream(new TrackStreamRequest()
+                {
+                    ReleaseId = Guid.Empty,
+                    TrackId = Guid.Parse(RandomInvalidGuid)
+                }));
+            }
+
+            [Test]
+            public void Test_StreamTrackAsStreamRequestForNullTrackId()
+            {
+                Assert.ThrowsAsync<ArgumentException>(() => Api.StreamTrackAsStream(new TrackStreamRequest()
+                {
+                    ReleaseId = Guid.Parse(RandomInvalidGuid),
+                    TrackId = Guid.Empty
+                }));
             }
         }
     }

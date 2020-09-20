@@ -160,6 +160,21 @@ namespace SoftThorn.MonstercatNet.Tests
             Assert.IsTrue(result.Length > 0);
         }
 
+        [Test, Order(13)]
+        public async Task Test_StreamTrackAsStream()
+        {
+            var release = await Api.StreamTrackAsStream(new TrackStreamRequest()
+            {
+                ReleaseId = Guid.Parse("09497970-9679-4ea6-930d-e1bf22cfc994"),
+                TrackId = Guid.Parse("c8d3abc3-1668-42de-b832-b58ca6cc883f")
+            });
+
+            Assert.IsNotNull(release);
+
+            var result = release.ToByteArray();
+            Assert.IsTrue(result.Length > 0);
+        }
+
         [Test, Order(999)]
         public async Task Test_Logout()
         {

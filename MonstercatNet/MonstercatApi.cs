@@ -7,9 +7,7 @@ namespace SoftThorn.MonstercatNet
 {
     public sealed class MonstercatApi : IMonstercatApi
     {
-        private const string BaseUrl = "https://connect.monstercat.com/v2/";
-
-        private static readonly RefitSettings _settings = new RefitSettings(new NewtonsoftJsonContentSerializer(), new DefaultUrlParameterFormatter(), new DefaultFormUrlEncodedParameterFormatter());
+        private static readonly RefitSettings _settings = new RefitSettings();
 
         /// <summary>
         /// Generate the client to be able to interact with the monstercat api
@@ -24,8 +22,6 @@ namespace SoftThorn.MonstercatNet
             {
                 throw new ArgumentNullException(nameof(client));
             }
-
-            client.BaseAddress = new Uri(BaseUrl);
 
             return new MonstercatApi(RestService.For<IMonstercatApi>(client, _settings));
         }
@@ -42,6 +38,26 @@ namespace SoftThorn.MonstercatNet
             if (credentials is null)
             {
                 throw new ArgumentNullException(nameof(credentials));
+            }
+
+            if (credentials.Password is null)
+            {
+                throw new ArgumentNullException(nameof(ApiCredentials.Password));
+            }
+
+            if (credentials.Email is null)
+            {
+                throw new ArgumentNullException(nameof(ApiCredentials.Email));
+            }
+
+            if (credentials.Password.Length == 0)
+            {
+                throw new ArgumentNullException(nameof(ApiCredentials.Password));
+            }
+
+            if (credentials.Email.Length == 0)
+            {
+                throw new ArgumentNullException(nameof(ApiCredentials.Email));
             }
 
             return _service.Login(credentials);
@@ -137,6 +153,11 @@ namespace SoftThorn.MonstercatNet
                 throw new ArgumentNullException(nameof(request));
             }
 
+            if (request.ReleaseId == Guid.Empty)
+            {
+                throw new ArgumentException(nameof(ReleaseCoverRequest.ReleaseId));
+            }
+
             return _service.GetReleaseCover(request);
         }
 
@@ -150,20 +171,55 @@ namespace SoftThorn.MonstercatNet
                 throw new ArgumentNullException(nameof(request));
             }
 
+            if (request.ReleaseId == Guid.Empty)
+            {
+                throw new ArgumentException(nameof(ReleaseDownloadRequest.ReleaseId));
+            }
+
             return _service.DownloadRelease(request);
         }
 
         /// <summary>
         /// gold membership required
         /// </summary>
-        public Task<HttpContent> DownloadTrack([Query] TrackDownloadRequest request)
+        public Task<HttpContent> DownloadTrack(TrackDownloadRequest request)
         {
             if (request is null)
             {
                 throw new ArgumentNullException(nameof(request));
             }
 
+            if (request.ReleaseId == Guid.Empty)
+            {
+                throw new ArgumentException(nameof(TrackDownloadRequest.ReleaseId));
+            }
+
+            if (request.TrackId == Guid.Empty)
+            {
+                throw new ArgumentException(nameof(TrackDownloadRequest.TrackId));
+            }
+
             return _service.DownloadTrack(request);
+        }
+
+        public Task<HttpContent> StreamTrack(TrackStreamRequest request)
+        {
+            if (request is null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
+            if (request.ReleaseId == Guid.Empty)
+            {
+                throw new ArgumentException(nameof(TrackDownloadRequest.ReleaseId));
+            }
+
+            if (request.TrackId == Guid.Empty)
+            {
+                throw new ArgumentException(nameof(TrackDownloadRequest.TrackId));
+            }
+
+            return _service.StreamTrack(request);
         }
     }
 }

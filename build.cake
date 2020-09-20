@@ -148,7 +148,7 @@ Task("CleanSolution")
         foreach(var folder in folders)
         {
             EnsureDirectoryExists(folder);
-            CleanDirectory(folder,(file) => !file.Path.Segments.Last().Contains(".gitignore"));
+            CleanDirectory(folder, (file) => !file.Path.Segments.Last().Contains(".gitignore"));
         }
 });
 

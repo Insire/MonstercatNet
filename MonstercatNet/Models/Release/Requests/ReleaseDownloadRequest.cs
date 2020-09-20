@@ -1,4 +1,4 @@
-﻿using Refit;
+using Refit;
 using System;
 
 namespace SoftThorn.MonstercatNet
@@ -9,5 +9,10 @@ namespace SoftThorn.MonstercatNet
         public FileFormat Format { get; set; } = FileFormat.flac;
 
         public Guid ReleaseId { get; set; }
+
+        public ReleaseDownloadRequest()
+        {
+            ReleaseId = Guid.Empty;
+        }
     }
 }
