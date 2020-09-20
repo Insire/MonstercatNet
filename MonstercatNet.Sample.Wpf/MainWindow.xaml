@@ -1,0 +1,22 @@
+<Window x:Class="MonstercatNet.Sample.Wpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        Title="Monstercat.Sample.Wpf"
+        Width="600"
+        Height="250"
+        Loaded="Window_Loaded"
+        mc:Ignorable="d">
+
+    <StackPanel Orientation="Vertical">
+
+        <Button Margin="50"
+                Click="buttonPlay_Click"
+                Content="Play" />
+
+        <Button Margin="50"
+                Click="Button_Click"
+                Content="Generate" />
+    </StackPanel>
+</Window>
