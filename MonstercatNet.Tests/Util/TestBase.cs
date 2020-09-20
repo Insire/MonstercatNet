@@ -18,14 +18,12 @@ namespace SoftThorn.MonstercatNet.Tests
         public void Setup()
         {
             var configuration = new ConfigurationBuilder()
-                .AddUserSecrets<TestBase>(optional: true)
+                .AddUserSecrets<TestBase>()
                 .AddEnvironmentVariables()
                 .Build();
 
             var sectionName = typeof(ApiCredentials).Name;
             var section = configuration.GetSection(sectionName);
-
-            Assert.IsNotNull(section, "no credentials found");
 
             section.Bind(Credentials);
 
