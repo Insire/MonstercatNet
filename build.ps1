@@ -101,7 +101,7 @@ function GetProxyEnabledWebClient
     return $wc
 }
 
-Write-Host "Preparing to run build script..."
+Write-Output "Preparing to run build script..."
 
 if(!$PSScriptRoot){
     $PSScriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent
@@ -180,7 +180,7 @@ if(-Not $SkipToolPackageRestore.IsPresent) {
     }
 
     Write-Verbose -Message "Restoring tools from NuGet..."
-    
+
     $NuGetOutput = Invoke-Expression "& $env:NUGET_EXE_INVOCATION install -ExcludeVersion -OutputDirectory `"$TOOLS_DIR`""
 
     if ($LASTEXITCODE -ne 0) {
@@ -251,6 +251,6 @@ if ($DryRun) { $cakeArguments += "-dryrun" }
 $cakeArguments += $ScriptArgs
 
 # Start Cake
-Write-Host "Running build script..."
+Write-Output "Running build script..."
 Invoke-Expression "& $CAKE_EXE_INVOCATION $($cakeArguments -join " ")"
 exit $LASTEXITCODE
