@@ -93,8 +93,7 @@ private void MergeReports(string pattern, ReportGeneratorReportType type, string
 
 Setup(ctx =>
 {
-    publicRelease = EnvironmentVariable("PublicRelease", false);
-    if(publicRelease && GitVersion().BranchName == "master")
+    if(GitVersion().BranchName == "master")
     {
         publicRelease = true;
         Information("Building a public release.");

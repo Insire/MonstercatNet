@@ -1,5 +1,7 @@
 # MonstercatNet
 
+[![Build status](https://dev.azure.com/SoftThorn/MonstercatNet/_apis/build/status/MonstercatNet-CD)](https://dev.azure.com/SoftThorn/MonstercatNet/_build/latest?definitionId=3)
+
 MonstercatNet is a .NET wrapper around the API that drives [monstercat.com](https://www.monstercat.com/) written in C#.
 
 ## Supported Platforms
