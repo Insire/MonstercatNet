@@ -197,12 +197,11 @@ Task("BuildAndPack")
                 .Append($"-p:PublicRelease={publicRelease}")
 
                 .Append($"-p:IncludeSymbols=true")
-                .Append($"-p:SourceLinkCreate=true")
+                .Append($"-p:DebugType=portable")
                 .Append($"-p:SymbolPackageFormat=snupkg")
-                .Append($"-p:IncludeSymbols=true")
+                .Append($"-p:SourceLinkCreate=true")
                 .Append($"-p:EmbedUntrackedSources=true")
                 .Append($"-p:PublishRepositoryUrl=true")
-
             );
 
         StartProcess("dotnet", settings);

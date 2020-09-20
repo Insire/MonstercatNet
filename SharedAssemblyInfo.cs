@@ -12,8 +12,8 @@ using System.Reflection;
 
 // Metadata Attributes
 [assembly: AssemblyMetadata("Platform", "AnyCPU")]
-[assembly: AssemblyMetadata("CompileDate", "[UTC]20.09.2020 10:12:18")]
+[assembly: AssemblyMetadata("CompileDate", "[UTC]20.09.2020 10:12:57")]
 [assembly: AssemblyMetadata("PublicRelease", "True")]
 [assembly: AssemblyMetadata("Branch", "master")]
-[assembly: AssemblyMetadata("Commit", "690bfea649cc7c1db8ae9ea9c605868915a8c826")]
-[assembly: AssemblyMetadata("Version", "2.0.11")]
+[assembly: AssemblyMetadata("Commit", "79a03140dcb0cc811ab11d81b6ac5d98cdf45dad")]
+[assembly: AssemblyMetadata("Version", "2.0.12")]
