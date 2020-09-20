@@ -21,11 +21,11 @@ const string SolutionPath ="./MonstercatNet.sln";
 const string AssemblyInfoPath ="./SharedAssemblyInfo.cs";
 const string PackagePath = "./packages";
 const string ResultsPath = "./results";
-const string CoberturaResultsPath = "./results/reports/cobertura";
+const string CoberturaResultsPath = "results/reports/cobertura";
 const string localNugetDirectory = @"D:\Drop\NuGet";
 
 var reportsFolder = new DirectoryPath(ResultsPath).Combine("reports");
-var coberturaResultFile = new DirectoryPath(CoberturaResultsPath).CombineWithFilePath("Cobertura.xml");
+var coberturaResultFile = Context.Environment.WorkingDirectory.Combine(CoberturaResultsPath).CombineWithFilePath("Cobertura.xml");
 var vstestResultsFile = new FilePath("vsTestResults.trx");
 var codeCoverageBinaryFile = new FilePath("vsCodeCoverage.coverage");
 var codeCoverageResultsFile = new FilePath("vsCodeCoverage.xml");
@@ -52,24 +52,6 @@ var ReportGeneratorSettings = new ReportGeneratorSettings()
         "-Microsoft*",
     }
 };
-
-private void Build(string path)
-{
-    var settings = new ProcessSettings()
-        .UseWorkingDirectory(".")
-        .WithArguments(builder => builder
-            .Append("build")
-            .AppendQuoted(path)
-            .Append("--nologo")
-            .Append($"-c {Configuration}")
-            .Append("-p:GeneratePackageOnBuild=false") // we package only specific projects and we do that in a second cli call
-            .Append("-p:DebugType=full") // required for opencover codecoverage and sourcelinking
-            .Append("-p:DebugSymbols=true") // required for opencover codecoverage
-            .Append("-p:SourceLinkCreate=true")
-    );
-
-    StartProcess("dotnet", settings);
-}
 
 private void GenerateReport(FilePath inputFile, ReportGeneratorReportType type, string subFolder)
 {
@@ -109,11 +91,6 @@ Setup(ctx =>
     Debug("IsRunningOnAzurePipelinesHosted: " + BuildSystem.IsRunningOnAzurePipelinesHosted);
 
     Information("Provider: " + BuildSystem.Provider);
-
-    foreach(var entry in Context.EnvironmentVariables())
-    {
-        Debug(entry.Key + " " + entry.Value);
-    }
 });
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -193,6 +170,11 @@ Task("UpdateAssemblyInfo")
                     Key = "Commit",
                     Value = gitVersion.Sha,
                 },
+                new AssemblyInfoMetadataAttribute()
+                {
+                    Key = "Version",
+                    Value = GitVersioningGetVersion().SemVer2,
+                },
             }
         };
 
@@ -202,30 +184,28 @@ Task("UpdateAssemblyInfo")
 Task("BuildAndPack")
     .DoesForEach(nugetPackageProjects, project=>
     {
-        Build(project);
-        Pack(project);
+        var settings = new ProcessSettings()
+            .UseWorkingDirectory(".")
+            .WithArguments(builder => builder
+                .Append("pack")
+                .AppendQuoted(project)
+                .Append("--no-restore")
+                .Append("--nologo")
+                .Append($"-c {Configuration}")
+                .Append($"--output \"{PackagePath}\"")
+                .Append($"-p:PackageVersion={GitVersioningGetVersion().SemVer2}")
+                .Append($"-p:PublicRelease={publicRelease}")
 
-        void Pack(string path)
-        {
-            var settings = new ProcessSettings()
-                .UseWorkingDirectory(".")
-                .WithArguments(builder => builder
-                    .Append("pack")
-                    .AppendQuoted(path)
-                    .Append("--include-symbols")
-                    .Append("--include-source")
-                    .Append("--no-build")
-                    .Append("--no-restore")
-                    .Append("--nologo")
-                    .Append($"-c {Configuration}")
-                    .Append($"--output \"{PackagePath}\"")
-                    .Append($"-p:PackageVersion={GitVersioningGetVersion().SemVer2}")
-                    .Append($"-p:PublicRelease={publicRelease}")
-                    .Append($"-p:DebugType=portable")
-                );
+                .Append($"-p:IncludeSymbols=true")
+                .Append($"-p:SourceLinkCreate=true")
+                .Append($"-p:SymbolPackageFormat=snupkg")
+                .Append($"-p:IncludeSymbols=true")
+                .Append($"-p:EmbedUntrackedSources=true")
+                .Append($"-p:PublishRepositoryUrl=true")
 
-            StartProcess("dotnet", settings);
-        }
+            );
+
+        StartProcess("dotnet", settings);
     });
 
 Task("Test")
@@ -241,8 +221,8 @@ Task("Test")
             ArgumentCustomization = builder => builder
                 .Append("--nologo")
                 .Append("--results-directory:./Results/coverage")
-                .Append("-p:DebugType=full")
-                .Append("-p:DebugSymbols=true")
+                .Append($"-p:DebugType=full") // required for opencover codecoverage and sourcelinking
+                .Append($"-p:DebugSymbols=true") // required for opencover codecoverage
                 .AppendSwitchQuoted("--collect",":","\"\"Code Coverage\"\"")
                 .Append($"--logger:trx;LogFileName=..\\{vstestResultsFile.FullPath};"),
         };
@@ -288,13 +268,13 @@ Task("HtmlReport")
     });
 
 Task("UploadCodecovReport")
-    .IsDependentOn("CoberturaReport")
-    .WithCriteria(()=> FileExists(coberturaResultFile), $"since {coberturaResultFile} wasn't created.")
+     .IsDependentOn("CoberturaReport")
+    .WithCriteria(()=> FileExists(coberturaResultFile.FullPath), $"since {coberturaResultFile} wasn't created.")
     .WithCriteria(()=> BuildSystem.IsRunningOnAzurePipelinesHosted, "since task is not running on AzurePipelines (Hosted).")
     .WithCriteria(()=> !string.IsNullOrEmpty(EnvironmentVariable("CODECOV_TOKEN")),"since environment variable CODECOV_TOKEN missing or empty.")
     .Does(()=>
     {
-        Codecov(new[] { coberturaResultFile.FullPath }, EnvironmentVariable("CODECOV_TOKEN"));
+        Codecov(new[]{ coberturaResultFile.FullPath }, EnvironmentVariable("CODECOV_TOKEN"));
     });
 
 Task("TestAndUploadReport")
@@ -319,8 +299,8 @@ Task("PushLocally")
 Task("Default")
     .IsDependentOn("CleanSolution")
     .IsDependentOn("UpdateAssemblyInfo")
-    .IsDependentOn("BuildAndPack")
     .IsDependentOn("TestAndUploadReport")
+    .IsDependentOn("BuildAndPack")
     .IsDependentOn("PushLocally");
 
 RunTarget(Argument("target", "Default"));
