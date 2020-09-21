@@ -12,6 +12,14 @@ MonstercatNet is a .NET wrapper around the API that drives [monstercat.com](http
 
 Since this library relies on [refit](https://github.com/reactiveui/refit) for setting up the API endpoints, there are limitations. You can find the limitations [here](https://github.com/reactiveui/refit#where-does-this-work).
 
+## Installation
+
+You can find the latest nuget package [here](https://www.nuget.org/packages/MonstercatNet/).
+
+## Changelog
+
+See [here](CHANGELOG.md)
+
 ## Usage
 
 ### creating the client
@@ -88,18 +96,13 @@ var releaseCover = await client.GetReleaseCoverAsByteArray(new ReleaseCoverReque
 
 The currently implemented and supported endpoints can be found [here](endpoints.md)
 
-## Download
+## Versions
 
-You can find the latest nuget package [here](https://www.nuget.org/packages/MonstercatNet/).
+See [here](versioning.md)
 
-## Versioning
+## Contributing
 
-MonstercatNet uses the following versioning strategy:
+See [here](CONTRIBUTING.md)
 
-|number|description|
-| - | - |
-|major|mirrors the version of the supported monstercat api version|
-|minor|major version according to [semver](https://semver.org/) (changes when incompatible API changes were made))|
-|build|minor version according to [semver](https://semver.org/) (changes when functionality or bugfixes in a backwards compatible manner were added|
 ----
 A special thanks goes out to [defvs](https://github.com/defvs/connect-v2-docs) who with many others documented the unofficial API.

@@ -267,7 +267,7 @@ Task("HtmlReport")
     });
 
 Task("UploadCodecovReport")
-     .IsDependentOn("CoberturaReport")
+    .IsDependentOn("CoberturaReport")
     .WithCriteria(()=> FileExists(coberturaResultFile.FullPath), $"since {coberturaResultFile} wasn't created.")
     .WithCriteria(()=> BuildSystem.IsRunningOnAzurePipelinesHosted, "since task is not running on AzurePipelines (Hosted).")
     .WithCriteria(()=> !string.IsNullOrEmpty(EnvironmentVariable("CODECOV_TOKEN")),"since environment variable CODECOV_TOKEN missing or empty.")
