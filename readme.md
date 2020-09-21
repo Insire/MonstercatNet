@@ -1,7 +1,7 @@
 # MonstercatNet
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/Insire/Maple/blob/master/license.md)
-![NuGet](https://img.shields.io/nuget/v/MonstercatNet)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/Insire/MonstercatNet/blob/master/LINCENSE.md)
+[![NuGet](https://img.shields.io/nuget/v/MonstercatNet)](https://www.nuget.org/packages/MonstercatNet/)
 [![Build status](https://dev.azure.com/SoftThorn/MonstercatNet/_apis/build/status/MonstercatNet-CD)](https://dev.azure.com/SoftThorn/MonstercatNet/_build/latest?definitionId=3)
 [![CodeFactor](https://www.codefactor.io/repository/github/insire/monstercatnet/badge)](https://www.codefactor.io/repository/github/insire/monstercatnet)
 [![codecov](https://codecov.io/gh/Insire/MonstercatNet/branch/master/graph/badge.svg)](https://codecov.io/gh/Insire/MonstercatNet)
@@ -14,7 +14,7 @@ Since this library relies on [refit](https://github.com/reactiveui/refit) for se
 
 ## Usage
 
-### Creating the client
+### creating the client
 
 ```cs
 using SoftThorn.MonstercatNet;
@@ -30,7 +30,7 @@ using SoftThorn.MonstercatNet;
 
 var credentials = new ApiCredentials()
 {
-    Email = "", // your accoutn e-mail
+    Email = "", // your account e-mail
     Password = "" // your password
 };
 
