@@ -6,6 +6,15 @@
         "^refs/heads/v\\d+\\.\\d+$"
     ],
     "pathFilters": [
-        ":!/MonstercatNet.Tests"
+        ":!/MonstercatNet.Tests",
+        ":!/MonstercatNet.Sample.Wpf",
+        ":!readme.md",
+        ":!LICENSE.md",
+        ":!build.cake",
+        ":!cake.config",
+        ":!SharedAssemblyInfo.cs",
+        ":!MonstercatNet.ruleset",
+        ":!MonstercatNet.sln",
+        ":!codecov.yml"
     ]
 }

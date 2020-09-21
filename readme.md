@@ -1,6 +1,6 @@
 # MonstercatNet
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/Insire/MonstercatNet/blob/master/LINCENSE.md)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/Insire/MonstercatNet/blob/master/LICENSE.md)
 [![NuGet](https://img.shields.io/nuget/v/MonstercatNet)](https://www.nuget.org/packages/MonstercatNet/)
 [![Build status](https://dev.azure.com/SoftThorn/MonstercatNet/_apis/build/status/MonstercatNet-CD)](https://dev.azure.com/SoftThorn/MonstercatNet/_build/latest?definitionId=3)
 [![CodeFactor](https://www.codefactor.io/repository/github/insire/monstercatnet/badge)](https://www.codefactor.io/repository/github/insire/monstercatnet)
