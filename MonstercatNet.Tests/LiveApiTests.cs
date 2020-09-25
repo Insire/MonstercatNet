@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using SoftThorn.MonstercatNet.Models.Playlist;
 using System;
 using System.Threading.Tasks;
 
@@ -173,6 +174,30 @@ namespace SoftThorn.MonstercatNet.Tests
 
             var result = release.ToByteArray();
             Assert.IsTrue(result.Length > 0);
+        }
+
+        [Test, Order(14)]
+        public async Task Test_CreatePlaylist()
+        {
+            await Api.CreatePlaylist(new Playlist()
+            {
+                Name = $"MyTestPlaylist",
+                Public = true,
+                Tracks = new PlaylistTrack[]
+                {
+                    new PlaylistTrack()
+                    {
+                        ReleaseId = Guid.Parse("09497970-9679-4ea6-930d-e1bf22cfc994"),
+                        TrackId = Guid.Parse("c8d3abc3-1668-42de-b832-b58ca6cc883f")
+                    }
+                }
+            });
+        }
+
+        [Test, Order(15)]
+        public async Task Test_DeletePlaylist()
+        {
+            await Api.DeletePlaylist("35c010c3-2529-40ed-8b87-307dc6f28d70");
         }
 
         [Test, Order(999)]
