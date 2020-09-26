@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using SoftThorn.MonstercatNet.Models.Playlist;
 using System;
 
 namespace SoftThorn.MonstercatNet.Tests
@@ -256,6 +257,29 @@ namespace SoftThorn.MonstercatNet.Tests
                     ReleaseId = Guid.Parse(RandomInvalidGuid),
                     TrackId = Guid.Empty
                 }));
+            }
+
+            [Test]
+            public void Test_CreatePlaylistNullName()
+            {
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.CreatePlaylist(new Playlist()
+                {
+                    Name = null,
+                    Public = true,
+                    Tracks = new PlaylistTrack[0]
+                }));
+            }
+
+            [Test]
+            public void Test_DeletePlaylistNullPlaylistId()
+            {
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.DeletePlaylist(null));
+            }
+
+            [Test]
+            public void Test_DeletePlaylistEmptyPlaylistId()
+            {
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.DeletePlaylist(""));
             }
         }
     }
