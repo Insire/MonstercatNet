@@ -1,5 +1,4 @@
 using NUnit.Framework;
-using SoftThorn.MonstercatNet.Models.Playlist;
 using System;
 
 namespace SoftThorn.MonstercatNet.Tests

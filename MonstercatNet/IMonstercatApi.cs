@@ -1,5 +1,4 @@
 using Refit;
-using SoftThorn.MonstercatNet.Models.Playlist;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -84,7 +83,7 @@ namespace SoftThorn.MonstercatNet
         Task<HttpContent> StreamTrack([Query] TrackStreamRequest request);
 
         [Post("/self/playlist")]
-        Task CreatePlaylist(Playlist playlist);
+        Task<Playlist> CreatePlaylist(Playlist playlist);
 
         [Delete("/playlist/{playlistId}")]
         Task DeletePlaylist(string playlistId);

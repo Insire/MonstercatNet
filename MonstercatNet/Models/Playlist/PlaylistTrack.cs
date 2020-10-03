@@ -1,6 +1,6 @@
 using System;
 
-namespace SoftThorn.MonstercatNet.Models.Playlist
+namespace SoftThorn.MonstercatNet
 {
     public sealed class PlaylistTrack
     {

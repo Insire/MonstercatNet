@@ -1,5 +1,4 @@
 using Refit;
-using SoftThorn.MonstercatNet.Models.Playlist;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -223,7 +222,7 @@ namespace SoftThorn.MonstercatNet
             return _service.StreamTrack(request);
         }
 
-        public Task CreatePlaylist(Playlist request)
+        public Task<Playlist> CreatePlaylist(Playlist request)
         {
             if (request == null)
             {
