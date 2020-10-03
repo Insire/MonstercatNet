@@ -225,6 +225,11 @@ namespace SoftThorn.MonstercatNet
 
         public Task CreatePlaylist(Playlist request)
         {
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
             if (request.Name == null)
             {
                 throw new ArgumentNullException(nameof(request.Name));

@@ -260,6 +260,12 @@ namespace SoftThorn.MonstercatNet.Tests
             }
 
             [Test]
+            public void Test_CreatePlaylistNullRequest()
+            {
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.CreatePlaylist(null));
+            }
+
+            [Test]
             public void Test_CreatePlaylistNullName()
             {
                 Assert.ThrowsAsync<ArgumentNullException>(() => Api.CreatePlaylist(new Playlist()
