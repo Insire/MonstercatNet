@@ -82,6 +82,12 @@ namespace SoftThorn.MonstercatNet
         [Get("/release/{request.ReleaseId}/track-stream/{request.TrackId}")]
         Task<HttpContent> StreamTrack([Query] TrackStreamRequest request);
 
+        [Post("/self/playlist")]
+        Task<Playlist> CreatePlaylist(Playlist playlist);
+
+        [Delete("/playlist/{playlistId}")]
+        Task DeletePlaylist(string playlistId);
+
         // /playlist/[playlistId]
 
         // /playlist/[playlistId]/catalog

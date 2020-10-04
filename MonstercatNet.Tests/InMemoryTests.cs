@@ -257,6 +257,35 @@ namespace SoftThorn.MonstercatNet.Tests
                     TrackId = Guid.Empty
                 }));
             }
+
+            [Test]
+            public void Test_CreatePlaylistNullRequest()
+            {
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.CreatePlaylist(null));
+            }
+
+            [Test]
+            public void Test_CreatePlaylistNullName()
+            {
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.CreatePlaylist(new Playlist()
+                {
+                    Name = null,
+                    Public = true,
+                    Tracks = new PlaylistTrack[0]
+                }));
+            }
+
+            [Test]
+            public void Test_DeletePlaylistNullPlaylistId()
+            {
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.DeletePlaylist(null));
+            }
+
+            [Test]
+            public void Test_DeletePlaylistEmptyPlaylistId()
+            {
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.DeletePlaylist(""));
+            }
         }
     }
 }

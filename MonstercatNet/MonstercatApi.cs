@@ -221,5 +221,30 @@ namespace SoftThorn.MonstercatNet
 
             return _service.StreamTrack(request);
         }
+
+        public Task<Playlist> CreatePlaylist(Playlist request)
+        {
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
+            if (request.Name == null)
+            {
+                throw new ArgumentNullException(nameof(request.Name));
+            }
+
+            return _service.CreatePlaylist(request);
+        }
+
+        public Task DeletePlaylist(string playlistId)
+        {
+            if (string.IsNullOrWhiteSpace(playlistId))
+            {
+                throw new ArgumentNullException(nameof(playlistId));
+            }
+
+            return _service.DeletePlaylist(playlistId);
+        }
     }
 }

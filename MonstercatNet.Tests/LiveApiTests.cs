@@ -175,10 +175,43 @@ namespace SoftThorn.MonstercatNet.Tests
             Assert.IsTrue(result.Length > 0);
         }
 
+        [Test, Order(14)]
+        public async Task Test_CreatePlaylist()
+        {
+            await CreatePlaylist();
+        }
+
+        [Test, Order(15)]
+        public async Task Test_DeletePlaylist()
+        {
+            // Arrange
+            var testPlaylist = await CreatePlaylist();
+
+            // Act & Assert
+            await Api.DeletePlaylist(testPlaylist.Id.ToString());
+        }
+
         [Test, Order(999)]
         public async Task Test_Logout()
         {
             await Api.Logout();
+        }
+
+        private Task<Playlist> CreatePlaylist()
+        {
+            return Api.CreatePlaylist(new Playlist()
+            {
+                Name = $"MyTestPlaylist",
+                Public = true,
+                Tracks = new PlaylistTrack[]
+                {
+                    new PlaylistTrack()
+                    {
+                        ReleaseId = Guid.Parse("09497970-9679-4ea6-930d-e1bf22cfc994"),
+                        TrackId = Guid.Parse("c8d3abc3-1668-42de-b832-b58ca6cc883f")
+                    }
+                }
+            });
         }
     }
 }
