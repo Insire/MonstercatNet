@@ -222,7 +222,7 @@ namespace SoftThorn.MonstercatNet
             return _service.StreamTrack(request);
         }
 
-        public Task<Playlist> CreatePlaylist(Playlist request)
+        public Task<Playlist> CreatePlaylist(PlaylistCreateRequest request)
         {
             if (request == null)
             {
@@ -237,14 +237,19 @@ namespace SoftThorn.MonstercatNet
             return _service.CreatePlaylist(request);
         }
 
-        public Task DeletePlaylist(string playlistId)
+        public Task DeletePlaylist(Guid playlistId)
         {
-            if (string.IsNullOrWhiteSpace(playlistId))
+            if (playlistId == Guid.Empty)
             {
                 throw new ArgumentNullException(nameof(playlistId));
             }
 
             return _service.DeletePlaylist(playlistId);
+        }
+
+        public Task<SelfPlaylists> GetSelfPlaylists()
+        {
+            return _service.GetSelfPlaylists();
         }
     }
 }

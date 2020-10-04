@@ -1,4 +1,4 @@
-﻿namespace SoftThorn.MonstercatNet
+namespace SoftThorn.MonstercatNet
 {
     /// <summary>
     /// represents tracks in the catalog, in reverse chronological order (newest first)
