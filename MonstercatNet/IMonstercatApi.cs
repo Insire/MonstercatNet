@@ -1,4 +1,5 @@
 using Refit;
+using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -83,16 +84,20 @@ namespace SoftThorn.MonstercatNet
         Task<HttpContent> StreamTrack([Query] TrackStreamRequest request);
 
         [Post("/self/playlist")]
-        Task<Playlist> CreatePlaylist(Playlist playlist);
+        Task<Playlist> CreatePlaylist(PlaylistCreateRequest request);
 
+        /// <summary>
+        /// delete a user specific playlist via its id
+        /// </summary>
+        /// <param name="playlistId"><see cref="Playlist.Id"/></param>
         [Delete("/playlist/{playlistId}")]
-        Task DeletePlaylist(string playlistId);
+        Task DeletePlaylist([Query] Guid playlistId);
+
+        [Get("/self/playlists")]
+        Task<SelfPlaylists> GetSelfPlaylists();
 
         // /playlist/[playlistId]
 
         // /playlist/[playlistId]/catalog
-
-        //[Get("/self/playlists")]
-        //Task<PlaylistBrowseResult> GetSelfPlaylists();
     }
 }

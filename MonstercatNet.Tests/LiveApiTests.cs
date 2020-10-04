@@ -1,11 +1,14 @@
 using NUnit.Framework;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SoftThorn.MonstercatNet.Tests
 {
     public sealed class LiveApiTests : TestBase
     {
+        internal Playlist Playlist { get; private set; }
+
         [Test, Order(1)]
         public async Task Test_Login()
         {
@@ -178,40 +181,49 @@ namespace SoftThorn.MonstercatNet.Tests
         [Test, Order(14)]
         public async Task Test_CreatePlaylist()
         {
-            await CreatePlaylist();
-        }
-
-        [Test, Order(15)]
-        public async Task Test_DeletePlaylist()
-        {
-            // Arrange
-            var testPlaylist = await CreatePlaylist();
-
-            // Act & Assert
-            await Api.DeletePlaylist(testPlaylist.Id.ToString());
-        }
-
-        [Test, Order(999)]
-        public async Task Test_Logout()
-        {
-            await Api.Logout();
-        }
-
-        private Task<Playlist> CreatePlaylist()
-        {
-            return Api.CreatePlaylist(new Playlist()
+            Playlist = await Api.CreatePlaylist(new PlaylistCreateRequest()
             {
                 Name = $"MyTestPlaylist",
                 Public = true,
-                Tracks = new PlaylistTrack[]
+                Tracks = new PlaylistCreateTrack[]
                 {
-                    new PlaylistTrack()
+                    new PlaylistCreateTrack()
                     {
                         ReleaseId = Guid.Parse("09497970-9679-4ea6-930d-e1bf22cfc994"),
                         TrackId = Guid.Parse("c8d3abc3-1668-42de-b832-b58ca6cc883f")
                     }
                 }
             });
+
+            Assert.IsNotNull(Playlist);
+        }
+
+        [Test, Order(15)]
+        public async Task Test_GetSelfPlaylists()
+        {
+            var playlists = await Api.GetSelfPlaylists();
+
+            Assert.IsNotNull(playlists);
+
+            Assert.IsTrue(playlists.Results.Length >= 1);
+            Assert.IsNotNull(playlists.Results.FirstOrDefault(p => p.Id == Playlist.Id));
+        }
+
+        [Test, Order(16)]
+        public async Task Test_DeletePlaylist()
+        {
+            if (Playlist is null)
+            {
+                Assert.Inconclusive("The test case that should create a valid playlist either didn't run or did failed to complete.");
+            }
+
+            await Api.DeletePlaylist(Playlist.Id);
+        }
+
+        [Test, Order(999)]
+        public async Task Test_Logout()
+        {
+            await Api.Logout();
         }
     }
 }

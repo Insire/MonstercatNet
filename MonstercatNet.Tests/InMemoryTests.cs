@@ -267,24 +267,18 @@ namespace SoftThorn.MonstercatNet.Tests
             [Test]
             public void Test_CreatePlaylistNullName()
             {
-                Assert.ThrowsAsync<ArgumentNullException>(() => Api.CreatePlaylist(new Playlist()
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.CreatePlaylist(new PlaylistCreateRequest()
                 {
                     Name = null,
                     Public = true,
-                    Tracks = new PlaylistTrack[0]
+                    Tracks = new PlaylistCreateTrack[0]
                 }));
-            }
-
-            [Test]
-            public void Test_DeletePlaylistNullPlaylistId()
-            {
-                Assert.ThrowsAsync<ArgumentNullException>(() => Api.DeletePlaylist(null));
             }
 
             [Test]
             public void Test_DeletePlaylistEmptyPlaylistId()
             {
-                Assert.ThrowsAsync<ArgumentNullException>(() => Api.DeletePlaylist(""));
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.DeletePlaylist(Guid.Empty));
             }
         }
     }
