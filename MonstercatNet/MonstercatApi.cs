@@ -276,5 +276,30 @@ namespace SoftThorn.MonstercatNet
 
             return _service.PlaylistAddTrack(request);
         }
+
+        public Task PlaylistDeleteTrack(Guid playlistId, PlaylistDeleteTrackRequest request)
+        {
+            if (playlistId == Guid.Empty)
+            {
+                throw new ArgumentNullException(nameof(playlistId));
+            }
+
+            if (request is null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
+            if (request.ReleaseId == Guid.Empty)
+            {
+                throw new ArgumentNullException(nameof(request.ReleaseId));
+            }
+
+            if (request.TrackId == Guid.Empty)
+            {
+                throw new ArgumentNullException(nameof(request.TrackId));
+            }
+
+            return _service.PlaylistDeleteTrack(playlistId, request);
+        }
     }
 }

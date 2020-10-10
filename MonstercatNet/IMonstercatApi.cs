@@ -99,6 +99,15 @@ namespace SoftThorn.MonstercatNet
         [Patch("/playlist/{request.PlaylistId}/record")]
         Task PlaylistAddTrack(PlaylistAddTrackRequest request);
 
+        /// <summary>
+        /// deletes a specfic track from an existing playlist
+        /// </summary>
+        /// <remarks>
+        /// requests to this endpoint might fail, if the track to be deleted was added only recently
+        /// </remarks>
+        [Delete("/playlist/{playlistId}/record")]
+        Task PlaylistDeleteTrack(Guid playlistId, [Body] PlaylistDeleteTrackRequest request);
+
         // /playlist/[playlistId]
 
         // /playlist/[playlistId]/catalog
