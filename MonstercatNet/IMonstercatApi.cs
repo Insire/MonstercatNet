@@ -96,6 +96,9 @@ namespace SoftThorn.MonstercatNet
         [Get("/self/playlists")]
         Task<SelfPlaylists> GetSelfPlaylists();
 
+        [Patch("/playlist/{request.PlaylistId}/record")]
+        Task PlaylistAddTrack(PlaylistAddTrackRequest request);
+
         // /playlist/[playlistId]
 
         // /playlist/[playlistId]/catalog

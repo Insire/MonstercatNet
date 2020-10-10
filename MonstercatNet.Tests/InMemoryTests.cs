@@ -280,6 +280,45 @@ namespace SoftThorn.MonstercatNet.Tests
             {
                 Assert.ThrowsAsync<ArgumentNullException>(() => Api.DeletePlaylist(Guid.Empty));
             }
+
+            [Test]
+            public void Test_PlaylistAddTrackNullRequest()
+            {
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.PlaylistAddTrack(null));
+            }
+
+            [Test]
+            public void Test_PlaylistAddTrackNullPlaylistId()
+            {
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.PlaylistAddTrack(new PlaylistAddTrackRequest()
+                {
+                    PlaylistId = Guid.Empty,
+                    ReleaseId = Guid.Parse(RandomInvalidGuid),
+                    TrackId = Guid.Parse(RandomInvalidGuid),
+                }));
+            }
+
+            [Test]
+            public void Test_PlaylistAddTrackNullRelease()
+            {
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.PlaylistAddTrack(new PlaylistAddTrackRequest()
+                {
+                    PlaylistId = Guid.Parse(RandomInvalidGuid),
+                    ReleaseId = Guid.Empty,
+                    TrackId = Guid.Parse(RandomInvalidGuid),
+                }));
+            }
+
+            [Test]
+            public void Test_PlaylistAddTrackNullTrack()
+            {
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.PlaylistAddTrack(new PlaylistAddTrackRequest()
+                {
+                    PlaylistId = Guid.Parse(RandomInvalidGuid),
+                    ReleaseId = Guid.Parse(RandomInvalidGuid),
+                    TrackId = Guid.Empty
+                }));
+            }
         }
     }
 }

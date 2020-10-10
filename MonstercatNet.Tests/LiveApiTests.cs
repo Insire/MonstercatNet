@@ -199,6 +199,17 @@ namespace SoftThorn.MonstercatNet.Tests
         }
 
         [Test, Order(15)]
+        public async Task Test_PlaylistAddTrack()
+        {
+            await Api.PlaylistAddTrack(new PlaylistAddTrackRequest()
+            {
+                PlaylistId = Playlist.Id,
+                ReleaseId = Guid.Parse("ff361c51-ed8c-49f7-b693-c04a1e01dcca"),
+                TrackId = Guid.Parse("95f781ba-2737-41aa-83a1-115e73b879a8")
+            });
+        }
+
+        [Test, Order(16)]
         public async Task Test_GetSelfPlaylists()
         {
             var playlists = await Api.GetSelfPlaylists();
@@ -209,7 +220,7 @@ namespace SoftThorn.MonstercatNet.Tests
             Assert.IsNotNull(playlists.Results.FirstOrDefault(p => p.Id == Playlist.Id));
         }
 
-        [Test, Order(16)]
+        [Test, Order(17)]
         public async Task Test_DeletePlaylist()
         {
             if (Playlist is null)
