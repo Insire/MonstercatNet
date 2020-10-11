@@ -96,6 +96,11 @@ namespace SoftThorn.MonstercatNet
         [Get("/self/playlists")]
         Task<SelfPlaylists> GetSelfPlaylists();
 
+        /// <summary>
+        /// add one track to the end of a playlist
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [Patch("/playlist/{request.PlaylistId}/record")]
         Task PlaylistAddTrack(PlaylistAddTrackRequest request);
 
@@ -108,8 +113,14 @@ namespace SoftThorn.MonstercatNet
         [Delete("/playlist/{playlistId}/record")]
         Task PlaylistDeleteTrack(Guid playlistId, [Body] PlaylistDeleteTrackRequest request);
 
-        // /playlist/[playlistId]
+        /// <summary>
+        /// Getting a playlist complete tracklist
+        /// </summary>
+        /// <returns></returns>
+        [Get("/playlist/{playlistId}/catalog")]
+        Task<PlaylistTracks> GetPlaylistTracks([Query] Guid playlistId);
 
-        // /playlist/[playlistId]/catalog
+        //[Patch("/playlist/{playlistId}")]
+        //Task UpdatePlaylist();
     }
 }
