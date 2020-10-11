@@ -33,7 +33,7 @@ namespace MonstercatNet.Sample.Wpf
 
             var builder = new StringBuilder();
 
-            var dtos = attributes.OrderBy(p => p.Method.Method).ThenBy(p => p.Path).Select(p => new RenderDto { Method = p.Method.Method, Path = p.Path }).ToList();
+            var dtos = attributes.OrderBy(p => p.Path).ThenBy(p => p.Method.Method).Select(p => new RenderDto { Method = p.Method.Method, Path = p.Path }).ToList();
 
             builder.AppendLine("# Endpoints");
             builder.AppendLine();

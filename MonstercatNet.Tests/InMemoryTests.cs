@@ -355,6 +355,12 @@ namespace SoftThorn.MonstercatNet.Tests
                     TrackId = Guid.Empty
                 }));
             }
+
+            [Test]
+            public void Test_PlaylistGetTrackListNullPlaylistId()
+            {
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.GetPlaylistTracks(Guid.Empty));
+            }
         }
     }
 }
