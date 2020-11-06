@@ -242,6 +242,14 @@ namespace SoftThorn.MonstercatNet.Tests
         }
 
         [Test, Order(19)]
+        public async Task Test_GetPlaylist()
+        {
+            var playlist = await Api.GetPlaylist(Playlist.Id);
+
+            Assert.IsNotNull(playlist);
+        }
+
+        [Test, Order(20)]
         public async Task Test_DeletePlaylist()
         {
             if (Playlist is null)

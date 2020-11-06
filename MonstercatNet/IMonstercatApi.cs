@@ -96,6 +96,9 @@ namespace SoftThorn.MonstercatNet
         [Get("/self/playlists")]
         Task<SelfPlaylists> GetSelfPlaylists();
 
+        [Get("/playlist/{playlistId}")]
+        Task<Playlist> GetPlaylist([Query] Guid playlistId);
+
         /// <summary>
         /// add one track to the end of a playlist
         /// </summary>
