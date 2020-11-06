@@ -6,6 +6,7 @@
 |GET|/catalog/filters|
 |GET|/catalog/release/{catalogId}|
 |DELETE|/playlist/{playlistId}|
+|GET|/playlist/{playlistId}|
 |GET|/playlist/{playlistId}/catalog|
 |DELETE|/playlist/{playlistId}/record|
 |PATCH|/playlist/{request.PlaylistId}/record|

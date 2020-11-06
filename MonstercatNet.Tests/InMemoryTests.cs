@@ -361,6 +361,12 @@ namespace SoftThorn.MonstercatNet.Tests
             {
                 Assert.ThrowsAsync<ArgumentNullException>(() => Api.GetPlaylistTracks(Guid.Empty));
             }
+
+            [Test]
+            public void Test_PlaylistGetPlaylistNullPlaylistId()
+            {
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.GetPlaylist(Guid.Empty));
+            }
         }
     }
 }

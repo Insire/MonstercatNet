@@ -311,5 +311,15 @@ namespace SoftThorn.MonstercatNet
 
             return _service.GetPlaylistTracks(playlistId);
         }
+
+        public Task<Playlist> GetPlaylist(Guid playlistId)
+        {
+            if (playlistId == Guid.Empty)
+            {
+                throw new ArgumentNullException(nameof(playlistId));
+            }
+
+            return _service.GetPlaylist(playlistId);
+        }
     }
 }
