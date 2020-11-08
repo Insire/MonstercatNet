@@ -14,8 +14,7 @@ using Cake.Core;
 // SETUP
 ///////////////////////////////////////////////////////////////////////////////
 
-var Configuration = Argument("configuration", "Release");
-
+const string Configuration = "Release";
 const string Platform = "AnyCPU";
 const string SolutionPath ="./MonstercatNet.sln";
 const string AssemblyInfoPath ="./SharedAssemblyInfo.cs";
@@ -73,6 +72,37 @@ private void MergeReports(string pattern, ReportGeneratorReportType type, string
     ReportGenerator(pattern, reportsFolder.Combine(subFolder), ReportGeneratorSettings);
 }
 
+private void Clean()
+{
+    var solution = ParseSolution(SolutionPath);
+
+    foreach(var project in solution.Projects)
+    {
+        // check solution items and exclude solution folders, since they are virtual
+        if(project.Name == "Solution Items")
+            continue;
+
+        var customProject = ParseProject(project.Path, configuration: Configuration, platform: Platform);
+
+        foreach(var path in customProject.OutputPaths)
+        {
+            CleanDirectory(path.FullPath);
+        }
+    }
+
+    var folders = new[]
+    {
+        new DirectoryPath(PackagePath),
+        new DirectoryPath(ResultsPath),
+    };
+
+    foreach(var folder in folders)
+    {
+        EnsureDirectoryExists(folder);
+        CleanDirectory(folder, (file) => !file.Path.Segments.Last().Contains(".gitignore"));
+    }
+}
+
 Setup(ctx =>
 {
     if(GitVersion().BranchName == "master")
@@ -99,34 +129,14 @@ Setup(ctx =>
 Task("CleanSolution")
     .Does(() =>
     {
-        var solution = ParseSolution(SolutionPath);
+        Clean();
+    });
 
-        foreach(var project in solution.Projects)
-        {
-            // check solution items and exclude solution folders, since they are virtual
-            if(project.Name == "Solution Items")
-                continue;
-
-            var customProject = ParseProject(project.Path, configuration: Configuration, platform: Platform);
-
-            foreach(var path in customProject.OutputPaths)
-            {
-                CleanDirectory(path.FullPath);
-            }
-        }
-
-        var folders = new[]
-        {
-            new DirectoryPath(PackagePath),
-            new DirectoryPath(ResultsPath),
-        };
-
-        foreach(var folder in folders)
-        {
-            EnsureDirectoryExists(folder);
-            CleanDirectory(folder, (file) => !file.Path.Segments.Last().Contains(".gitignore"));
-        }
-});
+Task("CleanSolutionAgain")
+    .Does(() =>
+    {
+        Clean();
+    });
 
 Task("UpdateAssemblyInfo")
     .Does(() =>
@@ -182,6 +192,7 @@ Task("UpdateAssemblyInfo")
 });
 
 Task("BuildAndPack")
+    .IsDependentOn("CleanSolutionAgain")
     .DoesForEach(nugetPackageProjects, project=>
     {
         var settings = new ProcessSettings()
@@ -189,19 +200,21 @@ Task("BuildAndPack")
             .WithArguments(builder => builder
                 .Append("pack")
                 .AppendQuoted(project)
-                .Append("--no-restore")
                 .Append("--nologo")
                 .Append($"-c {Configuration}")
                 .Append($"--output \"{PackagePath}\"")
                 .Append($"-p:PackageVersion={GitVersioningGetVersion().SemVer2}")
                 .Append($"-p:PublicRelease={publicRelease}")
 
+                // Creating symbol packages
                 .Append($"-p:IncludeSymbols=true")
-                .Append($"-p:DebugType=portable")
                 .Append($"-p:SymbolPackageFormat=snupkg")
-                .Append($"-p:SourceLinkCreate=true")
-                .Append($"-p:EmbedUntrackedSources=true")
+
+                // enable source linking
                 .Append($"-p:PublishRepositoryUrl=true")
+
+                // Deterministic Builds
+                 .Append($"-p:EmbedUntrackedSources=true")
             );
 
         StartProcess("dotnet", settings);
@@ -281,7 +294,7 @@ Task("TestAndUploadReport")
     .IsDependentOn("UploadCodecovReport");
 
 Task("PushLocally")
-    .WithCriteria(() => BuildSystem.IsLocalBuild,"since task is not running on a developer machine.")
+    .WithCriteria(() => BuildSystem.IsLocalBuild, "since task is not running on a developer machine.")
     .WithCriteria(() => DirectoryExists(localNugetDirectory), $@"since there is no local directory ({localNugetDirectory}) to push nuget packages to.")
     .DoesForEach(() => GetFiles(PackagePath + "/*.nupkg"), path =>
     {
@@ -295,11 +308,36 @@ Task("PushLocally")
         StartProcess("./tools/nuget.exe",settings);
     });
 
+Task("PushRemote")
+   .IsDependentOn("BuildAndPack")
+    // .WithCriteria(() => BuildSystem.IsRunningOnAzurePipelines || BuildSystem.IsRunningOnAzurePipelinesHosted, "since task is running on a azure devops.")
+    .WithCriteria(()=> !string.IsNullOrEmpty(EnvironmentVariable("NUGETORG_APIKEY")),"since environment variable NUGETORG_APIKEY missing or empty.")
+    .Does(() =>
+    {
+        foreach(var package in GetFiles(PackagePath + "/*.nupkg"))
+        {
+            var settings = new ProcessSettings()
+                .UseWorkingDirectory(".")
+                .WithArguments(builder => builder
+                    .Append("push")
+                    .AppendQuoted(package.FullPath)
+                    .AppendSwitchSecret("-apikey", EnvironmentVariable("NUGETORG_APIKEY"))
+                    .AppendSwitchQuoted("-source", "https://api.nuget.org/v3/index.json")
+                    .Append("-SkipDuplicate")
+                );
+
+            StartProcess("./tools/nuget.exe", settings);
+        }
+    });
+
+Task("Push")
+    .IsDependentOn("PushLocally")
+    .IsDependentOn("PushRemote");
+
 Task("Default")
     .IsDependentOn("CleanSolution")
     .IsDependentOn("UpdateAssemblyInfo")
     .IsDependentOn("TestAndUploadReport")
-    .IsDependentOn("BuildAndPack")
-    .IsDependentOn("PushLocally");
+    .IsDependentOn("Push");
 
 RunTarget(Argument("target", "Default"));
