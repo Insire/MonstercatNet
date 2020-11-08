@@ -138,10 +138,10 @@ Setup(ctx =>
     Information($"dotnet.exe ({ctx.Tools.Resolve("dotnet.exe")}) {(FileExists(Context.Tools.Resolve("dotnet.exe")) ? "was found" : "is missing")}");
     Information($"CodeCoverage.exe ({ctx.Tools.Resolve("CodeCoverage.exe")}) {(FileExists(Context.Tools.Resolve("CodeCoverage.exe")) ? "was found" : "is missing")}");
 
-    Information($"NUGETORG_APIKEY was {(string.IsNullOrEmpty(EnvironmentVariable("NUGETORG_APIKEY")) ? " not" : "")} set.");
-    Information($"CODECOV_TOKEN was {(string.IsNullOrEmpty(EnvironmentVariable("CODECOV_TOKEN")) ? " not" : "")} set.");
-    Information($"ApiCredentials__Email was {(string.IsNullOrEmpty(EnvironmentVariable("ApiCredentials__Email")) ? " not" : "")} set.");
-    Information($"ApiCredentials__Password was {(string.IsNullOrEmpty(EnvironmentVariable("ApiCredentials__Password")) ? " not" : "")} set.");
+    Information($"NUGETORG_APIKEY was{(string.IsNullOrEmpty(EnvironmentVariable("NUGETORG_APIKEY")) ? " not" : "")} set.");
+    Information($"CODECOV_TOKEN was{(string.IsNullOrEmpty(EnvironmentVariable("CODECOV_TOKEN")) ? " not" : "")} set.");
+    Information($"ApiCredentials__Email was{(string.IsNullOrEmpty(EnvironmentVariable("ApiCredentials__Email")) ? " not" : "")} set.");
+    Information($"ApiCredentials__Password was{(string.IsNullOrEmpty(EnvironmentVariable("ApiCredentials__Password")) ? " not" : "")} set.");
 });
 
 ///////////////////////////////////////////////////////////////////////////////
