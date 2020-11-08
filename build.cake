@@ -116,13 +116,12 @@ Setup(ctx =>
         Information("Building a pre-release.");
     }
 
-    Debug("IsLocalBuild: " + BuildSystem.IsLocalBuild);
-    Debug("IsRunningOnAppVeyor: " + BuildSystem.IsRunningOnAppVeyor);
-    Debug("IsRunningOnAzurePipelines: " + BuildSystem.IsRunningOnAzurePipelines);
-    Debug("IsRunningOnAzurePipelinesHosted: " + BuildSystem.IsRunningOnAzurePipelinesHosted);
-
     Information("Provider: " + BuildSystem.Provider);
+
     Information($"nuget.exe ({ctx.Tools.Resolve("nuget.exe")}) {(FileExists(Context.Tools.Resolve("nuget.exe")) ? "was found" : "is missing")}");
+    Information($"dotnet.exe ({ctx.Tools.Resolve("dotnet.exe")}) {(FileExists(Context.Tools.Resolve("dotnet.exe")) ? "was found" : "is missing")}");
+    Information($"CodeCoverage.exe ({ctx.Tools.Resolve("CodeCoverage.exe")}) {(FileExists(Context.Tools.Resolve("CodeCoverage.exe")) ? "was found" : "is missing")}");
+
     Information($"NUGETORG_APIKEY was {(string.IsNullOrEmpty(EnvironmentVariable("NUGETORG_APIKEY")) ? "not " : "")}set.");
     Information($"CODECOV_TOKEN was {(string.IsNullOrEmpty(EnvironmentVariable("CODECOV_TOKEN")) ? "not " : "")}set.");
 
@@ -208,7 +207,7 @@ Task("BuildAndPack")
                 .Append($"-c {Configuration}")
                 .Append($"--output \"{PackagePath}\"")
                 .Append($"-p:PackageVersion={GitVersioningGetVersion().SemVer2}")
-                .Append($"-p:PublicRelease={publicRelease}")
+                .Append($"-p:PublicRelease={publicRelease}") // Nerdbank.GitVersioning - omit git commit ID
 
                 // Creating symbol packages
                 .Append($"-p:IncludeSymbols=true")
@@ -221,7 +220,7 @@ Task("BuildAndPack")
                 .Append($"-p:EmbedUntrackedSources=true")
             );
 
-        StartProcess("dotnet", settings);
+        StartProcess(Context.Tools.Resolve("dotnet.exe"), settings);
     });
 
 Task("Test")
@@ -230,8 +229,8 @@ Task("Test")
         var projectFile = @"./MonstercatNet.Tests/MonstercatNet.Tests.csproj";
         var testSettings = new DotNetCoreTestSettings
         {
-            Framework="netcoreapp3.1",
-            Configuration = "Release",
+            Framework = "netcoreapp3.1",
+            Configuration = Configuration,
             NoBuild = false,
             NoRestore = false,
             ArgumentCustomization = builder => builder
@@ -251,7 +250,6 @@ Task("ConvertCoverage")
     .WithCriteria(() => Context.Tools.Resolve("CodeCoverage.exe") != null, $"since CodeCoverage.exe is not a registered tool.")
     .DoesForEach(() => GetFiles($"{ResultsPath}/coverage/**/*.coverage"), file =>
     {
-        var codeCoverageExe = Context.Tools.Resolve("CodeCoverage.exe");
         var result = System.IO.Path.ChangeExtension(file.FullPath, ".xml");
 
         var settings = new ProcessSettings()
@@ -262,7 +260,7 @@ Task("ConvertCoverage")
                     .Append(file.FullPath)
                 );
 
-        StartProcess(codeCoverageExe.FullPath, settings);
+        StartProcess(Context.Tools.Resolve("CodeCoverage.exe"), settings);
     });
 
 Task("CoberturaReport")
