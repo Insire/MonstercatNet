@@ -33,7 +33,7 @@ namespace MonstercatNet.Sample.Wpf
 
             var builder = new StringBuilder();
 
-            var dtos = attributes.OrderBy(p => p.Path).ThenBy(p => p.Method.Method).Select(p => new RenderDto { Method = p.Method.Method, Path = p.Path }).ToList();
+            var dtos = attributes.OrderBy(p => p.Path).ThenBy(p => p.Method.Method).Select(p => new RenderDto { Method = p.Method.Method, Path = p.Path }).Distinct(new RenderDtoEqualityComparer()).ToList();
 
             builder.AppendLine("# Endpoints");
             builder.AppendLine();
@@ -50,7 +50,7 @@ namespace MonstercatNet.Sample.Wpf
         }
 
         [DebuggerDisplay("{" + nameof(GetDebuggerDisplay) + "(),nq}")]
-        private class RenderDto
+        private sealed class RenderDto
         {
             public string Path { get; set; }
             public string Method { get; set; }
@@ -58,6 +58,27 @@ namespace MonstercatNet.Sample.Wpf
             private string GetDebuggerDisplay()
             {
                 return Method + " " + Path;
+            }
+        }
+
+        private sealed class RenderDtoEqualityComparer : IEqualityComparer<RenderDto>
+        {
+            public bool Equals(RenderDto b1, RenderDto b2)
+            {
+                if (b2 == null && b1 == null)
+                    return true;
+                else if (b1 == null || b2 == null)
+                    return false;
+                else if (b1.Method == b2.Method && b1.Path == b2.Path)
+                    return true;
+                else
+                    return false;
+            }
+
+            public int GetHashCode(RenderDto bx)
+            {
+                var hCode = bx.Method.GetHashCode() ^ bx.Path.GetHashCode();
+                return hCode.GetHashCode();
             }
         }
     }
