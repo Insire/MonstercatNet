@@ -80,9 +80,15 @@ namespace SoftThorn.MonstercatNet
         [Get("/release/{request.ReleaseId}/track-download/{request.TrackId}")]
         Task<HttpContent> DownloadTrack([Query] TrackDownloadRequest request);
 
+        /// <summary>
+        /// no login required
+        /// </summary>
         [Get("/release/{request.ReleaseId}/track-stream/{request.TrackId}")]
         Task<HttpContent> StreamTrack([Query] TrackStreamRequest request);
 
+        /// <summary>
+        /// create a new playlist. requires login.
+        /// </summary>
         [Post("/self/playlist")]
         Task<Playlist> CreatePlaylist(PlaylistCreateRequest request);
 
@@ -93,17 +99,21 @@ namespace SoftThorn.MonstercatNet
         [Delete("/playlist/{playlistId}")]
         Task DeletePlaylist([Query] Guid playlistId);
 
+        /// <summary>
+        /// fetch your playlists. requires login.
+        /// </summary>
         [Get("/self/playlists")]
         Task<SelfPlaylists> GetSelfPlaylists();
 
+        /// <summary>
+        /// fetch a playlist. Might require login, depending on whether you fetch your own playlist or the playlist is private.
+        /// </summary>
         [Get("/playlist/{playlistId}")]
         Task<Playlist> GetPlaylist([Query] Guid playlistId);
 
         /// <summary>
         /// add one track to the end of a playlist
         /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
         [Patch("/playlist/{request.PlaylistId}/record")]
         Task PlaylistAddTrack(PlaylistAddTrackRequest request);
 
@@ -119,11 +129,25 @@ namespace SoftThorn.MonstercatNet
         /// <summary>
         /// Getting a playlist complete tracklist
         /// </summary>
-        /// <returns></returns>
         [Get("/playlist/{playlistId}/catalog")]
         Task<PlaylistTracks> GetPlaylistTracks([Query] Guid playlistId);
 
-        //[Patch("/playlist/{playlistId}")]
-        //Task UpdatePlaylist();
+        /// <summary>
+        /// rename a playlist
+        /// </summary>
+        /// <remarks>
+        /// this can a take a while
+        /// </remarks>
+        [Patch("/playlist/{playlistId}")]
+        Task<Playlist> RenamePlaylist([Query] Guid playlistId, [Body] PlaylistRenameRequest request);
+
+        /// <summary>
+        /// switch the playlist from public to private or vice versa
+        /// </summary>
+        /// <remarks>
+        /// this can a take a while
+        /// </remarks>
+        [Patch("/playlist/{playlistId}")]
+        Task<Playlist> SwitchPlaylistAvailability([Query] Guid playlistId, [Body] PlaylistSwitchAvailabilityRequest request);
     }
 }

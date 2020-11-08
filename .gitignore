@@ -344,3 +344,5 @@ tools/
 !tools/packages.config
 
 results/
+
+.vscode
