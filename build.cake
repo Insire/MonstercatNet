@@ -310,7 +310,7 @@ Task("PushLocally")
 
 Task("PushRemote")
    .IsDependentOn("BuildAndPack")
-    // .WithCriteria(() => BuildSystem.IsRunningOnAzurePipelines || BuildSystem.IsRunningOnAzurePipelinesHosted, "since task is running on a azure devops.")
+    .WithCriteria(() => BuildSystem.IsRunningOnAzurePipelines || BuildSystem.IsRunningOnAzurePipelinesHosted, "since task is running on a azure devops.")
     .WithCriteria(()=> !string.IsNullOrEmpty(EnvironmentVariable("NUGETORG_APIKEY")),"since environment variable NUGETORG_APIKEY missing or empty.")
     .Does(() =>
     {
