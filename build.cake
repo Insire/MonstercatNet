@@ -122,6 +122,7 @@ Setup(ctx =>
     Debug("IsRunningOnAzurePipelinesHosted: " + BuildSystem.IsRunningOnAzurePipelinesHosted);
 
     Information("Provider: " + BuildSystem.Provider);
+    Information("nuget.exe located at: " + ctx.Tools.Resolve("nuget.exe"));
 });
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -215,7 +216,7 @@ Task("BuildAndPack")
                 .Append($"-p:PublishRepositoryUrl=true")
 
                 // Deterministic Builds
-                 .Append($"-p:EmbedUntrackedSources=true")
+                .Append($"-p:EmbedUntrackedSources=true")
             );
 
         StartProcess("dotnet", settings);
@@ -297,6 +298,7 @@ Task("TestAndUploadReport")
 Task("PushLocally")
     .WithCriteria(() => BuildSystem.IsLocalBuild, "since task is not running on a developer machine.")
     .WithCriteria(() => DirectoryExists(localNugetDirectory), $@"since there is no local directory ({localNugetDirectory}) to push nuget packages to.")
+    .WithCriteria(() => !FileExists(Context.Tools.Resolve("nuget.exe")), $@"since there is no nuget.exe registered with cake")
     .DoesForEach(() => GetFiles(PackagePath + "/*.nupkg"), path =>
     {
         var settings = new ProcessSettings()
@@ -306,13 +308,14 @@ Task("PushLocally")
             .AppendSwitchQuoted("-source", localNugetDirectory)
             .AppendQuoted(path.FullPath));
 
-        StartProcess("./tools/nuget.exe",settings);
+        StartProcess(Context.Tools.Resolve("nuget.exe"), settings);
     });
 
 Task("PushRemote")
     .IsDependentOn("BuildAndPack")
     .WithCriteria(() => BuildSystem.IsRunningOnAzurePipelines || BuildSystem.IsRunningOnAzurePipelinesHosted, "since task is running on a azure devops.")
     .WithCriteria(()=> !string.IsNullOrEmpty(EnvironmentVariable("NUGETORG_APIKEY")),"since environment variable NUGETORG_APIKEY missing or empty.")
+    .WithCriteria(() => !FileExists(Context.Tools.Resolve("nuget.exe")), $@"since there is no nuget.exe registered with cake")
     .Does(() =>
     {
         foreach(var package in GetFiles(packageFolder.FullPath + "/*.nupkg"))
@@ -328,7 +331,7 @@ Task("PushRemote")
                     .Append("-Verbosity detailed")
                 );
 
-            StartProcess("./tools/nuget.exe", settings);
+            StartProcess(Context.Tools.Resolve("nuget.exe"), settings);
         }
     });
 
