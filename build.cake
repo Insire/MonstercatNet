@@ -122,7 +122,10 @@ Setup(ctx =>
     Debug("IsRunningOnAzurePipelinesHosted: " + BuildSystem.IsRunningOnAzurePipelinesHosted);
 
     Information("Provider: " + BuildSystem.Provider);
-    Information("nuget.exe located at: " + ctx.Tools.Resolve("nuget.exe"));
+    Information($"nuget.exe ({ctx.Tools.Resolve("nuget.exe")}) {(FileExists(Context.Tools.Resolve("nuget.exe")) ? "was found" : "is missing")}");
+    Information($"NUGETORG_APIKEY was {(string.IsNullOrEmpty(EnvironmentVariable("NUGETORG_APIKEY")) ? "not " : "")}set.");
+    Information($"CODECOV_TOKEN was {(string.IsNullOrEmpty(EnvironmentVariable("CODECOV_TOKEN")) ? "not " : "")}set.");
+
 });
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -195,7 +198,7 @@ Task("UpdateAssemblyInfo")
 
 Task("BuildAndPack")
     .IsDependentOn("CleanSolutionAgain")
-    .DoesForEach(nugetPackageProjects, project=>
+    .DoesForEach(nugetPackageProjects, project =>
     {
         var settings = new ProcessSettings()
             .UseWorkingDirectory(".")
@@ -223,7 +226,7 @@ Task("BuildAndPack")
     });
 
 Task("Test")
-    .Does(()=>
+    .Does(() =>
     {
         var projectFile = @"./MonstercatNet.Tests/MonstercatNet.Tests.csproj";
         var testSettings = new DotNetCoreTestSettings
@@ -246,8 +249,8 @@ Task("Test")
 
 Task("ConvertCoverage")
     .IsDependentOn("Test")
-    .WithCriteria(()=> Context.Tools.Resolve("CodeCoverage.exe") != null, $"since CodeCoverage.exe is not a registered tool.")
-    .DoesForEach(()=> GetFiles($"{ResultsPath}/coverage/**/*.coverage"), file=>
+    .WithCriteria(() => Context.Tools.Resolve("CodeCoverage.exe") != null, $"since CodeCoverage.exe is not a registered tool.")
+    .DoesForEach(() => GetFiles($"{ResultsPath}/coverage/**/*.coverage"), file =>
     {
         var codeCoverageExe = Context.Tools.Resolve("CodeCoverage.exe");
         var result = System.IO.Path.ChangeExtension(file.FullPath, ".xml");
@@ -265,28 +268,28 @@ Task("ConvertCoverage")
 
 Task("CoberturaReport")
     .IsDependentOn("ConvertCoverage")
-    .WithCriteria(()=> GetFiles("./Results/coverage/**/*.xml").Count > 0, $"since there is no coverage xml file in /Results/coverage/.")
-    .WithCriteria(()=> BuildSystem.IsRunningOnAzurePipelinesHosted, "since task is not running on a Azure Pipelines (Hosted).")
-    .Does(()=>
+    .WithCriteria(() => GetFiles("./Results/coverage/**/*.xml").Count > 0, $"since there is no coverage xml file in /Results/coverage/.")
+    .WithCriteria(() => BuildSystem.IsRunningOnAzurePipelinesHosted, "since task is not running on a Azure Pipelines (Hosted).")
+    .Does(() =>
     {
         MergeReports("./Results/coverage/**/*.xml", ReportGeneratorReportType.Cobertura, "cobertura");
     });
 
 Task("HtmlReport")
     .IsDependentOn("ConvertCoverage")
-    .WithCriteria(()=> GetFiles("./Results/coverage/**/*.xml").Count > 0, $"since there is no coverage xml file in /Results/coverage/.")
-    .WithCriteria(()=> BuildSystem.IsLocalBuild, "since task is not running on a developer machine.")
-    .Does(()=>
+    .WithCriteria(() => GetFiles("./Results/coverage/**/*.xml").Count > 0, $"since there is no coverage xml file in /Results/coverage/.")
+    .WithCriteria(() => BuildSystem.IsLocalBuild, "since task is not running on a developer machine.")
+    .Does(() =>
     {
         MergeReports("./Results/coverage/**/*.xml", ReportGeneratorReportType.Html, "html");
     });
 
 Task("UploadCodecovReport")
     .IsDependentOn("CoberturaReport")
-    .WithCriteria(()=> FileExists(coberturaResultFile.FullPath), $"since {coberturaResultFile} wasn't created.")
-    .WithCriteria(()=> BuildSystem.IsRunningOnAzurePipelinesHosted, "since task is not running on AzurePipelines (Hosted).")
-    .WithCriteria(()=> !string.IsNullOrEmpty(EnvironmentVariable("CODECOV_TOKEN")),"since environment variable CODECOV_TOKEN missing or empty.")
-    .Does(()=>
+    .WithCriteria(() => FileExists(coberturaResultFile.FullPath), $"since {coberturaResultFile} wasn't created.")
+    .WithCriteria(() => BuildSystem.IsRunningOnAzurePipelinesHosted, "since task is not running on AzurePipelines (Hosted).")
+    .WithCriteria(() => !string.IsNullOrEmpty(EnvironmentVariable("CODECOV_TOKEN")),"since environment variable CODECOV_TOKEN missing or empty.")
+    .Does(() =>
     {
         Codecov(new[]{ coberturaResultFile.FullPath }, EnvironmentVariable("CODECOV_TOKEN"));
     });
@@ -298,7 +301,7 @@ Task("TestAndUploadReport")
 Task("PushLocally")
     .WithCriteria(() => BuildSystem.IsLocalBuild, "since task is not running on a developer machine.")
     .WithCriteria(() => DirectoryExists(localNugetDirectory), $@"since there is no local directory ({localNugetDirectory}) to push nuget packages to.")
-    .WithCriteria(() => !FileExists(Context.Tools.Resolve("nuget.exe")), $@"since there is no nuget.exe registered with cake")
+    .WithCriteria(() => FileExists(Context.Tools.Resolve("nuget.exe")), $@"since there is no nuget.exe registered with cake")
     .DoesForEach(() => GetFiles(PackagePath + "/*.nupkg"), path =>
     {
         var settings = new ProcessSettings()
@@ -314,8 +317,8 @@ Task("PushLocally")
 Task("PushRemote")
     .IsDependentOn("BuildAndPack")
     .WithCriteria(() => BuildSystem.IsRunningOnAzurePipelines || BuildSystem.IsRunningOnAzurePipelinesHosted, "since task is running on a azure devops.")
-    .WithCriteria(()=> !string.IsNullOrEmpty(EnvironmentVariable("NUGETORG_APIKEY")),"since environment variable NUGETORG_APIKEY missing or empty.")
-    .WithCriteria(() => !FileExists(Context.Tools.Resolve("nuget.exe")), $@"since there is no nuget.exe registered with cake")
+    .WithCriteria(() => !string.IsNullOrEmpty(EnvironmentVariable("NUGETORG_APIKEY")),"since environment variable NUGETORG_APIKEY missing or empty.")
+    .WithCriteria(() => FileExists(Context.Tools.Resolve("nuget.exe")), $@"since there is no nuget.exe registered with cake")
     .Does(() =>
     {
         foreach(var package in GetFiles(packageFolder.FullPath + "/*.nupkg"))
@@ -328,7 +331,7 @@ Task("PushRemote")
                     .AppendSwitchSecret("-apikey", EnvironmentVariable("NUGETORG_APIKEY"))
                     .AppendSwitchQuoted("-source", "https://api.nuget.org/v3/index.json")
                     .Append("-SkipDuplicate")
-                    .Append("-Verbosity detailed")
+                    .AppendSwitch("-Verbosity", "detailed")
                 );
 
             StartProcess(Context.Tools.Resolve("nuget.exe"), settings);
