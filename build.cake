@@ -21,17 +21,15 @@ const string AssemblyInfoPath ="./SharedAssemblyInfo.cs";
 const string PackagePath = "./packages";
 const string ResultsPath = "./results";
 const string CoberturaResultsPath = "results/reports/cobertura";
-const string localNugetDirectory = @"D:\Drop\NuGet";
+const string LocalNugetDirectory = @"D:\Drop\NuGet";
 
-var packageFolder = MakeAbsolute(new DirectoryPath(PackagePath));
-var reportsFolder = new DirectoryPath(ResultsPath).Combine("reports");
-var coberturaResultFile = Context.Environment.WorkingDirectory.Combine(CoberturaResultsPath).CombineWithFilePath("Cobertura.xml");
-var vstestResultsFile = new FilePath("vsTestResults.trx");
-var codeCoverageBinaryFile = new FilePath("vsCodeCoverage.coverage");
-var codeCoverageResultsFile = new FilePath("vsCodeCoverage.xml");
+var PackageFolder = MakeAbsolute(new DirectoryPath(PackagePath));
+var ReportsFolder = new DirectoryPath(ResultsPath).Combine("reports");
 
-var publicRelease = false;
-var gitVersion = default(GitVersion);
+var CoberturaResultFile = Context.Environment.WorkingDirectory.Combine(CoberturaResultsPath).CombineWithFilePath("Cobertura.xml");
+
+var PublicRelease = false;
+var GitVersionResult = default(GitVersion);
 
 // projects that are supposed to generate a nuget package
 var nugetPackageProjects = new[]
@@ -61,7 +59,7 @@ private void GenerateReport(FilePath inputFile, ReportGeneratorReportType type, 
         type
     };
 
-    ReportGenerator(inputFile, reportsFolder.Combine(subFolder), ReportGeneratorSettings);
+    ReportGenerator(inputFile, ReportsFolder.Combine(subFolder), ReportGeneratorSettings);
 }
 
 private void MergeReports(string pattern, ReportGeneratorReportType type, string subFolder)
@@ -71,10 +69,10 @@ private void MergeReports(string pattern, ReportGeneratorReportType type, string
         type
     };
 
-    ReportGenerator(pattern, reportsFolder.Combine(subFolder), ReportGeneratorSettings);
+    ReportGenerator(pattern, ReportsFolder.Combine(subFolder), ReportGeneratorSettings);
 }
 
-private void Clean()
+private void Clean(bool cleanBin, bool cleanObj, bool cleanOutput, bool cleanMisc)
 {
     var solution = ParseSolution(SolutionPath);
 
@@ -85,58 +83,69 @@ private void Clean()
             continue;
 
         var projectFile = project.Path; // FilePath
-        var binFolder = projectFile.GetDirectory().Combine("bin");
-        if(DirectoryExists(binFolder))
+        if(cleanBin)
         {
-            CleanDirectory(binFolder);
+            var binFolder = projectFile.GetDirectory().Combine("bin");
+            if(DirectoryExists(binFolder))
+            {
+                CleanDirectory(binFolder);
+            }
         }
 
-        var objFolder = projectFile.GetDirectory().Combine("obj");
-        if(DirectoryExists(objFolder))
+        if(cleanObj)
         {
-            CleanDirectory(objFolder);
+            var objFolder = projectFile.GetDirectory().Combine("obj");
+            if(DirectoryExists(objFolder))
+            {
+                CleanDirectory(objFolder);
+            }
         }
 
-        var customProject = ParseProject(project.Path, configuration: Configuration, platform: Platform);
-        foreach(var path in customProject.OutputPaths)
+        if(cleanOutput)
         {
-            CleanDirectory(path.FullPath);
+            var customProject = ParseProject(project.Path, configuration: Configuration, platform: Platform);
+            foreach(var path in customProject.OutputPaths)
+            {
+                CleanDirectory(path.FullPath);
+            }
         }
     }
 
-    var folders = new[]
+    if(cleanMisc)
     {
-        new DirectoryPath(PackagePath),
-        new DirectoryPath(ResultsPath),
-    };
+        var folders = new[]
+        {
+            new DirectoryPath(PackagePath),
+            new DirectoryPath(ResultsPath),
+        };
 
-    foreach(var folder in folders)
-    {
-        EnsureDirectoryExists(folder);
-        CleanDirectory(folder, (file) => !file.Path.Segments.Last().Contains(".gitignore"));
+        foreach(var folder in folders)
+        {
+            EnsureDirectoryExists(folder);
+            CleanDirectory(folder, (file) => !file.Path.Segments.Last().Contains(".gitignore"));
+        }
     }
 }
 
 Setup(ctx =>
 {
-    gitVersion = GitVersion();
-    if(gitVersion.BranchName == "master")
+    GitVersionResult = GitVersion();
+    if(GitVersionResult.BranchName == "master")
     {
-        publicRelease = true;
+        PublicRelease = true;
         Information("Building a public release.");
     }
     else
     {
-        publicRelease = true;
         Information("Building a pre-release.");
     }
 
     Information($"Provider: {BuildSystem.Provider}");
     Information($"Platform: {Context.Environment.Platform.Family} ({(Context.Environment.Platform.Is64Bit ? "x64" : "x86")})");
 
-    Information($"nuget.exe ({ctx.Tools.Resolve("nuget.exe")}) {(FileExists(Context.Tools.Resolve("nuget.exe")) ? "was found" : "is missing")}");
-    Information($"dotnet.exe ({ctx.Tools.Resolve("dotnet.exe")}) {(FileExists(Context.Tools.Resolve("dotnet.exe")) ? "was found" : "is missing")}");
-    Information($"CodeCoverage.exe ({ctx.Tools.Resolve("CodeCoverage.exe")}) {(FileExists(Context.Tools.Resolve("CodeCoverage.exe")) ? "was found" : "is missing")}");
+    Information($"nuget.exe ({ctx.Tools.Resolve("nuget.exe")}) {(FileExists(Context.Tools.Resolve("nuget.exe")) ? "was found" : "is missing")}.");
+    Information($"dotnet.exe ({ctx.Tools.Resolve("dotnet.exe")}) {(FileExists(Context.Tools.Resolve("dotnet.exe")) ? "was found" : "is missing")}.");
+    Information($"CodeCoverage.exe ({ctx.Tools.Resolve("CodeCoverage.exe")}) {(FileExists(Context.Tools.Resolve("CodeCoverage.exe")) ? "was found" : "is missing")}.");
 
     Information($"NUGETORG_APIKEY was{(string.IsNullOrEmpty(EnvironmentVariable("NUGETORG_APIKEY")) ? " not" : "")} set.");
     Information($"CODECOV_TOKEN was{(string.IsNullOrEmpty(EnvironmentVariable("CODECOV_TOKEN")) ? " not" : "")} set.");
@@ -150,13 +159,13 @@ Setup(ctx =>
 Task("CleanSolution")
     .Does(() =>
     {
-        Clean();
+        Clean(true,true,true,true);
     });
 
 Task("CleanSolutionAgain")
     .Does(() =>
     {
-        Clean();
+        Clean(true,true,true,false);
     });
 
 Task("UpdateAssemblyInfo")
@@ -188,17 +197,17 @@ Task("UpdateAssemblyInfo")
                 new AssemblyInfoMetadataAttribute()
                 {
                     Key = "PublicRelease",
-                    Value = publicRelease.ToString(),
+                    Value = PublicRelease.ToString(),
                 },
                 new AssemblyInfoMetadataAttribute()
                 {
                     Key = "Branch",
-                    Value = gitVersion.BranchName,
+                    Value = GitVersionResult.BranchName,
                 },
                 new AssemblyInfoMetadataAttribute()
                 {
                     Key = "Commit",
-                    Value = gitVersion.Sha,
+                    Value = GitVersionResult.Sha,
                 },
                 new AssemblyInfoMetadataAttribute()
                 {
@@ -223,7 +232,7 @@ Task("BuildAndPack")
                 .Append($"-c {Configuration}")
                 .Append($"--output \"{PackagePath}\"")
                 .Append($"-p:PackageVersion={GitVersioningGetVersion().SemVer2}")
-                .Append($"-p:PublicRelease={publicRelease}") // Nerdbank.GitVersioning - omit git commit ID
+                .Append($"-p:PublicRelease={PublicRelease}") // Nerdbank.GitVersioning - omit git commit ID
 
                 // Creating symbol packages
                 .Append($"-p:IncludeSymbols=true")
@@ -234,9 +243,6 @@ Task("BuildAndPack")
 
                 // Deterministic Builds
                 .Append($"-p:EmbedUntrackedSources=true")
-
-                .Append($"-p:DebugType=portable")
-                .Append($"-p:DebugSymbols=true")
             );
 
         StartProcess(Context.Tools.Resolve("dotnet.exe"), settings);
@@ -260,7 +266,7 @@ Task("Test")
                 .Append($"-p:DebugType=full") // required for opencover codecoverage and sourcelinking
                 .Append($"-p:DebugSymbols=true") // required for opencover codecoverage
                 .AppendSwitchQuoted("--collect",":","\"\"Code Coverage\"\"")
-                .Append($"--logger:trx;LogFileName=..\\{vstestResultsFile.FullPath};"),
+                .Append($"--logger:trx;LogFileName=..\\vsTestResults.trx;"),
         };
 
         DotNetCoreTest(projectFile, testSettings);
@@ -287,7 +293,7 @@ Task("ConvertCoverage")
 Task("CoberturaReport")
     .IsDependentOn("ConvertCoverage")
     .WithCriteria(() => GetFiles("./Results/coverage/**/*.xml").Count > 0, $"since there is no coverage xml file in /Results/coverage/.")
-    .WithCriteria(() => BuildSystem.IsRunningOnAzurePipelinesHosted, "since task is not running on a Azure Pipelines (Hosted).")
+    .WithCriteria(() => BuildSystem.IsRunningOnAzurePipelines || BuildSystem.IsRunningOnAzurePipelinesHosted, "since task is not running on a Azure Pipelines (Hosted).")
     .Does(() =>
     {
         MergeReports("./Results/coverage/**/*.xml", ReportGeneratorReportType.Cobertura, "cobertura");
@@ -304,12 +310,12 @@ Task("HtmlReport")
 
 Task("UploadCodecovReport")
     .IsDependentOn("CoberturaReport")
-    .WithCriteria(() => FileExists(coberturaResultFile.FullPath), $"since {coberturaResultFile} wasn't created.")
-    .WithCriteria(() => BuildSystem.IsRunningOnAzurePipelinesHosted, "since task is not running on AzurePipelines (Hosted).")
+    .WithCriteria(() => FileExists(CoberturaResultFile.FullPath), $"since {CoberturaResultFile} wasn't created.")
+    .WithCriteria(() => BuildSystem.IsRunningOnAzurePipelines || BuildSystem.IsRunningOnAzurePipelinesHosted, "since task is not running on AzurePipelines (Hosted).")
     .WithCriteria(() => !string.IsNullOrEmpty(EnvironmentVariable("CODECOV_TOKEN")),"since environment variable CODECOV_TOKEN missing or empty.")
     .Does(() =>
     {
-        Codecov(new[]{ coberturaResultFile.FullPath }, EnvironmentVariable("CODECOV_TOKEN"));
+        Codecov(new[]{ CoberturaResultFile.FullPath }, EnvironmentVariable("CODECOV_TOKEN"));
     });
 
 Task("TestAndUploadReport")
@@ -318,7 +324,7 @@ Task("TestAndUploadReport")
 
 Task("PushLocally")
     .WithCriteria(() => BuildSystem.IsLocalBuild, "since task is not running on a developer machine.")
-    .WithCriteria(() => DirectoryExists(localNugetDirectory), $@"since there is no local directory ({localNugetDirectory}) to push nuget packages to.")
+    .WithCriteria(() => DirectoryExists(LocalNugetDirectory), $@"since there is no local directory ({LocalNugetDirectory}) to push nuget packages to.")
     .WithCriteria(() => FileExists(Context.Tools.Resolve("nuget.exe")), $@"since there is no nuget.exe registered with cake")
     .DoesForEach(() => GetFiles(PackagePath + "/*.nupkg"), path =>
     {
@@ -326,7 +332,7 @@ Task("PushLocally")
             .UseWorkingDirectory(".")
             .WithArguments(builder => builder
             .Append("push")
-            .AppendSwitchQuoted("-source", localNugetDirectory)
+            .AppendSwitchQuoted("-source", LocalNugetDirectory)
             .AppendQuoted(path.FullPath));
 
         StartProcess(Context.Tools.Resolve("nuget.exe"), settings);
@@ -339,7 +345,7 @@ Task("PushRemote")
     .WithCriteria(() => FileExists(Context.Tools.Resolve("nuget.exe")), $@"since there is no nuget.exe registered with cake")
     .Does(() =>
     {
-        foreach(var package in GetFiles(packageFolder.FullPath + "/*.nupkg"))
+        foreach(var package in GetFiles(PackageFolder.FullPath + "/*.nupkg"))
         {
             var settings = new ProcessSettings()
                 .UseWorkingDirectory(".")
@@ -348,7 +354,6 @@ Task("PushRemote")
                     .AppendQuoted(package.FullPath)
                     .AppendSwitchSecret("-apikey", EnvironmentVariable("NUGETORG_APIKEY"))
                     .AppendSwitchQuoted("-source", "https://api.nuget.org/v3/index.json")
-                    .Append("-SkipDuplicate")
                     .AppendSwitch("-Verbosity", "detailed")
                 );
 
