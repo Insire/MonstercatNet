@@ -205,7 +205,6 @@ Task("BuildAndPack")
             .WithArguments(builder => builder
                 .Append("pack")
                 .AppendQuoted(project)
-                .Append("--nologo")
                 .Append($"-c {Configuration}")
                 .Append($"--output \"{PackagePath}\"")
                 .Append($"-p:PackageVersion={GitVersioningGetVersion().SemVer2}")
