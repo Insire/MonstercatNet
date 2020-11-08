@@ -23,6 +23,7 @@ const string ResultsPath = "./results";
 const string CoberturaResultsPath = "results/reports/cobertura";
 const string localNugetDirectory = @"D:\Drop\NuGet";
 
+var packageFolder = MakeAbsolute(new DirectoryPath(PackagePath));
 var reportsFolder = new DirectoryPath(ResultsPath).Combine("reports");
 var coberturaResultFile = Context.Environment.WorkingDirectory.Combine(CoberturaResultsPath).CombineWithFilePath("Cobertura.xml");
 var vstestResultsFile = new FilePath("vsTestResults.trx");
@@ -309,12 +310,12 @@ Task("PushLocally")
     });
 
 Task("PushRemote")
-   .IsDependentOn("BuildAndPack")
+    .IsDependentOn("BuildAndPack")
     .WithCriteria(() => BuildSystem.IsRunningOnAzurePipelines || BuildSystem.IsRunningOnAzurePipelinesHosted, "since task is running on a azure devops.")
     .WithCriteria(()=> !string.IsNullOrEmpty(EnvironmentVariable("NUGETORG_APIKEY")),"since environment variable NUGETORG_APIKEY missing or empty.")
     .Does(() =>
     {
-        foreach(var package in GetFiles(PackagePath + "/*.nupkg"))
+        foreach(var package in GetFiles(packageFolder.FullPath + "/*.nupkg"))
         {
             var settings = new ProcessSettings()
                 .UseWorkingDirectory(".")
@@ -324,6 +325,7 @@ Task("PushRemote")
                     .AppendSwitchSecret("-apikey", EnvironmentVariable("NUGETORG_APIKEY"))
                     .AppendSwitchQuoted("-source", "https://api.nuget.org/v3/index.json")
                     .Append("-SkipDuplicate")
+                    .Append("-Verbosity detailed")
                 );
 
             StartProcess("./tools/nuget.exe", settings);
