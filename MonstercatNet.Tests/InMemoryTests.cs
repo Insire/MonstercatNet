@@ -367,6 +367,42 @@ namespace SoftThorn.MonstercatNet.Tests
             {
                 Assert.ThrowsAsync<ArgumentNullException>(() => Api.GetPlaylist(Guid.Empty));
             }
+
+            [Test]
+            public void Test_PlaylistRenamePlaylistNullPlaylistId()
+            {
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.RenamePlaylist(Guid.Empty, new PlaylistRenameRequest() { Name = "1" }));
+            }
+
+            [Test]
+            public void Test_PlaylistRenamePlaylistNullrequest()
+            {
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.RenamePlaylist(Guid.NewGuid(), null));
+            }
+
+            [Test]
+            public void Test_PlaylistRenamePlaylistNullPlaylistName()
+            {
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.RenamePlaylist(Guid.Empty, new PlaylistRenameRequest() { Name = null }));
+            }
+
+            [Test]
+            public void Test_PlaylistRenamePlaylistEmptyPlaylistName()
+            {
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.RenamePlaylist(Guid.NewGuid(), new PlaylistRenameRequest()));
+            }
+
+            [Test]
+            public void Test_PlaylistSwitchPlaylistAvailabilityNullPlaylistId()
+            {
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.SwitchPlaylistAvailability(Guid.Empty, new PlaylistSwitchAvailabilityRequest()));
+            }
+
+            [Test]
+            public void Test_PlaylistSwitchPlaylistAvailabilityNullRequest()
+            {
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.SwitchPlaylistAvailability(Guid.NewGuid(), null));
+            }
         }
     }
 }

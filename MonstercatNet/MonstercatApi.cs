@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Refit;
 using System;
 using System.Net.Http;
@@ -7,7 +9,16 @@ namespace SoftThorn.MonstercatNet
 {
     public sealed class MonstercatApi : IMonstercatApi
     {
-        private static readonly RefitSettings _settings = new RefitSettings();
+        private static readonly RefitSettings _settings = new RefitSettings
+        {
+            ContentSerializer = new NewtonsoftJsonContentSerializer(new JsonSerializerSettings
+            {
+                ContractResolver = new DefaultContractResolver
+                {
+                    NamingStrategy = new CamelCaseNamingStrategy()
+                }
+            })
+        };
 
         /// <summary>
         /// Generate the client to be able to interact with the monstercat api
@@ -320,6 +331,41 @@ namespace SoftThorn.MonstercatNet
             }
 
             return _service.GetPlaylist(playlistId);
+        }
+
+        public Task<Playlist> RenamePlaylist([Query] Guid playlistId, PlaylistRenameRequest request)
+        {
+            if (playlistId == Guid.Empty)
+            {
+                throw new ArgumentNullException(nameof(playlistId));
+            }
+
+            if (request is null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
+            if (string.IsNullOrEmpty(request.Name))
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
+            return _service.RenamePlaylist(playlistId, request);
+        }
+
+        public Task<Playlist> SwitchPlaylistAvailability([Query] Guid playlistId, PlaylistSwitchAvailabilityRequest request)
+        {
+            if (playlistId == Guid.Empty)
+            {
+                throw new ArgumentNullException(nameof(playlistId));
+            }
+
+            if (request is null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
+            return _service.SwitchPlaylistAvailability(playlistId, request);
         }
     }
 }

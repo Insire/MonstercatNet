@@ -184,7 +184,7 @@ namespace SoftThorn.MonstercatNet.Tests
             Playlist = await Api.CreatePlaylist(new PlaylistCreateRequest()
             {
                 Name = $"MyTestPlaylist",
-                Public = true,
+                Public = false,
                 Tracks = new PlaylistCreateTrack[]
                 {
                     new PlaylistCreateTrack()
@@ -250,6 +250,30 @@ namespace SoftThorn.MonstercatNet.Tests
         }
 
         [Test, Order(20)]
+        public async Task Test_RenamePlaylist()
+        {
+            var playlist = await Api.RenamePlaylist(Playlist.Id, new PlaylistRenameRequest() { Name = "MyRenameTestPlaylist" });
+
+            Assert.AreEqual("MyRenameTestPlaylist", playlist.Name);
+        }
+
+        [Test, Order(21)]
+        public async Task Test_MakePlaylistPublic()
+        {
+            var playlist = await Api.SwitchPlaylistAvailability(Playlist.Id, new PlaylistSwitchAvailabilityRequest() { Public = true });
+
+            Assert.AreEqual(true, playlist.Public);
+        }
+
+        [Test, Order(22)]
+        public async Task Test_MakePlaylistPrivate()
+        {
+            var playlist = await Api.SwitchPlaylistAvailability(Playlist.Id, new PlaylistSwitchAvailabilityRequest() { Public = false });
+
+            Assert.AreEqual(false, playlist.Public);
+        }
+
+        [Test, Order(23)]
         public async Task Test_DeletePlaylist()
         {
             if (Playlist is null)
