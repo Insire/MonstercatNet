@@ -15,7 +15,7 @@ and this projects versioning scheme was inspired by [Semantic Versioning](https:
 
 - PATCH /playlists
 
-## [2.0.27] - 2020-11-06
+## [2.0.29] - 2020-11-06
 
 ### Added
 

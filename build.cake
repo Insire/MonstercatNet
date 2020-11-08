@@ -116,15 +116,15 @@ Setup(ctx =>
         Information("Building a pre-release.");
     }
 
-    Information("Provider: " + BuildSystem.Provider);
+    Information($"Provider: {BuildSystem.Provider}");
+    Information($"Platform: {Context.Environment.Platform.Family} ({(Context.Environment.Platform.Is64Bit ? "x64" : "x86")})");
 
     Information($"nuget.exe ({ctx.Tools.Resolve("nuget.exe")}) {(FileExists(Context.Tools.Resolve("nuget.exe")) ? "was found" : "is missing")}");
     Information($"dotnet.exe ({ctx.Tools.Resolve("dotnet.exe")}) {(FileExists(Context.Tools.Resolve("dotnet.exe")) ? "was found" : "is missing")}");
     Information($"CodeCoverage.exe ({ctx.Tools.Resolve("CodeCoverage.exe")}) {(FileExists(Context.Tools.Resolve("CodeCoverage.exe")) ? "was found" : "is missing")}");
 
-    Information($"NUGETORG_APIKEY was {(string.IsNullOrEmpty(EnvironmentVariable("NUGETORG_APIKEY")) ? "not " : "")}set.");
-    Information($"CODECOV_TOKEN was {(string.IsNullOrEmpty(EnvironmentVariable("CODECOV_TOKEN")) ? "not " : "")}set.");
-
+    Information($"NUGETORG_APIKEY was {(string.IsNullOrEmpty(EnvironmentVariable("NUGETORG_APIKEY")) ? " not" : "")} set.");
+    Information($"CODECOV_TOKEN was {(string.IsNullOrEmpty(EnvironmentVariable("CODECOV_TOKEN")) ? " not" : "")} set.");
 });
 
 ///////////////////////////////////////////////////////////////////////////////
