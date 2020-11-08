@@ -84,8 +84,20 @@ private void Clean()
         if(project.Name == "Solution Items")
             continue;
 
-        var customProject = ParseProject(project.Path, configuration: Configuration, platform: Platform);
+        var projectFile = project.Path; // FilePath
+        var binFolder = projectFile.GetDirectory().Combine("bin");
+        if(DirectoryExists(binFolder))
+        {
+            CleanDirectory(binFolder);
+        }
 
+        var objFolder = projectFile.GetDirectory().Combine("obj");
+        if(DirectoryExists(objFolder))
+        {
+            CleanDirectory(objFolder);
+        }
+
+        var customProject = ParseProject(project.Path, configuration: Configuration, platform: Platform);
         foreach(var path in customProject.OutputPaths)
         {
             CleanDirectory(path.FullPath);
@@ -262,12 +274,12 @@ Task("ConvertCoverage")
         var result = System.IO.Path.ChangeExtension(file.FullPath, ".xml");
 
         var settings = new ProcessSettings()
-                .UseWorkingDirectory(ResultsPath)
-                .WithArguments(builder => builder
-                    .Append("analyze")
-                    .AppendSwitchQuoted(@"-output",":",result)
-                    .Append(file.FullPath)
-                );
+            .UseWorkingDirectory(ResultsPath)
+            .WithArguments(builder => builder
+                .Append("analyze")
+                .AppendSwitchQuoted(@"-output",":",result)
+                .Append(file.FullPath)
+            );
 
         StartProcess(Context.Tools.Resolve("CodeCoverage.exe"), settings);
     });
