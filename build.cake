@@ -31,6 +31,7 @@ var codeCoverageBinaryFile = new FilePath("vsCodeCoverage.coverage");
 var codeCoverageResultsFile = new FilePath("vsCodeCoverage.xml");
 
 var publicRelease = false;
+var gitVersion = default(GitVersion);
 
 // projects that are supposed to generate a nuget package
 var nugetPackageProjects = new[]
@@ -106,13 +107,15 @@ private void Clean()
 
 Setup(ctx =>
 {
-    if(GitVersion().BranchName == "master")
+    gitVersion = GitVersion();
+    if(gitVersion.BranchName == "master")
     {
         publicRelease = true;
         Information("Building a public release.");
     }
     else
     {
+        publicRelease = true;
         Information("Building a pre-release.");
     }
 
@@ -125,6 +128,8 @@ Setup(ctx =>
 
     Information($"NUGETORG_APIKEY was {(string.IsNullOrEmpty(EnvironmentVariable("NUGETORG_APIKEY")) ? " not" : "")} set.");
     Information($"CODECOV_TOKEN was {(string.IsNullOrEmpty(EnvironmentVariable("CODECOV_TOKEN")) ? " not" : "")} set.");
+    Information($"ApiCredentials__Email was {(string.IsNullOrEmpty(EnvironmentVariable("ApiCredentials__Email")) ? " not" : "")} set.");
+    Information($"ApiCredentials__Password was {(string.IsNullOrEmpty(EnvironmentVariable("ApiCredentials__Password")) ? " not" : "")} set.");
 });
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -145,7 +150,6 @@ Task("CleanSolutionAgain")
 Task("UpdateAssemblyInfo")
     .Does(() =>
     {
-        var gitVersion = GitVersion();
         var assemblyInfoParseResult = ParseAssemblyInfo(AssemblyInfoPath);
 
         var settings = new AssemblyInfoSettings()
@@ -218,12 +222,17 @@ Task("BuildAndPack")
 
                 // Deterministic Builds
                 .Append($"-p:EmbedUntrackedSources=true")
+
+                .Append($"-p:DebugType=portable")
+                .Append($"-p:DebugSymbols=true")
             );
 
         StartProcess(Context.Tools.Resolve("dotnet.exe"), settings);
     });
 
 Task("Test")
+    .WithCriteria(() => !string.IsNullOrEmpty(EnvironmentVariable("ApiCredentials__Email")),"since environment variable ApiCredentials__Email missing or empty.")
+    .WithCriteria(() => !string.IsNullOrEmpty(EnvironmentVariable("ApiCredentials__Password")),"since environment variable ApiCredentials__Password missing or empty.")
     .Does(() =>
     {
         var projectFile = @"./MonstercatNet.Tests/MonstercatNet.Tests.csproj";
@@ -336,8 +345,8 @@ Task("PushRemote")
     });
 
 Task("Push")
-    .IsDependentOn("PushLocally")
-    .IsDependentOn("PushRemote");
+    .IsDependentOn("PushRemote")
+    .IsDependentOn("PushLocally");
 
 Task("Default")
     .IsDependentOn("CleanSolution")
