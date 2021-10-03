@@ -34,7 +34,7 @@ namespace SoftThorn.MonstercatNet
         /// <summary>
         /// fetch account info
         /// </summary>
-        [Get("/self")]
+        [Get("/me")]
         Task<Self> GetSelf();
 
         /// <summary>

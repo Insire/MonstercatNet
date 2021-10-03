@@ -1,0 +1,11 @@
+﻿namespace SoftThorn.MonstercatNet
+{
+    public sealed class UiSettings
+    {
+        public bool HideUnlicensableTracks { get; set; }
+        public bool BlockUnlicensableTracks { get; set; }
+        public bool PlaylistPublicDefault { get; set; }
+        public string PreferredFormat { get; set; } = "";
+        public bool AutoEnableStreamerMode { get; set; }
+    }
+}

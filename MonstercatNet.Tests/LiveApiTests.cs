@@ -21,8 +21,8 @@ namespace SoftThorn.MonstercatNet.Tests
             var self = await Api.GetSelf();
 
             Assert.IsNotNull(self);
-            Assert.AreEqual(Credentials.Email, self.Email);
-            Assert.IsTrue(self.HasGold, "The test account should have an active gold subscription, otherwise some tests are bound to fail.");
+            Assert.AreEqual(Credentials.Email, self.User.Email);
+            Assert.IsTrue(self.User.HasGold, "The test account should have an active gold subscription, otherwise some tests are bound to fail.");
         }
 
         [Test, Order(3)]
