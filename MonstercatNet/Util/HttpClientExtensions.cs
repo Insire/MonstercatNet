@@ -5,8 +5,7 @@ namespace SoftThorn.MonstercatNet
 {
     public static class HttpClientExtensions
     {
-        private const string Host = "connect.monstercat.com";
-        private const string BaseUrl = "https://" + Host + "/v2/";
+        private const string BaseUrl = "https://www.monstercat.com/api";
 
         private static readonly Uri _uri = new Uri(BaseUrl);
 

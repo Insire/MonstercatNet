@@ -37,7 +37,7 @@ namespace SoftThorn.MonstercatNet
         }
 
         private int _skip = MinSkip;
-        [AliasAs("skip")]
+        [AliasAs("Offset")]
         public int Skip
         {
             get { return _skip; }

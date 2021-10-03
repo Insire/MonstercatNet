@@ -5,6 +5,8 @@ namespace SoftThorn.MonstercatNet
     public sealed class Track
     {
         public string ArtistsTitle { get; set; } = string.Empty;
+        public string Brand { get; set; } = string.Empty;
+        public int BrandId { get; set; }
         public int Bpm { get; set; }
         public bool CreatorFriendly { get; set; }
         public DateTime DebutDate { get; set; }

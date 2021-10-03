@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace SoftThorn.MonstercatNet
 {
@@ -16,6 +16,12 @@ namespace SoftThorn.MonstercatNet
         public string Title { get; set; } = string.Empty;
         public string Type { get; set; } = string.Empty;
         public string Version { get; set; } = string.Empty;
+
+        [Obsolete]
         public Link[]? Links { get; set; }
+
+        public string Brand { get; set; } = string.Empty;
+        public string YoutubeUrl { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
     }
 }

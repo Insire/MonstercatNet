@@ -50,8 +50,8 @@ namespace SoftThorn.MonstercatNet.Tests
             });
 
             Assert.IsNotNull(tracks);
-            Assert.AreEqual(1, tracks.Results.Length);
-            Assert.AreEqual(Guid.Parse("c8d3abc3-1668-42de-b832-b58ca6cc883f"), tracks.Results[0].Id);
+            Assert.IsTrue(tracks.Results.Length >= 1);
+            Assert.AreEqual(Guid.Parse("{ab1011db-70a1-4f08-9a93-a4d9cb54ab35}"), tracks.Results[0].Id);
         }
 
         [Test, Order(5)]
@@ -64,8 +64,8 @@ namespace SoftThorn.MonstercatNet.Tests
             });
 
             Assert.IsNotNull(releases);
-            Assert.IsTrue(releases.Results.Length == 1);
-            Assert.IsNotNull(releases.Results[0]);
+            Assert.IsTrue(releases.Results.Data.Length == 1);
+            Assert.IsNotNull(releases.Results.Data[0]);
         }
 
         [Test, Order(6)]
