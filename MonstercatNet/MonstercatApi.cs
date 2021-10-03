@@ -11,8 +11,6 @@ namespace SoftThorn.MonstercatNet
     {
         private static readonly RefitSettings _settings = new RefitSettings
         {
-            //ContentSerializer = new SystemTextJsonContentSerializer(),
-
             ContentSerializer = new NewtonsoftJsonContentSerializer(new JsonSerializerSettings
             {
                 ContractResolver = new DefaultContractResolver
@@ -235,7 +233,7 @@ namespace SoftThorn.MonstercatNet
             return _service.StreamTrack(request);
         }
 
-        public Task<Playlist> CreatePlaylist(PlaylistCreateRequest request)
+        public Task<CreatePlaylistResponse> CreatePlaylist(PlaylistCreateRequest request)
         {
             if (request is null)
             {

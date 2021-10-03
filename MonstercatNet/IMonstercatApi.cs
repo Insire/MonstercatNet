@@ -10,13 +10,13 @@ namespace SoftThorn.MonstercatNet
         /// <summary>
         /// authenticate the given HttpClient instance with the provided credentials
         /// </summary>
-        [Post("/signin")]
+        [Post("/sign-in")]
         Task Login([Body(BodySerializationMethod.Serialized)] ApiCredentials credentials);
 
         /// <summary>
         /// signout
         /// </summary>
-        [Post("/signout")]
+        [Post("/sign-out")]
         Task Logout();
 
         /// <summary>
@@ -89,20 +89,20 @@ namespace SoftThorn.MonstercatNet
         /// <summary>
         /// create a new playlist. requires login.
         /// </summary>
-        [Post("/self/playlist")]
-        Task<Playlist> CreatePlaylist(PlaylistCreateRequest request);
+        [Post("/playlist")]
+        Task<CreatePlaylistResponse> CreatePlaylist(PlaylistCreateRequest request);
 
         /// <summary>
         /// delete a user specific playlist via its id
         /// </summary>
         /// <param name="playlistId"><see cref="Playlist.Id"/></param>
-        [Delete("/playlist/{playlistId}")]
+        [Post("/playlist/{playlistId}/delete")]
         Task DeletePlaylist([Query] Guid playlistId);
 
         /// <summary>
         /// fetch your playlists. requires login.
         /// </summary>
-        [Get("/self/playlists")]
+        [Get("/playlists")]
         Task<SelfPlaylists> GetSelfPlaylists();
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace SoftThorn.MonstercatNet
         /// <remarks>
         /// this can a take a while
         /// </remarks>
-        [Patch("/playlist/{playlistId}")]
+        [Post("/playlist/{playlistId}")]
         Task<Playlist> RenamePlaylist([Query] Guid playlistId, [Body] PlaylistRenameRequest request);
 
         /// <summary>

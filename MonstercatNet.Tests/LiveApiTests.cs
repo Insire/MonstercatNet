@@ -7,7 +7,7 @@ namespace SoftThorn.MonstercatNet.Tests
 {
     public sealed class LiveApiTests : TestBase
     {
-        internal Playlist Playlist { get; private set; }
+        internal Guid? PlaylistId { get; private set; }
 
         [Test, Order(1)]
         public async Task Test_Login()
@@ -181,7 +181,7 @@ namespace SoftThorn.MonstercatNet.Tests
         [Test, Order(14)]
         public async Task Test_CreatePlaylist()
         {
-            Playlist = await Api.CreatePlaylist(new PlaylistCreateRequest()
+            var response = await Api.CreatePlaylist(new PlaylistCreateRequest()
             {
                 Name = $"MyTestPlaylist",
                 Public = false,
@@ -195,13 +195,20 @@ namespace SoftThorn.MonstercatNet.Tests
                 }
             });
 
-            Assert.IsNotNull(Playlist);
+            Assert.IsNotNull(response);
+
+            PlaylistId = response.Id;
         }
 
         [Test, Order(15)]
         public async Task Test_PlaylistGetTracklist()
         {
-            var tracklist = await Api.GetPlaylistTracks(Playlist.Id);
+            if (PlaylistId is null)
+            {
+                Assert.Inconclusive("The test case that should create a valid playlist either didn't run or did failed to complete.");
+            }
+
+            var tracklist = await Api.GetPlaylistTracks(PlaylistId.Value);
 
             Assert.IsNotNull(tracklist);
             Assert.IsNotNull(tracklist.Results);
@@ -212,9 +219,14 @@ namespace SoftThorn.MonstercatNet.Tests
         [Test, Order(16)]
         public async Task Test_PlaylistAddTrack()
         {
+            if (PlaylistId is null)
+            {
+                Assert.Inconclusive("The test case that should create a valid playlist either didn't run or did failed to complete.");
+            }
+
             await Api.PlaylistAddTrack(new PlaylistAddTrackRequest()
             {
-                PlaylistId = Playlist.Id,
+                PlaylistId = PlaylistId.Value,
                 ReleaseId = Guid.Parse("ff361c51-ed8c-49f7-b693-c04a1e01dcca"),
                 TrackId = Guid.Parse("95f781ba-2737-41aa-83a1-115e73b879a8")
             });
@@ -223,7 +235,12 @@ namespace SoftThorn.MonstercatNet.Tests
         [Test, Order(17)]
         public async Task Test_PlaylistDeleteTrack()
         {
-            await Api.PlaylistDeleteTrack(Playlist.Id, new PlaylistDeleteTrackRequest()
+            if (PlaylistId is null)
+            {
+                Assert.Inconclusive("The test case that should create a valid playlist either didn't run or did failed to complete.");
+            }
+
+            await Api.PlaylistDeleteTrack(PlaylistId.Value, new PlaylistDeleteTrackRequest()
             {
                 ReleaseId = Guid.Parse("09497970-9679-4ea6-930d-e1bf22cfc994"),
                 TrackId = Guid.Parse("c8d3abc3-1668-42de-b832-b58ca6cc883f")
@@ -238,13 +255,18 @@ namespace SoftThorn.MonstercatNet.Tests
             Assert.IsNotNull(playlists);
 
             Assert.IsTrue(playlists.Results.Length >= 1);
-            Assert.IsNotNull(playlists.Results.FirstOrDefault(p => p.Id == Playlist.Id));
+            Assert.IsNotNull(playlists.Results.FirstOrDefault(p => p.Id == PlaylistId));
         }
 
         [Test, Order(19)]
         public async Task Test_GetPlaylist()
         {
-            var playlist = await Api.GetPlaylist(Playlist.Id);
+            if (PlaylistId is null)
+            {
+                Assert.Inconclusive("The test case that should create a valid playlist either didn't run or did failed to complete.");
+            }
+
+            var playlist = await Api.GetPlaylist(PlaylistId.Value);
 
             Assert.IsNotNull(playlist);
         }
@@ -252,7 +274,16 @@ namespace SoftThorn.MonstercatNet.Tests
         [Test, Order(20)]
         public async Task Test_RenamePlaylist()
         {
-            var playlist = await Api.RenamePlaylist(Playlist.Id, new PlaylistRenameRequest() { Name = "MyRenameTestPlaylist" });
+            if (PlaylistId is null)
+            {
+                Assert.Inconclusive("The test case that should create a valid playlist either didn't run or did failed to complete.");
+            }
+
+            var playlist = await Api.RenamePlaylist(PlaylistId.Value, new PlaylistRenameRequest()
+            {
+                Name = "MyRenameTestPlaylist",
+                Id = PlaylistId.Value,
+            });
 
             Assert.AreEqual("MyRenameTestPlaylist", playlist.Name);
         }
@@ -260,7 +291,12 @@ namespace SoftThorn.MonstercatNet.Tests
         [Test, Order(21)]
         public async Task Test_MakePlaylistPublic()
         {
-            var playlist = await Api.SwitchPlaylistAvailability(Playlist.Id, new PlaylistSwitchAvailabilityRequest() { Public = true });
+            if (PlaylistId is null)
+            {
+                Assert.Inconclusive("The test case that should create a valid playlist either didn't run or did failed to complete.");
+            }
+
+            var playlist = await Api.SwitchPlaylistAvailability(PlaylistId.Value, new PlaylistSwitchAvailabilityRequest() { Public = true });
 
             Assert.AreEqual(true, playlist.Public);
         }
@@ -268,7 +304,12 @@ namespace SoftThorn.MonstercatNet.Tests
         [Test, Order(22)]
         public async Task Test_MakePlaylistPrivate()
         {
-            var playlist = await Api.SwitchPlaylistAvailability(Playlist.Id, new PlaylistSwitchAvailabilityRequest() { Public = false });
+            if (PlaylistId is null)
+            {
+                Assert.Inconclusive("The test case that should create a valid playlist either didn't run or did failed to complete.");
+            }
+
+            var playlist = await Api.SwitchPlaylistAvailability(PlaylistId.Value, new PlaylistSwitchAvailabilityRequest() { Public = false });
 
             Assert.AreEqual(false, playlist.Public);
         }
@@ -276,12 +317,12 @@ namespace SoftThorn.MonstercatNet.Tests
         [Test, Order(23)]
         public async Task Test_DeletePlaylist()
         {
-            if (Playlist is null)
+            if (PlaylistId is null)
             {
                 Assert.Inconclusive("The test case that should create a valid playlist either didn't run or did failed to complete.");
             }
 
-            await Api.DeletePlaylist(Playlist.Id);
+            await Api.DeletePlaylist(PlaylistId.Value);
         }
 
         [Test, Order(999)]
