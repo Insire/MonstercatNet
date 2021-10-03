@@ -1,5 +1,3 @@
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using Refit;
 using System;
 using System.Net.Http;
@@ -11,13 +9,7 @@ namespace SoftThorn.MonstercatNet
     {
         private static readonly RefitSettings _settings = new RefitSettings
         {
-            ContentSerializer = new NewtonsoftJsonContentSerializer(new JsonSerializerSettings
-            {
-                ContractResolver = new DefaultContractResolver
-                {
-                    NamingStrategy = new CamelCaseNamingStrategy()
-                }
-            })
+            ContentSerializer = new SystemTextJsonContentSerializer(),
         };
 
         /// <summary>
