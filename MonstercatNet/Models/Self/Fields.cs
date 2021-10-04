@@ -1,6 +1,10 @@
-﻿namespace SoftThorn.MonstercatNet
+using Newtonsoft.Json;
+
+namespace SoftThorn.MonstercatNet
 {
-    public class Fields
+    public sealed class Fields
     {
+        [JsonProperty("archived")]
+        public string[]? Archived { get; set; }
     }
 }

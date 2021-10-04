@@ -258,7 +258,7 @@ namespace SoftThorn.MonstercatNet
             return _service.DeletePlaylist(playlistId);
         }
 
-        public Task<SelfPlaylists> GetSelfPlaylists()
+        public Task<SelfPlaylistsResult> GetSelfPlaylists()
         {
             return _service.GetSelfPlaylists();
         }

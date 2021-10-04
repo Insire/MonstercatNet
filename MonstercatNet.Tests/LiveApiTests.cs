@@ -254,8 +254,8 @@ namespace SoftThorn.MonstercatNet.Tests
 
             Assert.IsNotNull(playlists);
 
-            Assert.IsTrue(playlists.Results.Length >= 1);
-            Assert.IsNotNull(playlists.Results.FirstOrDefault(p => p.Id == PlaylistId));
+            Assert.IsTrue(playlists.Playlists.Data.Length >= 1);
+            Assert.IsTrue(playlists.Playlists.Data.Any(p => p.Id == PlaylistId));
         }
 
         [Test, Order(19)]

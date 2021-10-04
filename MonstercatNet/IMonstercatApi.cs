@@ -103,7 +103,7 @@ namespace SoftThorn.MonstercatNet
         /// fetch your playlists. requires login.
         /// </summary>
         [Get("/playlists")]
-        Task<SelfPlaylists> GetSelfPlaylists();
+        Task<SelfPlaylistsResult> GetSelfPlaylists();
 
         /// <summary>
         /// fetch a playlist. Might require login, depending on whether you fetch your own playlist or the playlist is private.

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace SoftThorn.MonstercatNet
 {
@@ -24,7 +24,7 @@ namespace SoftThorn.MonstercatNet
         public float LocationLat { get; set; }
         public float LocationLng { get; set; }
         public int MaxLicenses { get; set; }
-        public string MyLibrary { get; set; } = "";
+        public Guid MyLibrary { get; set; }
         public string PasswordVerificationCode { get; set; } = "";
         public string PlaceName { get; set; } = "";
         public string PlaceNameFull { get; set; } = "";
@@ -37,7 +37,7 @@ namespace SoftThorn.MonstercatNet
         public DateTime UpdatedAt { get; set; }
         public string Username { get; set; } = "";
         public object[]? Features { get; set; }
-        public UiSettings Settings { get; set; } = new UiSettings();
+        public UserSettings Settings { get; set; } = new UserSettings();
         public bool HasGold { get; set; }
         public object? FreeGoldAt { get; set; }
         public bool FreeGold { get; set; }
