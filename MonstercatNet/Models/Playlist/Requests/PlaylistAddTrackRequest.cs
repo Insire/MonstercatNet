@@ -8,5 +8,6 @@ namespace SoftThorn.MonstercatNet
         public Guid ReleaseId { get; set; }
 
         public Guid PlaylistId { get; set; }
+        public int Sort { get; set; } = 3;
     }
 }

@@ -114,7 +114,7 @@ namespace SoftThorn.MonstercatNet
         /// <summary>
         /// add one track to the end of a playlist
         /// </summary>
-        [Patch("/playlist/{request.PlaylistId}/record")]
+        [Post("/playlist/{request.PlaylistId}/add")]
         Task PlaylistAddTrack(PlaylistAddTrackRequest request);
 
         /// <summary>
@@ -123,8 +123,8 @@ namespace SoftThorn.MonstercatNet
         /// <remarks>
         /// requests to this endpoint might fail, if the track to be deleted was added only recently
         /// </remarks>
-        [Delete("/playlist/{playlistId}/record")]
-        Task PlaylistDeleteTrack(Guid playlistId, [Body] PlaylistDeleteTrackRequest request);
+        [Post("/playlist/{request.PlaylistId}/remove")]
+        Task PlaylistDeleteTrack(PlaylistDeleteTrackRequest request);
 
         /// <summary>
         /// Getting a playlist complete tracklist

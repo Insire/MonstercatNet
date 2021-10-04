@@ -240,8 +240,9 @@ namespace SoftThorn.MonstercatNet.Tests
                 Assert.Inconclusive("The test case that should create a valid playlist either didn't run or did failed to complete.");
             }
 
-            await Api.PlaylistDeleteTrack(PlaylistId.Value, new PlaylistDeleteTrackRequest()
+            await Api.PlaylistDeleteTrack(new PlaylistDeleteTrackRequest()
             {
+                PlaylistId = PlaylistId.Value,
                 ReleaseId = Guid.Parse("09497970-9679-4ea6-930d-e1bf22cfc994"),
                 TrackId = Guid.Parse("c8d3abc3-1668-42de-b832-b58ca6cc883f")
             });
