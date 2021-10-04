@@ -1,20 +1,22 @@
-using Refit;
+using Newtonsoft.Json;
 using System;
 
 namespace SoftThorn.MonstercatNet
 {
-    public sealed class PlaylistRenameRequest
+    public sealed class PlaylistUpdateRequest
     {
-        [AliasAs("Title")]
-        public string Name { get; set; } = "";
+        public string? Title { get; set; } = "";
 
         public bool Archived { get; set; }
-        public DateTime CreatedAt { get; set; }
+        public DateTime? CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-        public Guid Id { get; set; }
-        public bool IsPublic { get; set; }
 
-        public string Description { get; set; } = "";
+        [JsonProperty("Id")]
+        public Guid PlaylistId { get; set; }
+
+        public bool? IsPublic { get; set; }
+
+        public string? Description { get; set; } = "";
 
         public Guid UserId { get; set; }
 

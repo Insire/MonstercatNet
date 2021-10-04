@@ -1,5 +1,3 @@
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using Refit;
 using System;
 using System.Net.Http;
@@ -11,13 +9,7 @@ namespace SoftThorn.MonstercatNet
     {
         private static readonly RefitSettings _settings = new RefitSettings
         {
-            ContentSerializer = new NewtonsoftJsonContentSerializer(new JsonSerializerSettings
-            {
-                ContractResolver = new DefaultContractResolver
-                {
-                    NamingStrategy = new CamelCaseNamingStrategy()
-                }
-            })
+            ContentSerializer = new NewtonsoftJsonContentSerializer()
         };
 
         /// <summary>
@@ -240,9 +232,9 @@ namespace SoftThorn.MonstercatNet
                 throw new ArgumentNullException(nameof(request));
             }
 
-            if (request.Name == null)
+            if (request.Title == null)
             {
-                throw new ArgumentNullException(nameof(request.Name));
+                throw new ArgumentNullException(nameof(request.Title));
             }
 
             return _service.CreatePlaylist(request);
@@ -332,39 +324,24 @@ namespace SoftThorn.MonstercatNet
             return _service.GetPlaylist(playlistId);
         }
 
-        public Task<Playlist> RenamePlaylist([Query] Guid playlistId, PlaylistRenameRequest request)
+        public Task<Playlist> UpdatePlaylist(PlaylistUpdateRequest request)
         {
-            if (playlistId == Guid.Empty)
-            {
-                throw new ArgumentNullException(nameof(playlistId));
-            }
-
             if (request is null)
             {
                 throw new ArgumentNullException(nameof(request));
             }
 
-            if (string.IsNullOrEmpty(request.Name))
+            if (request.PlaylistId == Guid.Empty)
             {
-                throw new ArgumentNullException(nameof(request));
+                throw new ArgumentNullException(nameof(request.PlaylistId));
             }
 
-            return _service.RenamePlaylist(playlistId, request);
-        }
-
-        public Task<Playlist> SwitchPlaylistAvailability([Query] Guid playlistId, PlaylistSwitchAvailabilityRequest request)
-        {
-            if (playlistId == Guid.Empty)
+            if (request.UpdatedAt == DateTime.MinValue)
             {
-                throw new ArgumentNullException(nameof(playlistId));
+                throw new ArgumentNullException(nameof(request.UpdatedAt));
             }
 
-            if (request is null)
-            {
-                throw new ArgumentNullException(nameof(request));
-            }
-
-            return _service.SwitchPlaylistAvailability(playlistId, request);
+            return _service.UpdatePlaylist(request);
         }
     }
 }

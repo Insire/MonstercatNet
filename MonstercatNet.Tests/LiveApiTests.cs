@@ -8,6 +8,7 @@ namespace SoftThorn.MonstercatNet.Tests
     public sealed class LiveApiTests : TestBase
     {
         internal Guid? PlaylistId { get; private set; }
+        internal Guid? UserId { get; private set; }
 
         [Test, Order(1)]
         public async Task Test_Login()
@@ -23,6 +24,8 @@ namespace SoftThorn.MonstercatNet.Tests
             Assert.IsNotNull(self);
             Assert.AreEqual(Credentials.Email, self.User.Email);
             Assert.IsTrue(self.User.HasGold, "The test account should have an active gold subscription, otherwise some tests are bound to fail.");
+
+            UserId = self.User.Id;
         }
 
         [Test, Order(3)]
@@ -183,16 +186,7 @@ namespace SoftThorn.MonstercatNet.Tests
         {
             var response = await Api.CreatePlaylist(new PlaylistCreateRequest()
             {
-                Name = $"MyTestPlaylist",
-                Public = false,
-                Tracks = new PlaylistCreateTrack[]
-                {
-                    new PlaylistCreateTrack()
-                    {
-                        ReleaseId = Guid.Parse("09497970-9679-4ea6-930d-e1bf22cfc994"),
-                        TrackId = Guid.Parse("c8d3abc3-1668-42de-b832-b58ca6cc883f")
-                    }
-                }
+                Title = $"MyTestPlaylist",
             });
 
             Assert.IsNotNull(response);
@@ -273,17 +267,19 @@ namespace SoftThorn.MonstercatNet.Tests
         }
 
         [Test, Order(20)]
-        public async Task Test_RenamePlaylist()
+        public async Task Test_UpdatePlaylist()
         {
             if (PlaylistId is null)
             {
                 Assert.Inconclusive("The test case that should create a valid playlist either didn't run or did failed to complete.");
             }
 
-            var playlist = await Api.RenamePlaylist(PlaylistId.Value, new PlaylistRenameRequest()
+            var playlist = await Api.UpdatePlaylist(new PlaylistUpdateRequest()
             {
-                Name = "MyRenameTestPlaylist",
-                Id = PlaylistId.Value,
+                Title = "MyRenameTestPlaylist",
+                PlaylistId = PlaylistId.Value,
+                UserId = UserId.Value,
+                UpdatedAt = DateTime.UtcNow,
             });
 
             Assert.AreEqual("MyRenameTestPlaylist", playlist.Name);
@@ -297,7 +293,14 @@ namespace SoftThorn.MonstercatNet.Tests
                 Assert.Inconclusive("The test case that should create a valid playlist either didn't run or did failed to complete.");
             }
 
-            var playlist = await Api.SwitchPlaylistAvailability(PlaylistId.Value, new PlaylistSwitchAvailabilityRequest() { Public = true });
+            var playlist = await Api.UpdatePlaylist(new PlaylistUpdateRequest()
+            {
+                Title = null,
+                PlaylistId = PlaylistId.Value,
+                UserId = UserId.Value,
+                UpdatedAt = DateTime.UtcNow,
+                IsPublic = true,
+            });
 
             Assert.AreEqual(true, playlist.Public);
         }
@@ -310,7 +313,14 @@ namespace SoftThorn.MonstercatNet.Tests
                 Assert.Inconclusive("The test case that should create a valid playlist either didn't run or did failed to complete.");
             }
 
-            var playlist = await Api.SwitchPlaylistAvailability(PlaylistId.Value, new PlaylistSwitchAvailabilityRequest() { Public = false });
+            var playlist = await Api.UpdatePlaylist(new PlaylistUpdateRequest()
+            {
+                Title = null,
+                PlaylistId = PlaylistId.Value,
+                UserId = UserId.Value,
+                UpdatedAt = DateTime.UtcNow,
+                IsPublic = false,
+            });
 
             Assert.AreEqual(false, playlist.Public);
         }

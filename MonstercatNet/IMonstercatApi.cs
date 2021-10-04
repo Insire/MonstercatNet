@@ -138,16 +138,7 @@ namespace SoftThorn.MonstercatNet
         /// <remarks>
         /// this can a take a while
         /// </remarks>
-        [Post("/playlist/{playlistId}")]
-        Task<Playlist> RenamePlaylist([Query] Guid playlistId, [Body] PlaylistRenameRequest request);
-
-        /// <summary>
-        /// switch the playlist from public to private or vice versa
-        /// </summary>
-        /// <remarks>
-        /// this can a take a while
-        /// </remarks>
-        [Patch("/playlist/{playlistId}")]
-        Task<Playlist> SwitchPlaylistAvailability([Query] Guid playlistId, [Body] PlaylistSwitchAvailabilityRequest request);
+        [Post("/playlist/{request.PlaylistId}")]
+        Task<Playlist> UpdatePlaylist(PlaylistUpdateRequest request);
     }
 }

@@ -269,9 +269,7 @@ namespace SoftThorn.MonstercatNet.Tests
             {
                 Assert.ThrowsAsync<ArgumentNullException>(() => Api.CreatePlaylist(new PlaylistCreateRequest()
                 {
-                    Name = null,
-                    Public = true,
-                    Tracks = new PlaylistCreateTrack[0]
+                    Title = null,
                 }));
             }
 
@@ -366,39 +364,48 @@ namespace SoftThorn.MonstercatNet.Tests
             }
 
             [Test]
-            public void Test_PlaylistRenamePlaylistNullPlaylistId()
+            public void Test_PlaylistUpdatePlaylistNullPlaylistId()
             {
-                Assert.ThrowsAsync<ArgumentNullException>(() => Api.RenamePlaylist(Guid.Empty, new PlaylistRenameRequest() { Name = "1" }));
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.UpdatePlaylist(new PlaylistUpdateRequest()
+                {
+                    Title = "1"
+                }));
             }
 
             [Test]
-            public void Test_PlaylistRenamePlaylistNullrequest()
+            public void Test_PlaylistUpdatePlaylistNullrequest()
             {
-                Assert.ThrowsAsync<ArgumentNullException>(() => Api.RenamePlaylist(Guid.NewGuid(), null));
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.UpdatePlaylist(null));
             }
 
             [Test]
-            public void Test_PlaylistRenamePlaylistNullPlaylistName()
+            public void Test_PlaylistUpdatePlaylistNullPlaylistName()
             {
-                Assert.ThrowsAsync<ArgumentNullException>(() => Api.RenamePlaylist(Guid.Empty, new PlaylistRenameRequest() { Name = null }));
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.UpdatePlaylist(new PlaylistUpdateRequest()
+                {
+                    PlaylistId = Guid.Empty,
+                    Title = null
+                }));
             }
 
             [Test]
-            public void Test_PlaylistRenamePlaylistEmptyPlaylistName()
+            public void Test_PlaylistUpdatePlaylistDefaultUpdatedAt()
             {
-                Assert.ThrowsAsync<ArgumentNullException>(() => Api.RenamePlaylist(Guid.NewGuid(), new PlaylistRenameRequest()));
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.UpdatePlaylist(new PlaylistUpdateRequest()
+                {
+                    PlaylistId = Guid.NewGuid(),
+                    Title = "non null title",
+                    UpdatedAt = DateTime.MinValue,
+                }));
             }
 
             [Test]
-            public void Test_PlaylistSwitchPlaylistAvailabilityNullPlaylistId()
+            public void Test_PlaylistUpdatePlaylistEmptyPlaylistName()
             {
-                Assert.ThrowsAsync<ArgumentNullException>(() => Api.SwitchPlaylistAvailability(Guid.Empty, new PlaylistSwitchAvailabilityRequest()));
-            }
-
-            [Test]
-            public void Test_PlaylistSwitchPlaylistAvailabilityNullRequest()
-            {
-                Assert.ThrowsAsync<ArgumentNullException>(() => Api.SwitchPlaylistAvailability(Guid.NewGuid(), null));
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.UpdatePlaylist(new PlaylistUpdateRequest()
+                {
+                    PlaylistId = Guid.NewGuid(),
+                }));
             }
         }
     }
