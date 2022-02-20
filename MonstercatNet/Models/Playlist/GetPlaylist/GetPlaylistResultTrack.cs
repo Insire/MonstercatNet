@@ -1,6 +1,6 @@
 namespace SoftThorn.MonstercatNet
 {
-    public sealed class PlaylistTrack
+    public sealed class GetPlaylistResultTrack
     {
         public string PlaylistId { get; set; } = "";
         public string ReleaseId { get; set; } = "";
