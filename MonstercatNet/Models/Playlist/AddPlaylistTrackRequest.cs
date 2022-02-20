@@ -2,7 +2,7 @@ using System;
 
 namespace SoftThorn.MonstercatNet
 {
-    public sealed class PlaylistAddTrackRequest
+    public sealed class AddPlaylistTrackRequest
     {
         public Guid TrackId { get; set; }
         public Guid ReleaseId { get; set; }
