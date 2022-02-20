@@ -3,13 +3,13 @@ using System;
 
 namespace SoftThorn.MonstercatNet
 {
-    public sealed class PlaylistUpdateRequest
+    public sealed class UpdatePlaylistRequest
     {
         public string? Title { get; set; } = "";
 
         public bool Archived { get; set; }
         public DateTime? CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
 
         [JsonProperty("Id")]
         public Guid PlaylistId { get; set; }
