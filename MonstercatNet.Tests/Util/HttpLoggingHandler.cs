@@ -87,7 +87,7 @@ namespace SoftThorn.MonstercatNet.Tests
                     }
                     else
                     {
-                        Debug.WriteLine($"{msg} {string.Join("", result.Cast<char>().Take(255))}...");
+                        Debug.WriteLine($"{msg} {string.Join("", result.Cast<char>().Take(1024))}...");
                     }
 
                     Debug.WriteLine($"{msg} Duration: {end - start}");

@@ -1,17 +1,13 @@
 using Refit;
 using System;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SoftThorn.MonstercatNet
 {
-    public sealed class MonstercatApi : IMonstercatApi
+    public sealed class MonstercatApi : MonstercatBase, IMonstercatApi
     {
-        private static readonly RefitSettings _settings = new RefitSettings
-        {
-            ContentSerializer = new NewtonsoftJsonContentSerializer()
-        };
-
         /// <summary>
         /// Generate the client to be able to interact with the monstercat api
         /// </summary>
@@ -26,7 +22,7 @@ namespace SoftThorn.MonstercatNet
                 throw new ArgumentNullException(nameof(client));
             }
 
-            return new MonstercatApi(RestService.For<IMonstercatApi>(client, _settings));
+            return new MonstercatApi(RestService.For<IMonstercatApi>(client, Settings));
         }
 
         private readonly IMonstercatApi _service;
@@ -36,7 +32,7 @@ namespace SoftThorn.MonstercatNet
             _service = service;
         }
 
-        public Task Login([Body(BodySerializationMethod.Serialized)] ApiCredentials credentials)
+        public Task Login([Body(BodySerializationMethod.Serialized)] ApiCredentials credentials, CancellationToken token = default)
         {
             if (credentials is null)
             {
@@ -63,30 +59,15 @@ namespace SoftThorn.MonstercatNet
                 throw new ArgumentNullException(nameof(ApiCredentials.Email));
             }
 
-            return _service.Login(credentials);
+            return _service.Login(credentials, token);
         }
 
-        public Task Logout()
+        public Task Logout(CancellationToken token = default)
         {
-            return _service.Logout();
+            return _service.Logout(token);
         }
 
-        public Task Login(string twoFactorAuthToken)
-        {
-            if (twoFactorAuthToken is null)
-            {
-                throw new ArgumentNullException(nameof(twoFactorAuthToken));
-            }
-
-            if (twoFactorAuthToken.Length == 0)
-            {
-                throw new ArgumentNullException(nameof(twoFactorAuthToken));
-            }
-
-            return _service.Login(twoFactorAuthToken);
-        }
-
-        public Task Resend(string twoFactorAuthToken)
+        public Task Login(string twoFactorAuthToken, CancellationToken token = default)
         {
             if (twoFactorAuthToken is null)
             {
@@ -98,43 +79,58 @@ namespace SoftThorn.MonstercatNet
                 throw new ArgumentNullException(nameof(twoFactorAuthToken));
             }
 
-            return _service.Resend(twoFactorAuthToken);
+            return _service.Login(twoFactorAuthToken, token);
         }
 
-        public Task<Self> GetSelf()
+        public Task Resend(string twoFactorAuthToken, CancellationToken token = default)
         {
-            return _service.GetSelf();
+            if (twoFactorAuthToken is null)
+            {
+                throw new ArgumentNullException(nameof(twoFactorAuthToken));
+            }
+
+            if (twoFactorAuthToken.Length == 0)
+            {
+                throw new ArgumentNullException(nameof(twoFactorAuthToken));
+            }
+
+            return _service.Resend(twoFactorAuthToken, token);
         }
 
-        public Task<TrackFilters> GetTrackSearchFilters()
+        public Task<Self> GetSelf(CancellationToken token = default)
         {
-            return _service.GetTrackSearchFilters();
+            return _service.GetSelf(token);
+        }
+
+        public Task<TrackFilters> GetTrackSearchFilters(CancellationToken token = default)
+        {
+            return _service.GetTrackSearchFilters(token);
         }
 
         /// <summary>
         /// return tracks in the catalog, in reverse chronological order (newest first)
         /// </summary>
-        public Task<TrackSearchResult> SearchTracks(TrackSearchRequest request)
+        public Task<TrackSearchResult> SearchTracks(TrackSearchRequest request, CancellationToken token = default)
         {
             if (request is null)
             {
                 throw new ArgumentNullException(nameof(request));
             }
 
-            return _service.SearchTracks(request);
+            return _service.SearchTracks(request, token);
         }
 
-        public Task<ReleaseBrowseResult> GetReleases(ReleaseBrowseRequest request)
+        public Task<ReleaseBrowseResult> GetReleases(ReleaseBrowseRequest request, CancellationToken token = default)
         {
             if (request is null)
             {
                 throw new ArgumentNullException(nameof(request));
             }
 
-            return _service.GetReleases(request);
+            return _service.GetReleases(request, token);
         }
 
-        public Task<ReleaseResult> GetRelease(string catalogId)
+        public Task<ReleaseResult> GetRelease(string catalogId, CancellationToken token = default)
         {
             if (catalogId is null)
             {
@@ -146,28 +142,13 @@ namespace SoftThorn.MonstercatNet
                 throw new ArgumentNullException(nameof(catalogId));
             }
 
-            return _service.GetRelease(catalogId);
-        }
-
-        public Task<HttpContent> GetReleaseCover(ReleaseCoverRequest request)
-        {
-            if (request is null)
-            {
-                throw new ArgumentNullException(nameof(request));
-            }
-
-            if (request.ReleaseId == Guid.Empty)
-            {
-                throw new ArgumentException(nameof(ReleaseCoverRequest.ReleaseId));
-            }
-
-            return _service.GetReleaseCover(request);
+            return _service.GetRelease(catalogId, token);
         }
 
         /// <summary>
         /// gold membership required
         /// </summary>
-        public Task<HttpContent> DownloadRelease(ReleaseDownloadRequest request)
+        public Task<HttpContent> DownloadRelease(ReleaseDownloadRequest request, CancellationToken token = default)
         {
             if (request is null)
             {
@@ -179,13 +160,13 @@ namespace SoftThorn.MonstercatNet
                 throw new ArgumentException(nameof(ReleaseDownloadRequest.ReleaseId));
             }
 
-            return _service.DownloadRelease(request);
+            return _service.DownloadRelease(request, token);
         }
 
         /// <summary>
         /// gold membership required
         /// </summary>
-        public Task<HttpContent> DownloadTrack(TrackDownloadRequest request)
+        public Task<HttpContent> DownloadTrack(TrackDownloadRequest request, CancellationToken token = default)
         {
             if (request is null)
             {
@@ -202,10 +183,10 @@ namespace SoftThorn.MonstercatNet
                 throw new ArgumentException(nameof(TrackDownloadRequest.TrackId));
             }
 
-            return _service.DownloadTrack(request);
+            return _service.DownloadTrack(request, token);
         }
 
-        public Task<HttpContent> StreamTrack(TrackStreamRequest request)
+        public Task<HttpContent> StreamTrack(TrackStreamRequest request, CancellationToken token = default)
         {
             if (request is null)
             {
@@ -222,10 +203,10 @@ namespace SoftThorn.MonstercatNet
                 throw new ArgumentException(nameof(TrackDownloadRequest.TrackId));
             }
 
-            return _service.StreamTrack(request);
+            return _service.StreamTrack(request, token);
         }
 
-        public Task<CreatePlaylistResponse> CreatePlaylist(PlaylistCreateRequest request)
+        public Task<CreatePlaylistResult> CreatePlaylist(PlaylistCreateRequest request, CancellationToken token = default)
         {
             if (request is null)
             {
@@ -240,22 +221,22 @@ namespace SoftThorn.MonstercatNet
             return _service.CreatePlaylist(request);
         }
 
-        public Task DeletePlaylist(Guid playlistId)
+        public Task DeletePlaylist(Guid playlistId, CancellationToken token = default)
         {
             if (playlistId == Guid.Empty)
             {
                 throw new ArgumentNullException(nameof(playlistId));
             }
 
-            return _service.DeletePlaylist(playlistId);
+            return _service.DeletePlaylist(playlistId, token);
         }
 
-        public Task<SelfPlaylistsResult> GetSelfPlaylists()
+        public Task<SelfPlaylistsResult> GetSelfPlaylists(CancellationToken token = default)
         {
-            return _service.GetSelfPlaylists();
+            return _service.GetSelfPlaylists(token);
         }
 
-        public Task PlaylistAddTrack(PlaylistAddTrackRequest request)
+        public Task PlaylistAddTrack(AddPlaylistTrackRequest request, CancellationToken token = default)
         {
             if (request is null)
             {
@@ -277,10 +258,10 @@ namespace SoftThorn.MonstercatNet
                 throw new ArgumentNullException(nameof(request.TrackId));
             }
 
-            return _service.PlaylistAddTrack(request);
+            return _service.PlaylistAddTrack(request, token);
         }
 
-        public Task PlaylistDeleteTrack(PlaylistDeleteTrackRequest request)
+        public Task PlaylistDeleteTrack(PlaylistDeleteTrackRequest request, CancellationToken token = default)
         {
             if (request is null)
             {
@@ -301,30 +282,10 @@ namespace SoftThorn.MonstercatNet
                 throw new ArgumentNullException(nameof(request.TrackId));
             }
 
-            return _service.PlaylistDeleteTrack(request);
+            return _service.PlaylistDeleteTrack(request, token);
         }
 
-        public Task<PlaylistTracks> GetPlaylistTracks(Guid playlistId)
-        {
-            if (playlistId == Guid.Empty)
-            {
-                throw new ArgumentNullException(nameof(playlistId));
-            }
-
-            return _service.GetPlaylistTracks(playlistId);
-        }
-
-        public Task<Playlist> GetPlaylist(Guid playlistId)
-        {
-            if (playlistId == Guid.Empty)
-            {
-                throw new ArgumentNullException(nameof(playlistId));
-            }
-
-            return _service.GetPlaylist(playlistId);
-        }
-
-        public Task<Playlist> UpdatePlaylist(PlaylistUpdateRequest request)
+        public Task<GetPlaylistTracksResult> GetPlaylistTracks(GetPlaylistTracksRequest request, CancellationToken token = default)
         {
             if (request is null)
             {
@@ -336,12 +297,32 @@ namespace SoftThorn.MonstercatNet
                 throw new ArgumentNullException(nameof(request.PlaylistId));
             }
 
-            if (request.UpdatedAt == DateTime.MinValue)
+            return _service.GetPlaylistTracks(request, token);
+        }
+
+        public Task<GetPlaylistResult> GetPlaylist(Guid playlistId, CancellationToken token = default)
+        {
+            if (playlistId == Guid.Empty)
             {
-                throw new ArgumentNullException(nameof(request.UpdatedAt));
+                throw new ArgumentNullException(nameof(playlistId));
             }
 
-            return _service.UpdatePlaylist(request);
+            return _service.GetPlaylist(playlistId, token);
+        }
+
+        public Task<UpdatePlaylistResult> UpdatePlaylist(UpdatePlaylistRequest request, CancellationToken token = default)
+        {
+            if (request is null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
+            if (request.PlaylistId == Guid.Empty)
+            {
+                throw new ArgumentNullException(nameof(request.PlaylistId));
+            }
+
+            return _service.UpdatePlaylist(request, token);
         }
     }
 }

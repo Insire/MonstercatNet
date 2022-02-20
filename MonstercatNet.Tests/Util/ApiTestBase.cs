@@ -1,10 +1,12 @@
+#nullable disable
+
 using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
 using System.Net.Http;
 
 namespace SoftThorn.MonstercatNet.Tests
 {
-    public abstract class TestBase
+    public abstract class ApiTestBase
     {
         private static IMonstercatApi Create()
         {
@@ -18,7 +20,7 @@ namespace SoftThorn.MonstercatNet.Tests
         public void Setup()
         {
             var configuration = new ConfigurationBuilder()
-                .AddUserSecrets<TestBase>()
+                .AddUserSecrets<ApiTestBase>()
                 .AddEnvironmentVariables()
                 .Build();
 

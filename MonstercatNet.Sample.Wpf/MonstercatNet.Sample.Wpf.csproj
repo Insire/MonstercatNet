@@ -2,9 +2,9 @@
 
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
-        <TargetFramework>net50-windows</TargetFramework>
+        <TargetFramework>net60-windows</TargetFramework>
         <UseWPF>true</UseWPF>
-        <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+        <UserSecretsId>31a9ef54-40ff-4c7c-81b1-c4c6e4bc1e99</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>

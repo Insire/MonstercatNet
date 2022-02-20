@@ -5,20 +5,6 @@ namespace SoftThorn.MonstercatNet
 {
     public static class MonstercatApiExtensions
     {
-        public static async Task<byte[]> GetReleaseCoverAsByteArray(this IMonstercatApi api, ReleaseCoverRequest request)
-        {
-            var content = await api.GetReleaseCover(request).ConfigureAwait(false);
-
-            return await content.ReadAsByteArrayAsync().ConfigureAwait(false);
-        }
-
-        public static async Task<Stream> GetReleaseCoverAsStream(this IMonstercatApi api, ReleaseCoverRequest request)
-        {
-            var content = await api.GetReleaseCover(request).ConfigureAwait(false);
-
-            return await content.ReadAsStreamAsync().ConfigureAwait(false);
-        }
-
         /// <summary>
         /// gold membership required
         /// </summary>

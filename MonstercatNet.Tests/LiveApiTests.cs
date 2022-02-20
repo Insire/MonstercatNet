@@ -1,3 +1,5 @@
+#nullable disable
+
 using NUnit.Framework;
 using System;
 using System.Linq;
@@ -5,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SoftThorn.MonstercatNet.Tests
 {
-    public sealed class LiveApiTests : TestBase
+    public sealed class LiveApiTests : ApiTestBase
     {
         internal Guid? PlaylistId { get; private set; }
         internal Guid? UserId { get; private set; }
@@ -82,34 +84,8 @@ namespace SoftThorn.MonstercatNet.Tests
             Assert.IsTrue(release.Tracks.Length == 1);
         }
 
-        [Test, Order(7)]
-        public async Task Test_GetReleaseCoverAsByteArray()
-        {
-            var cover = await Api.GetReleaseCoverAsByteArray(new ReleaseCoverRequest()
-            {
-                ReleaseId = Guid.Parse("466c62cd-cfa8-457d-9dbf-66db101d73a6"),
-            });
-
-            Assert.IsNotNull(cover);
-            Assert.IsTrue(cover.Length > 0);
-        }
-
-        [Test, Order(8)]
-        public async Task Test_GetReleaseCoverAsStream()
-        {
-            var cover = await Api.GetReleaseCoverAsStream(new ReleaseCoverRequest()
-            {
-                ReleaseId = Guid.Parse("466c62cd-cfa8-457d-9dbf-66db101d73a6"),
-            });
-
-            Assert.IsNotNull(cover);
-
-            var result = cover.ToByteArray();
-            Assert.IsTrue(result.Length > 0);
-        }
-
         // requires active gold subscription
-        [Test, Order(9)]
+        [Test, Order(7)]
         public async Task Test_DownloadReleaseAsByteArray()
         {
             var release = await Api.DownloadReleaseAsByteArray(new ReleaseDownloadRequest()
@@ -122,7 +98,7 @@ namespace SoftThorn.MonstercatNet.Tests
         }
 
         // requires active gold subscription
-        [Test, Order(10)]
+        [Test, Order(8)]
         public async Task Test_DownloadReleaseAsStream()
         {
             var release = await Api.DownloadReleaseAsStream(new ReleaseDownloadRequest()
@@ -137,7 +113,7 @@ namespace SoftThorn.MonstercatNet.Tests
         }
 
         // requires active gold subscription
-        [Test, Order(11)]
+        [Test, Order(9)]
         public async Task Test_DownloadTrackAsByteArray()
         {
             var release = await Api.DownloadTrackAsByteArray(new TrackDownloadRequest()
@@ -151,7 +127,7 @@ namespace SoftThorn.MonstercatNet.Tests
         }
 
         // requires active gold subscription
-        [Test, Order(12)]
+        [Test, Order(10)]
         public async Task Test_DownloadTrackAsStream()
         {
             var release = await Api.DownloadTrackAsStream(new TrackDownloadRequest()
@@ -166,7 +142,7 @@ namespace SoftThorn.MonstercatNet.Tests
             Assert.IsTrue(result.Length > 0);
         }
 
-        [Test, Order(13)]
+        [Test, Order(11)]
         public async Task Test_StreamTrackAsStream()
         {
             var release = await Api.StreamTrackAsStream(new TrackStreamRequest()
@@ -181,12 +157,12 @@ namespace SoftThorn.MonstercatNet.Tests
             Assert.IsTrue(result.Length > 0);
         }
 
-        [Test, Order(14)]
+        [Test, Order(12)]
         public async Task Test_CreatePlaylist()
         {
             var response = await Api.CreatePlaylist(new PlaylistCreateRequest()
             {
-                Title = $"MyTestPlaylist",
+                Title = "MyTestPlaylist",
             });
 
             Assert.IsNotNull(response);
@@ -194,23 +170,7 @@ namespace SoftThorn.MonstercatNet.Tests
             PlaylistId = response.Id;
         }
 
-        [Test, Order(15)]
-        public async Task Test_PlaylistGetTracklist()
-        {
-            if (PlaylistId is null)
-            {
-                Assert.Inconclusive("The test case that should create a valid playlist either didn't run or did failed to complete.");
-            }
-
-            var tracklist = await Api.GetPlaylistTracks(PlaylistId.Value);
-
-            Assert.IsNotNull(tracklist);
-            Assert.IsNotNull(tracklist.Results);
-            Assert.IsTrue(tracklist.Results.Length == 1);
-            Assert.IsTrue(tracklist.Results[0].Id == Guid.Parse("c8d3abc3-1668-42de-b832-b58ca6cc883f"));
-        }
-
-        [Test, Order(16)]
+        [Test, Order(13)]
         public async Task Test_PlaylistAddTrack()
         {
             if (PlaylistId is null)
@@ -218,7 +178,7 @@ namespace SoftThorn.MonstercatNet.Tests
                 Assert.Inconclusive("The test case that should create a valid playlist either didn't run or did failed to complete.");
             }
 
-            await Api.PlaylistAddTrack(new PlaylistAddTrackRequest()
+            await Api.PlaylistAddTrack(new AddPlaylistTrackRequest()
             {
                 PlaylistId = PlaylistId.Value,
                 ReleaseId = Guid.Parse("ff361c51-ed8c-49f7-b693-c04a1e01dcca"),
@@ -226,7 +186,26 @@ namespace SoftThorn.MonstercatNet.Tests
             });
         }
 
-        [Test, Order(17)]
+        [Test, Order(14)]
+        public async Task Test_PlaylistGetTracklist()
+        {
+            if (PlaylistId is null)
+            {
+                Assert.Inconclusive("The test case that should create a valid playlist either didn't run or did failed to complete.");
+            }
+
+            var tracklist = await Api.GetPlaylistTracks(new GetPlaylistTracksRequest()
+            {
+                PlaylistId = PlaylistId.Value
+            });
+
+            Assert.IsNotNull(tracklist);
+            Assert.IsNotNull(tracklist.Data);
+            Assert.IsTrue(tracklist.Data.Length == 1);
+            Assert.IsTrue(tracklist.Data[0].Id == Guid.Parse("c8d3abc3-1668-42de-b832-b58ca6cc883f"));
+        }
+
+        [Test, Order(15)]
         public async Task Test_PlaylistDeleteTrack()
         {
             if (PlaylistId is null)
@@ -242,7 +221,7 @@ namespace SoftThorn.MonstercatNet.Tests
             });
         }
 
-        [Test, Order(18)]
+        [Test, Order(16)]
         public async Task Test_GetSelfPlaylists()
         {
             var playlists = await Api.GetSelfPlaylists();
@@ -253,7 +232,7 @@ namespace SoftThorn.MonstercatNet.Tests
             Assert.IsTrue(playlists.Playlists.Data.Any(p => p.Id == PlaylistId));
         }
 
-        [Test, Order(19)]
+        [Test, Order(17)]
         public async Task Test_GetPlaylist()
         {
             if (PlaylistId is null)
@@ -266,7 +245,7 @@ namespace SoftThorn.MonstercatNet.Tests
             Assert.IsNotNull(playlist);
         }
 
-        [Test, Order(20)]
+        [Test, Order(18)]
         public async Task Test_UpdatePlaylist()
         {
             if (PlaylistId is null)
@@ -274,18 +253,17 @@ namespace SoftThorn.MonstercatNet.Tests
                 Assert.Inconclusive("The test case that should create a valid playlist either didn't run or did failed to complete.");
             }
 
-            var playlist = await Api.UpdatePlaylist(new PlaylistUpdateRequest()
+            var playlist = await Api.UpdatePlaylist(new UpdatePlaylistRequest()
             {
                 Title = "MyRenameTestPlaylist",
                 PlaylistId = PlaylistId.Value,
                 UserId = UserId.Value,
-                UpdatedAt = DateTime.UtcNow,
             });
 
-            Assert.AreEqual("MyRenameTestPlaylist", playlist.Name);
+            Assert.AreEqual("MyRenameTestPlaylist", playlist.Title);
         }
 
-        [Test, Order(21)]
+        [Test, Order(19)]
         public async Task Test_MakePlaylistPublic()
         {
             if (PlaylistId is null)
@@ -293,19 +271,18 @@ namespace SoftThorn.MonstercatNet.Tests
                 Assert.Inconclusive("The test case that should create a valid playlist either didn't run or did failed to complete.");
             }
 
-            var playlist = await Api.UpdatePlaylist(new PlaylistUpdateRequest()
+            var playlist = await Api.UpdatePlaylist(new UpdatePlaylistRequest()
             {
                 Title = null,
                 PlaylistId = PlaylistId.Value,
                 UserId = UserId.Value,
-                UpdatedAt = DateTime.UtcNow,
                 IsPublic = true,
             });
 
-            Assert.AreEqual(true, playlist.Public);
+            Assert.AreEqual(true, playlist.IsPublic);
         }
 
-        [Test, Order(22)]
+        [Test, Order(20)]
         public async Task Test_MakePlaylistPrivate()
         {
             if (PlaylistId is null)
@@ -313,19 +290,18 @@ namespace SoftThorn.MonstercatNet.Tests
                 Assert.Inconclusive("The test case that should create a valid playlist either didn't run or did failed to complete.");
             }
 
-            var playlist = await Api.UpdatePlaylist(new PlaylistUpdateRequest()
+            var playlist = await Api.UpdatePlaylist(new UpdatePlaylistRequest()
             {
                 Title = null,
                 PlaylistId = PlaylistId.Value,
                 UserId = UserId.Value,
-                UpdatedAt = DateTime.UtcNow,
                 IsPublic = false,
             });
 
-            Assert.AreEqual(false, playlist.Public);
+            Assert.AreEqual(false, playlist.IsPublic);
         }
 
-        [Test, Order(23)]
+        [Test, Order(21)]
         public async Task Test_DeletePlaylist()
         {
             if (PlaylistId is null)
