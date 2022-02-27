@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Build": {
+      "commandName": "Project",
+      "commandLineArgs": "",
+      "environmentVariables": {
+        "ApiCredentials__Password": "E9j&4gV6&*AMYBkwSV",
+        "ApiCredentials__Email": "peter.vietense@hotmail.de"
+      }
+    }
+  }
+}

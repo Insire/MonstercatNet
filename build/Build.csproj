@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net6.0</TargetFramework>
+        <RunWorkingDirectory>$(MSBuildProjectDirectory)</RunWorkingDirectory>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <PackageReference Include="Cake.Codecov" Version="1.0.1" />
+        <PackageReference Include="Cake.Frosting" Version="2.1.0" />
+        <PackageReference Include="Cake.GitVersioning" Version="3.4.255" />
+        <PackageReference Include="Cake.Incubator" Version="7.0.0" />
+
+        <PackageReference Include="Codecov" Version="1.13.0" />
+        <PackageReference Include="Microsoft.CodeCoverage" Version="17.1.0" />
+        <PackageReference Include="NUnit.ConsoleRunner" Version="3.15.0" />
+        <PackageReference Include="ReportGenerator" Version="5.0.4" />
+    </ItemGroup>
+</Project>
