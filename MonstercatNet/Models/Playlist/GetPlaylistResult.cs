@@ -22,7 +22,7 @@ namespace SoftThorn.MonstercatNet
         public Guid UserId { get; set; }
 
         [AliasAs("Items")]
-        public GetPlaylistResultTrack[] Tracks { get; set; } = Array.Empty<GetPlaylistResultTrack>();
+        public PlaylistRecord[] Tracks { get; set; } = Array.Empty<PlaylistRecord>();
 
         public string TileFileId { get; set; } = "";
         public string BackgroundFileId { get; set; } = "";

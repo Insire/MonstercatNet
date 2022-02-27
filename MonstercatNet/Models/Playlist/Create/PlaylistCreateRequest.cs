@@ -1,5 +1,3 @@
-using Refit;
-
 namespace SoftThorn.MonstercatNet
 {
     public sealed class PlaylistCreateRequest

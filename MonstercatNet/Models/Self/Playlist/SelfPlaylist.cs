@@ -16,6 +16,6 @@ namespace SoftThorn.MonstercatNet
         public string BackgroundFileId { get; set; } = "";
         public bool MyLibrary { get; set; }
         public int NumRecords { get; set; }
-        public object? Items { get; set; }
+        public PlaylistRecord[]? Items { get; set; }
     }
 }

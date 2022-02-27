@@ -218,68 +218,70 @@ namespace SoftThorn.MonstercatNet
             return _service.GetSelfPlaylists(token);
         }
 
-        public Task PlaylistAddTrack(AddPlaylistTrackRequest request, CancellationToken token = default)
+        public Task PlaylistAddTrack(Guid playlistId, PlaylistAddTrackRequest request, CancellationToken token = default)
         {
             if (request is null)
             {
                 throw new ArgumentNullException(nameof(request));
             }
 
-            if (request.PlaylistId == Guid.Empty)
+            if (playlistId == Guid.Empty)
             {
-                throw new ArgumentNullException(nameof(request.PlaylistId));
+                throw new ArgumentNullException(nameof(playlistId));
             }
 
-            if (request.ReleaseId == Guid.Empty)
+            foreach (var record in request.Records)
             {
-                throw new ArgumentNullException(nameof(request.ReleaseId));
+                if (record.PlaylistId == Guid.Empty)
+                {
+                    throw new ArgumentNullException(nameof(record.PlaylistId));
+                }
+
+                if (record.ReleaseId == Guid.Empty)
+                {
+                    throw new ArgumentNullException(nameof(record.ReleaseId));
+                }
+
+                if (record.TrackId == Guid.Empty)
+                {
+                    throw new ArgumentNullException(nameof(record.TrackId));
+                }
             }
 
-            if (request.TrackId == Guid.Empty)
-            {
-                throw new ArgumentNullException(nameof(request.TrackId));
-            }
-
-            return _service.PlaylistAddTrack(request, token);
+            return _service.PlaylistAddTrack(playlistId, request, token);
         }
 
-        public Task PlaylistDeleteTrack(PlaylistDeleteTrackRequest request, CancellationToken token = default)
-        {
-            if (request is null)
-            {
-                throw new ArgumentNullException(nameof(request));
-            }
-            if (request.PlaylistId == Guid.Empty)
-            {
-                throw new ArgumentNullException(nameof(request.PlaylistId));
-            }
-
-            if (request.ReleaseId == Guid.Empty)
-            {
-                throw new ArgumentNullException(nameof(request.ReleaseId));
-            }
-
-            if (request.TrackId == Guid.Empty)
-            {
-                throw new ArgumentNullException(nameof(request.TrackId));
-            }
-
-            return _service.PlaylistDeleteTrack(request, token);
-        }
-
-        public Task<GetPlaylistTracksResult> GetPlaylistTracks(GetPlaylistTracksRequest request, CancellationToken token = default)
+        public Task PlaylistDeleteTrack(Guid playlistId, PlaylistDeleteTrackRequest request, CancellationToken token = default)
         {
             if (request is null)
             {
                 throw new ArgumentNullException(nameof(request));
             }
 
-            if (request.PlaylistId == Guid.Empty)
+            if (playlistId == Guid.Empty)
             {
-                throw new ArgumentNullException(nameof(request.PlaylistId));
+                throw new ArgumentNullException(nameof(playlistId));
             }
 
-            return _service.GetPlaylistTracks(request, token);
+            foreach (var record in request.Records)
+            {
+                if (record.PlaylistId == Guid.Empty)
+                {
+                    throw new ArgumentNullException(nameof(record.PlaylistId));
+                }
+
+                if (record.ReleaseId == Guid.Empty)
+                {
+                    throw new ArgumentNullException(nameof(record.ReleaseId));
+                }
+
+                if (record.TrackId == Guid.Empty)
+                {
+                    throw new ArgumentNullException(nameof(record.TrackId));
+                }
+            }
+
+            return _service.PlaylistDeleteTrack(playlistId, request, token);
         }
 
         public Task<GetPlaylistResult> GetPlaylist(Guid playlistId, CancellationToken token = default)

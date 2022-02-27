@@ -82,7 +82,7 @@ namespace SoftThorn.MonstercatNet
         Task<CreatePlaylistResult> CreatePlaylist(PlaylistCreateRequest request, CancellationToken token = default);
 
         /// <summary>
-        /// delete a user specific playlist via its id
+        /// delete a specific playlist via its id
         /// </summary>
         /// <param name="playlistId"><see cref="Playlist.Id"/></param>
         [Post("/playlist/{playlistId}/delete")]
@@ -91,20 +91,20 @@ namespace SoftThorn.MonstercatNet
         /// <summary>
         /// fetch your playlists. requires login.
         /// </summary>
-        [Get("/playlists")]
+        [Get("/playlists?mylibrary=1")]
         Task<SelfPlaylistsResult> GetSelfPlaylists(CancellationToken token = default);
 
         /// <summary>
-        /// fetch a playlist. Might require login, depending on whether you fetch your own playlist or the playlist is private.
+        /// fetch one of your playlists. requires login.
         /// </summary>
-        [Get("/playlist/{playlistId}")]
+        [Get("/playlist/{playlistId}/catalog")]
         Task<GetPlaylistResult> GetPlaylist([Query] Guid playlistId, CancellationToken token = default);
 
         /// <summary>
         /// add one track to the end of a playlist
         /// </summary>
-        [Post("/playlist/{request.PlaylistId}/add")]
-        Task PlaylistAddTrack(AddPlaylistTrackRequest request, CancellationToken token = default);
+        [Post("/playlist/{playlistId}/modify-items?type=add")]
+        Task PlaylistAddTrack(Guid playlistId, PlaylistAddTrackRequest request, CancellationToken token = default);
 
         /// <summary>
         /// deletes a specfic track from an existing playlist
@@ -112,14 +112,8 @@ namespace SoftThorn.MonstercatNet
         /// <remarks>
         /// requests to this endpoint might fail, if the track to be deleted was added only recently
         /// </remarks>
-        [Post("/playlist/{request.PlaylistId}/remove")]
-        Task PlaylistDeleteTrack(PlaylistDeleteTrackRequest request, CancellationToken token = default);
-
-        /// <summary>
-        /// Getting a playlist complete tracklist
-        /// </summary>
-        [Get("/playlist/{request.PlaylistId}/catalog")]
-        Task<GetPlaylistTracksResult> GetPlaylistTracks([Query] GetPlaylistTracksRequest request, CancellationToken token = default);
+        [Post("/playlist/{playlistId}/modify-items?type=remove")]
+        Task PlaylistDeleteTrack(Guid playlistId, PlaylistDeleteTrackRequest request, CancellationToken token = default);
 
         /// <summary>
         /// rename a playlist

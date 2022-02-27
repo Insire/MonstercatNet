@@ -242,79 +242,115 @@ namespace SoftThorn.MonstercatNet.Tests
             [Test]
             public void Test_PlaylistAddTrackNullRequest()
             {
-                Assert.ThrowsAsync<ArgumentNullException>(() => Api.PlaylistAddTrack(null));
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.PlaylistAddTrack(Guid.Parse(RandomInvalidGuid), null));
+            }
+
+            [Test]
+            public void Test_PlaylistAddTrackEmptyPlaylistId()
+            {
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.PlaylistAddTrack(Guid.Empty, null));
             }
 
             [Test]
             public void Test_PlaylistAddTrackNullPlaylistId()
             {
-                Assert.ThrowsAsync<ArgumentNullException>(() => Api.PlaylistAddTrack(new AddPlaylistTrackRequest()
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.PlaylistAddTrack(Guid.Parse(RandomInvalidGuid), new PlaylistAddTrackRequest()
                 {
-                    PlaylistId = Guid.Empty,
-                    ReleaseId = Guid.Parse(RandomInvalidGuid),
-                    TrackId = Guid.Parse(RandomInvalidGuid),
+                    Records = new[]
+                    {
+                        new PlaylistRecord()
+                        {
+                            PlaylistId = Guid.Empty,
+                            ReleaseId = Guid.Parse(RandomInvalidGuid),
+                            TrackId = Guid.Parse(RandomInvalidGuid),
+                        }
+                    }
                 }));
             }
 
             [Test]
             public void Test_PlaylistAddTrackNullRelease()
             {
-                Assert.ThrowsAsync<ArgumentNullException>(() => Api.PlaylistAddTrack(new AddPlaylistTrackRequest()
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.PlaylistAddTrack(Guid.Parse(RandomInvalidGuid), new PlaylistAddTrackRequest()
                 {
-                    PlaylistId = Guid.Parse(RandomInvalidGuid),
-                    ReleaseId = Guid.Empty,
-                    TrackId = Guid.Parse(RandomInvalidGuid),
+                    Records = new[]
+                    {
+                        new PlaylistRecord()
+                        {
+                            PlaylistId = Guid.Parse(RandomInvalidGuid),
+                            ReleaseId = Guid.Empty,
+                            TrackId = Guid.Parse(RandomInvalidGuid),
+                        }
+                    }
                 }));
             }
 
             [Test]
             public void Test_PlaylistAddTrackNullTrack()
             {
-                Assert.ThrowsAsync<ArgumentNullException>(() => Api.PlaylistAddTrack(new AddPlaylistTrackRequest()
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.PlaylistAddTrack(Guid.Parse(RandomInvalidGuid), new PlaylistAddTrackRequest()
                 {
-                    PlaylistId = Guid.Parse(RandomInvalidGuid),
-                    ReleaseId = Guid.Parse(RandomInvalidGuid),
-                    TrackId = Guid.Empty
+                    Records = new[]
+                    {
+                        new PlaylistRecord()
+                        {
+                            PlaylistId = Guid.Parse(RandomInvalidGuid),
+                            ReleaseId = Guid.Parse(RandomInvalidGuid),
+                            TrackId = Guid.Empty
+                        }
+                    }
                 }));
             }
 
             [Test]
             public void Test_PlaylistDeleteTrackNullPlaylistId()
             {
-                Assert.ThrowsAsync<ArgumentNullException>(() => Api.PlaylistDeleteTrack(new PlaylistDeleteTrackRequest()
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.PlaylistDeleteTrack(Guid.Parse(RandomInvalidGuid), new PlaylistDeleteTrackRequest()
                 {
-                    PlaylistId = Guid.Empty,
-                    ReleaseId = Guid.Parse(RandomInvalidGuid),
-                    TrackId = Guid.Parse(RandomInvalidGuid),
+                    Records = new[]
+                    {
+                        new PlaylistRecord()
+                        {
+                            PlaylistId = Guid.Empty,
+                            ReleaseId = Guid.Parse(RandomInvalidGuid),
+                            TrackId = Guid.Parse(RandomInvalidGuid),
+                        }
+                    }
                 }));
             }
 
             [Test]
             public void Test_PlaylistDeleteTrackNullRelease()
             {
-                Assert.ThrowsAsync<ArgumentNullException>(() => Api.PlaylistDeleteTrack(new PlaylistDeleteTrackRequest()
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.PlaylistDeleteTrack(Guid.Parse(RandomInvalidGuid), new PlaylistDeleteTrackRequest()
                 {
-                    PlaylistId = Guid.Parse(RandomInvalidGuid),
-                    ReleaseId = Guid.Empty,
-                    TrackId = Guid.Parse(RandomInvalidGuid),
+                    Records = new[]
+                    {
+                        new PlaylistRecord()
+                        {
+                            PlaylistId = Guid.Parse(RandomInvalidGuid),
+                            ReleaseId = Guid.Empty,
+                            TrackId = Guid.Parse(RandomInvalidGuid),
+                        }
+                    }
                 }));
             }
 
             [Test]
             public void Test_PlaylistDeleteTrackNullTrack()
             {
-                Assert.ThrowsAsync<ArgumentNullException>(() => Api.PlaylistDeleteTrack(new PlaylistDeleteTrackRequest()
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.PlaylistDeleteTrack(Guid.Parse(RandomInvalidGuid), new PlaylistDeleteTrackRequest()
                 {
-                    PlaylistId = Guid.Parse(RandomInvalidGuid),
-                    ReleaseId = Guid.Parse(RandomInvalidGuid),
-                    TrackId = Guid.Empty
+                    Records = new[]
+                    {
+                        new PlaylistRecord()
+                        {
+                            PlaylistId = Guid.Parse(RandomInvalidGuid),
+                            ReleaseId = Guid.Parse(RandomInvalidGuid),
+                            TrackId = Guid.Empty
+                        }
+                    }
                 }));
-            }
-
-            [Test]
-            public void Test_PlaylistGetTrackListNullPlaylistId()
-            {
-                Assert.ThrowsAsync<ArgumentNullException>(() => Api.GetPlaylistTracks(new GetPlaylistTracksRequest() { PlaylistId = Guid.Empty }));
             }
 
             [Test]
