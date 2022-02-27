@@ -148,24 +148,6 @@ namespace SoftThorn.MonstercatNet
         /// <summary>
         /// gold membership required
         /// </summary>
-        public Task<HttpContent> DownloadRelease(ReleaseDownloadRequest request, CancellationToken token = default)
-        {
-            if (request is null)
-            {
-                throw new ArgumentNullException(nameof(request));
-            }
-
-            if (request.ReleaseId == Guid.Empty)
-            {
-                throw new ArgumentException(nameof(ReleaseDownloadRequest.ReleaseId));
-            }
-
-            return _service.DownloadRelease(request, token);
-        }
-
-        /// <summary>
-        /// gold membership required
-        /// </summary>
         public Task<HttpContent> DownloadTrack(TrackDownloadRequest request, CancellationToken token = default)
         {
             if (request is null)

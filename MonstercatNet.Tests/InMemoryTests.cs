@@ -161,27 +161,6 @@ namespace SoftThorn.MonstercatNet.Tests
             }
 
             [Test]
-            public void Test_DownloadReleaseAsByteArrayRequestForNull()
-            {
-                Assert.ThrowsAsync<ArgumentNullException>(() => Api.DownloadReleaseAsByteArray(null));
-            }
-
-            [Test]
-            public void Test_DownloadReleaseAsByteArrayRequestForNullReleaseId()
-            {
-                Assert.ThrowsAsync<ArgumentException>(() => Api.DownloadReleaseAsByteArray(new ReleaseDownloadRequest()
-                {
-                    ReleaseId = Guid.Empty
-                }));
-            }
-
-            [Test]
-            public void Test_DownloadReleaseAsStreamRequestForNull()
-            {
-                Assert.ThrowsAsync<ArgumentNullException>(() => Api.DownloadReleaseAsStream(null));
-            }
-
-            [Test]
             public void Test_DownloadTrackAsByteArrayRequestForNull()
             {
                 Assert.ThrowsAsync<ArgumentNullException>(() => Api.DownloadTrackAsByteArray(null));

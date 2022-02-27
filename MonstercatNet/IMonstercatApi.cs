@@ -64,12 +64,6 @@ namespace SoftThorn.MonstercatNet
         Task<ReleaseResult> GetRelease([Query] string catalogId, CancellationToken token = default);
 
         /// <summary>
-        /// returns as zip file as byte array
-        /// </summary>
-        [Get("/release/{request.ReleaseId}/download")]
-        Task<HttpContent> DownloadRelease([Query] ReleaseDownloadRequest request, CancellationToken token = default);
-
-        /// <summary>
         /// gold subscription required
         /// </summary>
         [Get("/release/{request.ReleaseId}/track-download/{request.TrackId}")]

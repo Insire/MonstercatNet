@@ -12,8 +12,9 @@ namespace SoftThorn.MonstercatNet.Tests
             {
                 CatalogId = "2FMCS1347",
             };
-            var builder = ReleaseCoverArtBuilder.Create()
-                .ForRelease(release);
+            var builder = ReleaseCoverArtBuilder
+                            .Create()
+                            .ForRelease(release);
 
             var cover = await Cdn.GetReleaseCoverAsByteArray(builder);
 
@@ -24,11 +25,13 @@ namespace SoftThorn.MonstercatNet.Tests
         [Test, Order(2)]
         public async Task Test_GetReleaseCoverAsStream()
         {
-            var builder = ReleaseCoverArtBuilder.Create()
-                .ForRelease(new TrackRelease()
-                {
-                    CatalogId = "MCS1346",
-                });
+            var builder = ReleaseCoverArtBuilder
+                            .Create()
+                            .ForRelease(new TrackRelease()
+                            {
+                                CatalogId = "MCS1346",
+                            });
+
             var cover = await Cdn.GetReleaseCoverAsStream(builder);
 
             Assert.IsNotNull(cover);
