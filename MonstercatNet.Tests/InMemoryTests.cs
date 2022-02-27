@@ -384,10 +384,5 @@ namespace SoftThorn.MonstercatNet.Tests
                 }));
             }
         }
-
-        public sealed class CdnBuilder
-        {
-
-        }
     }
 }
