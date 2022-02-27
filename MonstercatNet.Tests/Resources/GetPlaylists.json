@@ -1,0 +1,282 @@
+{
+    "Playlists": {
+        "Data": [
+            {
+                "Archived": false,
+                "CreatedAt": "2020-09-27T08:05:25.083798Z",
+                "UpdatedAt": "2020-09-27T08:05:25.083798Z",
+                "Id": "4cd2ea52-6f70-4fc1-8831-908176858fb7",
+                "IsPublic": false,
+                "Title": "My Library",
+                "Description": "",
+                "UserId": "f6e622f4-d296-4891-8b5a-8d6a840362db",
+                "TileFileId": null,
+                "BackgroundFileId": null,
+                "MyLibrary": true,
+                "NumRecords": 37,
+                "Items": [
+                    {
+                        "PlaylistId": "4cd2ea52-6f70-4fc1-8831-908176858fb7",
+                        "ReleaseId": "087aec44-9383-4037-85d1-c35a7573de9f",
+                        "TrackId": "1416f4a9-bdec-46e0-aca5-2e8e945fce66",
+                        "Sort": 0
+                    },
+                    {
+                        "PlaylistId": "4cd2ea52-6f70-4fc1-8831-908176858fb7",
+                        "ReleaseId": "a06cf771-da75-4444-9a58-bf113858e6ce",
+                        "TrackId": "3169bfeb-7504-46ed-a004-a0c3825f2125",
+                        "Sort": 1
+                    },
+                    {
+                        "PlaylistId": "4cd2ea52-6f70-4fc1-8831-908176858fb7",
+                        "ReleaseId": "252a4360-17a2-494d-b806-60733d54b051",
+                        "TrackId": "4cffd611-6c0c-4a67-b354-284e48add98a",
+                        "Sort": 2
+                    },
+                    {
+                        "PlaylistId": "4cd2ea52-6f70-4fc1-8831-908176858fb7",
+                        "ReleaseId": "1557e443-13b8-4cc5-a2d3-c2dd014f0f59",
+                        "TrackId": "6f37bff4-1b23-4194-9051-4d05b0fb7c67",
+                        "Sort": 3
+                    },
+                    {
+                        "PlaylistId": "4cd2ea52-6f70-4fc1-8831-908176858fb7",
+                        "ReleaseId": "c012b7c6-56a2-49b0-9e5c-51d2a83e041c",
+                        "TrackId": "4e7341a3-a6a5-4fab-ac0f-33516d13afb3",
+                        "Sort": 4
+                    },
+                    {
+                        "PlaylistId": "4cd2ea52-6f70-4fc1-8831-908176858fb7",
+                        "ReleaseId": "8e7ff5f3-b1bb-4afc-95ea-207af12a8af3",
+                        "TrackId": "cbcde724-1c6b-4927-8861-8fa92e054538",
+                        "Sort": 5
+                    },
+                    {
+                        "PlaylistId": "4cd2ea52-6f70-4fc1-8831-908176858fb7",
+                        "ReleaseId": "c98f35e6-be2e-42eb-bd47-47708ac10672",
+                        "TrackId": "361b04ec-d39a-49dd-9dba-929b40cd6d6b",
+                        "Sort": 6
+                    },
+                    {
+                        "PlaylistId": "4cd2ea52-6f70-4fc1-8831-908176858fb7",
+                        "ReleaseId": "649c4ff5-d8c5-461a-97fd-b829e30f974a",
+                        "TrackId": "44444353-aa34-48f9-befc-9b45aec09d44",
+                        "Sort": 7
+                    },
+                    {
+                        "PlaylistId": "4cd2ea52-6f70-4fc1-8831-908176858fb7",
+                        "ReleaseId": "75c1a74c-27bc-4ef6-884b-0b56515ea6e0",
+                        "TrackId": "65f50f6c-c87d-4d98-b41f-b275280fb7bb",
+                        "Sort": 8
+                    },
+                    {
+                        "PlaylistId": "4cd2ea52-6f70-4fc1-8831-908176858fb7",
+                        "ReleaseId": "75c1a74c-27bc-4ef6-884b-0b56515ea6e0",
+                        "TrackId": "7faf8da8-d89b-4931-9d44-ebdbc7334522",
+                        "Sort": 9
+                    },
+                    {
+                        "PlaylistId": "4cd2ea52-6f70-4fc1-8831-908176858fb7",
+                        "ReleaseId": "75c1a74c-27bc-4ef6-884b-0b56515ea6e0",
+                        "TrackId": "f2db30c8-1547-4c41-93d9-dca2bc822cac",
+                        "Sort": 10
+                    },
+                    {
+                        "PlaylistId": "4cd2ea52-6f70-4fc1-8831-908176858fb7",
+                        "ReleaseId": "ad0875a6-ed29-429e-8ac4-5f17b6ffa3d6",
+                        "TrackId": "919e28e0-aa33-45da-af4a-7bcaae28b837",
+                        "Sort": 11
+                    },
+                    {
+                        "PlaylistId": "4cd2ea52-6f70-4fc1-8831-908176858fb7",
+                        "ReleaseId": "ad0875a6-ed29-429e-8ac4-5f17b6ffa3d6",
+                        "TrackId": "a25c28d7-d296-46ee-b220-ede172965b92",
+                        "Sort": 12
+                    },
+                    {
+                        "PlaylistId": "4cd2ea52-6f70-4fc1-8831-908176858fb7",
+                        "ReleaseId": "ad0875a6-ed29-429e-8ac4-5f17b6ffa3d6",
+                        "TrackId": "c08e51c0-7478-4c2d-ab82-bd6f1632a822",
+                        "Sort": 13
+                    },
+                    {
+                        "PlaylistId": "4cd2ea52-6f70-4fc1-8831-908176858fb7",
+                        "ReleaseId": "ad0875a6-ed29-429e-8ac4-5f17b6ffa3d6",
+                        "TrackId": "cfe22c1d-c0a6-4796-9a19-a84323b45321",
+                        "Sort": 14
+                    },
+                    {
+                        "PlaylistId": "4cd2ea52-6f70-4fc1-8831-908176858fb7",
+                        "ReleaseId": "727f8f87-b262-4840-a04c-b46e30e9b717",
+                        "TrackId": "4376d67c-7096-4399-85a9-6a10799eb1d9",
+                        "Sort": 15
+                    },
+                    {
+                        "PlaylistId": "4cd2ea52-6f70-4fc1-8831-908176858fb7",
+                        "ReleaseId": "727f8f87-b262-4840-a04c-b46e30e9b717",
+                        "TrackId": "80774513-4c62-4ffe-82cb-db9bbefcf369",
+                        "Sort": 16
+                    },
+                    {
+                        "PlaylistId": "4cd2ea52-6f70-4fc1-8831-908176858fb7",
+                        "ReleaseId": "727f8f87-b262-4840-a04c-b46e30e9b717",
+                        "TrackId": "cfa4a059-dae5-479d-bfb3-f5015c492d60",
+                        "Sort": 17
+                    },
+                    {
+                        "PlaylistId": "4cd2ea52-6f70-4fc1-8831-908176858fb7",
+                        "ReleaseId": "727f8f87-b262-4840-a04c-b46e30e9b717",
+                        "TrackId": "de0ce9ba-b1d1-4a1d-936d-248509c832f3",
+                        "Sort": 18
+                    },
+                    {
+                        "PlaylistId": "4cd2ea52-6f70-4fc1-8831-908176858fb7",
+                        "ReleaseId": "727f8f87-b262-4840-a04c-b46e30e9b717",
+                        "TrackId": "dfd82c30-2a4f-43e3-bde6-c43180beae52",
+                        "Sort": 19
+                    },
+                    {
+                        "PlaylistId": "4cd2ea52-6f70-4fc1-8831-908176858fb7",
+                        "ReleaseId": "727f8f87-b262-4840-a04c-b46e30e9b717",
+                        "TrackId": "e1625bdb-adea-45c9-b252-4d08b9859df0",
+                        "Sort": 20
+                    },
+                    {
+                        "PlaylistId": "4cd2ea52-6f70-4fc1-8831-908176858fb7",
+                        "ReleaseId": "727f8f87-b262-4840-a04c-b46e30e9b717",
+                        "TrackId": "fd756304-5014-48d0-ba99-1963c35b3b57",
+                        "Sort": 21
+                    },
+                    {
+                        "PlaylistId": "4cd2ea52-6f70-4fc1-8831-908176858fb7",
+                        "ReleaseId": "6648c62a-df12-440b-9262-ed0d6f464682",
+                        "TrackId": "56bf4707-a2d4-4393-97df-2c67a79f3407",
+                        "Sort": 22
+                    },
+                    {
+                        "PlaylistId": "4cd2ea52-6f70-4fc1-8831-908176858fb7",
+                        "ReleaseId": "c07c60c4-c0eb-4d1b-949c-927dbaeea38d",
+                        "TrackId": "8ce98160-a1f5-42b9-803a-2eddbce99fa3",
+                        "Sort": 23
+                    },
+                    {
+                        "PlaylistId": "4cd2ea52-6f70-4fc1-8831-908176858fb7",
+                        "ReleaseId": "8077cb11-d816-4275-a9ae-7632d44f7cfa",
+                        "TrackId": "9b519d3d-0b49-47bb-9230-a88ff2bfbfa9",
+                        "Sort": 24
+                    },
+                    {
+                        "PlaylistId": "4cd2ea52-6f70-4fc1-8831-908176858fb7",
+                        "ReleaseId": "0db3521a-1c15-4c91-976f-7160c82f080f",
+                        "TrackId": "57e0ec87-ccf4-4237-a66d-5c5d84a863c7",
+                        "Sort": 25
+                    },
+                    {
+                        "PlaylistId": "4cd2ea52-6f70-4fc1-8831-908176858fb7",
+                        "ReleaseId": "b2016309-e0a7-4b7d-b56b-d5be783ce888",
+                        "TrackId": "2c35245d-fdca-4818-a470-a473bb14a805",
+                        "Sort": 26
+                    },
+                    {
+                        "PlaylistId": "4cd2ea52-6f70-4fc1-8831-908176858fb7",
+                        "ReleaseId": "da8f5341-90f8-4312-aea1-2da72cacad4f",
+                        "TrackId": "8e16df72-a8bd-4bfb-bbfa-3d44ce4c935c",
+                        "Sort": 27
+                    },
+                    {
+                        "PlaylistId": "4cd2ea52-6f70-4fc1-8831-908176858fb7",
+                        "ReleaseId": "3de04e02-ee32-46f3-8a2e-3b7a6da8885c",
+                        "TrackId": "7535fedd-8e2e-4ec6-a8ba-e73683dcc509",
+                        "Sort": 28
+                    },
+                    {
+                        "PlaylistId": "4cd2ea52-6f70-4fc1-8831-908176858fb7",
+                        "ReleaseId": "a06cf771-da75-4444-9a58-bf113858e6ce",
+                        "TrackId": "0e7ddd6e-0812-43e9-98fb-625f06a9bacf",
+                        "Sort": 29
+                    },
+                    {
+                        "PlaylistId": "4cd2ea52-6f70-4fc1-8831-908176858fb7",
+                        "ReleaseId": "a06cf771-da75-4444-9a58-bf113858e6ce",
+                        "TrackId": "0fb922c2-b313-4645-a2cc-84c1db82252d",
+                        "Sort": 30
+                    },
+                    {
+                        "PlaylistId": "4cd2ea52-6f70-4fc1-8831-908176858fb7",
+                        "ReleaseId": "a06cf771-da75-4444-9a58-bf113858e6ce",
+                        "TrackId": "22218dfb-e3c6-4ae4-b6aa-ac2d9495ea3a",
+                        "Sort": 31
+                    },
+                    {
+                        "PlaylistId": "4cd2ea52-6f70-4fc1-8831-908176858fb7",
+                        "ReleaseId": "a06cf771-da75-4444-9a58-bf113858e6ce",
+                        "TrackId": "7c0e0422-3560-4783-b714-7c2a91865b88",
+                        "Sort": 32
+                    },
+                    {
+                        "PlaylistId": "4cd2ea52-6f70-4fc1-8831-908176858fb7",
+                        "ReleaseId": "a06cf771-da75-4444-9a58-bf113858e6ce",
+                        "TrackId": "8066e522-8863-4de3-88a0-5cab0f6b22ab",
+                        "Sort": 33
+                    },
+                    {
+                        "PlaylistId": "4cd2ea52-6f70-4fc1-8831-908176858fb7",
+                        "ReleaseId": "a06cf771-da75-4444-9a58-bf113858e6ce",
+                        "TrackId": "9ac0b0bb-f3af-40f8-9875-1fa6fcb4b1e7",
+                        "Sort": 34
+                    },
+                    {
+                        "PlaylistId": "4cd2ea52-6f70-4fc1-8831-908176858fb7",
+                        "ReleaseId": "a06cf771-da75-4444-9a58-bf113858e6ce",
+                        "TrackId": "dac9098f-d2f1-4988-aec7-2190263744ec",
+                        "Sort": 35
+                    },
+                    {
+                        "PlaylistId": "4cd2ea52-6f70-4fc1-8831-908176858fb7",
+                        "ReleaseId": "8e7ff5f3-b1bb-4afc-95ea-207af12a8af3",
+                        "TrackId": "cbcde724-1c6b-4927-8861-8fa92e054538",
+                        "Sort": 36
+                    }
+                ]
+            },
+            {
+                "Archived": false,
+                "CreatedAt": "2020-08-12T18:43:12.536313Z",
+                "UpdatedAt": "2020-08-12T18:43:12.536313Z",
+                "Id": "d2d6605e-fd68-4ed8-810b-87ec2d88e945",
+                "IsPublic": true,
+                "Title": "Default",
+                "Description": "",
+                "UserId": "f6e622f4-d296-4891-8b5a-8d6a840362db",
+                "TileFileId": null,
+                "BackgroundFileId": null,
+                "MyLibrary": false,
+                "NumRecords": 27,
+                "Items": null
+            },
+            {
+                "Archived": false,
+                "CreatedAt": "2022-01-10T06:58:55.25074Z",
+                "UpdatedAt": "2022-01-10T06:58:55.25074Z",
+                "Id": "2348b259-c58b-4e2e-a514-e2c45b5ab287",
+                "IsPublic": false,
+                "Title": "Vicetone",
+                "Description": "",
+                "UserId": "f6e622f4-d296-4891-8b5a-8d6a840362db",
+                "TileFileId": null,
+                "BackgroundFileId": null,
+                "MyLibrary": false,
+                "NumRecords": 2,
+                "Items": null
+            }
+        ],
+        "Fields": {
+            "archived": [ "0" ],
+            "mylibrary": [ "1" ]
+        },
+        "Count": 3,
+        "Limit": 100,
+        "Offset": 0,
+        "Total": 3
+    }
+}

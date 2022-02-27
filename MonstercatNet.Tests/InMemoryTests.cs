@@ -1,3 +1,5 @@
+#nullable disable
+
 using NUnit.Framework;
 using System;
 
@@ -5,7 +7,7 @@ namespace SoftThorn.MonstercatNet.Tests
 {
     public sealed class InMemoryTests
     {
-        public sealed class LoginRequestValidation : TestBase
+        public sealed class LoginRequestValidation : ApiTestBase
         {
             [Test]
             public void Test_NullEmail()
@@ -93,7 +95,7 @@ namespace SoftThorn.MonstercatNet.Tests
             }
         }
 
-        public sealed class NullValidation : TestBase
+        public sealed class NullValidation : ApiTestBase
         {
             // there is no resource for this on the monstercat api - or atleast i didnt care to check
             private const string RandomInvalidGuid = "0788CAB5-4F38-4BEA-B7A0-F15D5A16888A";
@@ -156,48 +158,6 @@ namespace SoftThorn.MonstercatNet.Tests
             public void Test_GetReleaseRequestForEmpty()
             {
                 Assert.ThrowsAsync<ArgumentNullException>(() => Api.GetRelease(string.Empty));
-            }
-
-            [Test]
-            public void Test_GetReleaseCoverAsByteArrayRequestForNull()
-            {
-                Assert.ThrowsAsync<ArgumentNullException>(() => Api.GetReleaseCoverAsByteArray(null));
-            }
-
-            [Test]
-            public void Test_GetReleaseCoverAsStreamRequestForNull()
-            {
-                Assert.ThrowsAsync<ArgumentNullException>(() => Api.GetReleaseCoverAsStream(null));
-            }
-
-            [Test]
-            public void Test_GetReleaseCoverAsByteArrayRequestForNullReleaseId()
-            {
-                Assert.ThrowsAsync<ArgumentException>(() => Api.GetReleaseCoverAsByteArray(new ReleaseCoverRequest()
-                {
-                    ReleaseId = Guid.Empty
-                }));
-            }
-
-            [Test]
-            public void Test_DownloadReleaseAsByteArrayRequestForNull()
-            {
-                Assert.ThrowsAsync<ArgumentNullException>(() => Api.DownloadReleaseAsByteArray(null));
-            }
-
-            [Test]
-            public void Test_DownloadReleaseAsByteArrayRequestForNullReleaseId()
-            {
-                Assert.ThrowsAsync<ArgumentException>(() => Api.DownloadReleaseAsByteArray(new ReleaseDownloadRequest()
-                {
-                    ReleaseId = Guid.Empty
-                }));
-            }
-
-            [Test]
-            public void Test_DownloadReleaseAsStreamRequestForNull()
-            {
-                Assert.ThrowsAsync<ArgumentNullException>(() => Api.DownloadReleaseAsStream(null));
             }
 
             [Test]
@@ -269,9 +229,7 @@ namespace SoftThorn.MonstercatNet.Tests
             {
                 Assert.ThrowsAsync<ArgumentNullException>(() => Api.CreatePlaylist(new PlaylistCreateRequest()
                 {
-                    Name = null,
-                    Public = true,
-                    Tracks = new PlaylistCreateTrack[0]
+                    Title = null,
                 }));
             }
 
@@ -284,55 +242,80 @@ namespace SoftThorn.MonstercatNet.Tests
             [Test]
             public void Test_PlaylistAddTrackNullRequest()
             {
-                Assert.ThrowsAsync<ArgumentNullException>(() => Api.PlaylistAddTrack(null));
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.PlaylistAddTrack(Guid.Parse(RandomInvalidGuid), null));
+            }
+
+            [Test]
+            public void Test_PlaylistAddTrackEmptyPlaylistId()
+            {
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.PlaylistAddTrack(Guid.Empty, null));
             }
 
             [Test]
             public void Test_PlaylistAddTrackNullPlaylistId()
             {
-                Assert.ThrowsAsync<ArgumentNullException>(() => Api.PlaylistAddTrack(new PlaylistAddTrackRequest()
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.PlaylistAddTrack(Guid.Parse(RandomInvalidGuid), new PlaylistAddTrackRequest()
                 {
-                    PlaylistId = Guid.Empty,
-                    ReleaseId = Guid.Parse(RandomInvalidGuid),
-                    TrackId = Guid.Parse(RandomInvalidGuid),
+                    Records = new[]
+                    {
+                        new PlaylistRecord()
+                        {
+                            PlaylistId = Guid.Empty,
+                            ReleaseId = Guid.Parse(RandomInvalidGuid),
+                            TrackId = Guid.Parse(RandomInvalidGuid),
+                        }
+                    }
                 }));
             }
 
             [Test]
             public void Test_PlaylistAddTrackNullRelease()
             {
-                Assert.ThrowsAsync<ArgumentNullException>(() => Api.PlaylistAddTrack(new PlaylistAddTrackRequest()
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.PlaylistAddTrack(Guid.Parse(RandomInvalidGuid), new PlaylistAddTrackRequest()
                 {
-                    PlaylistId = Guid.Parse(RandomInvalidGuid),
-                    ReleaseId = Guid.Empty,
-                    TrackId = Guid.Parse(RandomInvalidGuid),
+                    Records = new[]
+                    {
+                        new PlaylistRecord()
+                        {
+                            PlaylistId = Guid.Parse(RandomInvalidGuid),
+                            ReleaseId = Guid.Empty,
+                            TrackId = Guid.Parse(RandomInvalidGuid),
+                        }
+                    }
                 }));
             }
 
             [Test]
             public void Test_PlaylistAddTrackNullTrack()
             {
-                Assert.ThrowsAsync<ArgumentNullException>(() => Api.PlaylistAddTrack(new PlaylistAddTrackRequest()
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.PlaylistAddTrack(Guid.Parse(RandomInvalidGuid), new PlaylistAddTrackRequest()
                 {
-                    PlaylistId = Guid.Parse(RandomInvalidGuid),
-                    ReleaseId = Guid.Parse(RandomInvalidGuid),
-                    TrackId = Guid.Empty
+                    Records = new[]
+                    {
+                        new PlaylistRecord()
+                        {
+                            PlaylistId = Guid.Parse(RandomInvalidGuid),
+                            ReleaseId = Guid.Parse(RandomInvalidGuid),
+                            TrackId = Guid.Empty
+                        }
+                    }
                 }));
-            }
-
-            [Test]
-            public void Test_PlaylistDeleteTrackNullRequest()
-            {
-                Assert.ThrowsAsync<ArgumentNullException>(() => Api.PlaylistDeleteTrack(Guid.Parse(RandomInvalidGuid), null));
             }
 
             [Test]
             public void Test_PlaylistDeleteTrackNullPlaylistId()
             {
-                Assert.ThrowsAsync<ArgumentNullException>(() => Api.PlaylistDeleteTrack(Guid.Empty, new PlaylistDeleteTrackRequest()
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.PlaylistDeleteTrack(Guid.Parse(RandomInvalidGuid), new PlaylistDeleteTrackRequest()
                 {
-                    ReleaseId = Guid.Parse(RandomInvalidGuid),
-                    TrackId = Guid.Parse(RandomInvalidGuid),
+                    Records = new[]
+                    {
+                        new PlaylistRecord()
+                        {
+                            PlaylistId = Guid.Empty,
+                            ReleaseId = Guid.Parse(RandomInvalidGuid),
+                            TrackId = Guid.Parse(RandomInvalidGuid),
+                        }
+                    }
                 }));
             }
 
@@ -341,8 +324,15 @@ namespace SoftThorn.MonstercatNet.Tests
             {
                 Assert.ThrowsAsync<ArgumentNullException>(() => Api.PlaylistDeleteTrack(Guid.Parse(RandomInvalidGuid), new PlaylistDeleteTrackRequest()
                 {
-                    ReleaseId = Guid.Empty,
-                    TrackId = Guid.Parse(RandomInvalidGuid),
+                    Records = new[]
+                    {
+                        new PlaylistRecord()
+                        {
+                            PlaylistId = Guid.Parse(RandomInvalidGuid),
+                            ReleaseId = Guid.Empty,
+                            TrackId = Guid.Parse(RandomInvalidGuid),
+                        }
+                    }
                 }));
             }
 
@@ -351,15 +341,16 @@ namespace SoftThorn.MonstercatNet.Tests
             {
                 Assert.ThrowsAsync<ArgumentNullException>(() => Api.PlaylistDeleteTrack(Guid.Parse(RandomInvalidGuid), new PlaylistDeleteTrackRequest()
                 {
-                    ReleaseId = Guid.Parse(RandomInvalidGuid),
-                    TrackId = Guid.Empty
+                    Records = new[]
+                    {
+                        new PlaylistRecord()
+                        {
+                            PlaylistId = Guid.Parse(RandomInvalidGuid),
+                            ReleaseId = Guid.Parse(RandomInvalidGuid),
+                            TrackId = Guid.Empty
+                        }
+                    }
                 }));
-            }
-
-            [Test]
-            public void Test_PlaylistGetTrackListNullPlaylistId()
-            {
-                Assert.ThrowsAsync<ArgumentNullException>(() => Api.GetPlaylistTracks(Guid.Empty));
             }
 
             [Test]
@@ -369,39 +360,28 @@ namespace SoftThorn.MonstercatNet.Tests
             }
 
             [Test]
-            public void Test_PlaylistRenamePlaylistNullPlaylistId()
+            public void Test_PlaylistUpdatePlaylistNullPlaylistId()
             {
-                Assert.ThrowsAsync<ArgumentNullException>(() => Api.RenamePlaylist(Guid.Empty, new PlaylistRenameRequest() { Name = "1" }));
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.UpdatePlaylist(new UpdatePlaylistRequest()
+                {
+                    Title = "1"
+                }));
             }
 
             [Test]
-            public void Test_PlaylistRenamePlaylistNullrequest()
+            public void Test_PlaylistUpdatePlaylistNullrequest()
             {
-                Assert.ThrowsAsync<ArgumentNullException>(() => Api.RenamePlaylist(Guid.NewGuid(), null));
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.UpdatePlaylist(null));
             }
 
             [Test]
-            public void Test_PlaylistRenamePlaylistNullPlaylistName()
+            public void Test_PlaylistUpdatePlaylistNullPlaylistName()
             {
-                Assert.ThrowsAsync<ArgumentNullException>(() => Api.RenamePlaylist(Guid.Empty, new PlaylistRenameRequest() { Name = null }));
-            }
-
-            [Test]
-            public void Test_PlaylistRenamePlaylistEmptyPlaylistName()
-            {
-                Assert.ThrowsAsync<ArgumentNullException>(() => Api.RenamePlaylist(Guid.NewGuid(), new PlaylistRenameRequest()));
-            }
-
-            [Test]
-            public void Test_PlaylistSwitchPlaylistAvailabilityNullPlaylistId()
-            {
-                Assert.ThrowsAsync<ArgumentNullException>(() => Api.SwitchPlaylistAvailability(Guid.Empty, new PlaylistSwitchAvailabilityRequest()));
-            }
-
-            [Test]
-            public void Test_PlaylistSwitchPlaylistAvailabilityNullRequest()
-            {
-                Assert.ThrowsAsync<ArgumentNullException>(() => Api.SwitchPlaylistAvailability(Guid.NewGuid(), null));
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.UpdatePlaylist(new UpdatePlaylistRequest()
+                {
+                    PlaylistId = Guid.Empty,
+                    Title = null
+                }));
             }
         }
     }

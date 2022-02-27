@@ -1,7 +1,10 @@
-﻿namespace SoftThorn.MonstercatNet
+using Newtonsoft.Json;
+
+namespace SoftThorn.MonstercatNet
 {
-    public sealed class ReleaseBrowseResult : ResultBase
+    public sealed class ReleaseBrowseResult
     {
-        public Release[]? Results { get; set; }
+        [JsonProperty("Releases")]
+        public Releases? Results { get; set; }
     }
 }

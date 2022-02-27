@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Configuration.UserSecrets;
 using System.Windows;
 
 [assembly: ThemeInfo(
@@ -9,4 +8,4 @@ using System.Windows;
                                               //(used if a resource is not found in the page,
                                               // app, or any theme specific resource dictionaries)
                                               )]
-[assembly: UserSecretsId("fc54f2db-d3b2-4f92-a0ad-0973dd6354ab")]
+[assembly: UserSecretsId("31a9ef54-40ff-4c7c-81b1-c4c6e4bc1e99")]

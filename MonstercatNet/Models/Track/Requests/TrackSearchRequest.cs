@@ -37,5 +37,14 @@ namespace SoftThorn.MonstercatNet
         /// </remarks>
         [AliasAs("creatorfriendly")]
         public bool Creatorfriendly { get; set; } = true;
+
+        [AliasAs("Released")]
+        public bool Released { get; set; } = true;
+
+        [AliasAs("nogold")]
+        public bool NoGold { get; set; } = true;
+
+        [AliasAs("sort")]
+        public string Sort { get; set; } = "-date";
     }
 }

@@ -1,45 +1,23 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <OutputType>Library</OutputType>
-        <LangVersion>8.0</LangVersion>
-        <Nullable>enable</Nullable>
         <RootNamespace>SoftThorn.MonstercatNet</RootNamespace>
         <AssemblyName>MonstercatNet</AssemblyName>
-        <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
 
         <Description>Monstercat.Net is a .Net wrapper around the monstercat REST api.</Description>
         <PackageTags>C#,Library,.NET,OSS,OpenSource,monstercat,monstercat-api</PackageTags>
-        <Company>SoftThorn</Company>
-        <Authors>Peter Vietense</Authors>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <Product>MonstercatNet</Product>
-        <RepositoryType>git</RepositoryType>
-        <PackageReleaseNotes></PackageReleaseNotes>
-    </PropertyGroup>
-
-    <PropertyGroup>
-        <CodeAnalysisRuleSet>..\MonstercatNet.ruleset</CodeAnalysisRuleSet>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="refit" Version="5.2.4" />
+        <PackageReference Include="refit" Version="6.3.2" />
+        <PackageReference Include="Refit.Newtonsoft.Json" Version="6.3.2" />
 
-        <PackageReference Include="Roslynator.Analyzers" Version="3.0.0">
+        <PackageReference Include="Nerdbank.GitVersioning" Version="3.4.255">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
 
-        <PackageReference Include="IDisposableAnalyzers" Version="3.4.8">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-
-        <PackageReference Include="Nerdbank.GitVersioning" Version="3.3.37">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
     </ItemGroup>
 </Project>

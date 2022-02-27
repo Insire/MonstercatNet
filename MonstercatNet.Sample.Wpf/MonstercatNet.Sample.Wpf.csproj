@@ -1,14 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <TargetFramework>net60-windows</TargetFramework>
         <UseWPF>true</UseWPF>
-        <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+        <UserSecretsId>31a9ef54-40ff-4c7c-81b1-c4c6e4bc1e99</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="NAudio" Version="1.10.0" />
+        <PackageReference Include="NAudio" Version="2.0.1" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="5.0.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />

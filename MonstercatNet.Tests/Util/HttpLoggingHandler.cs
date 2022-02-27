@@ -10,20 +10,23 @@ namespace SoftThorn.MonstercatNet.Tests
 {
     public sealed class HttpLoggingHandler : DelegatingHandler
     {
-        public HttpLoggingHandler(HttpMessageHandler innerHandler = null)
+        public HttpLoggingHandler(HttpMessageHandler? innerHandler = null)
             : base(innerHandler ?? new HttpClientHandler())
         {
         }
 
-        protected async override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             var req = request;
             var id = Guid.NewGuid().ToString();
             var msg = $"[{id} -   Request]";
+            var pathAndQuery = req.RequestUri?.PathAndQuery ?? "";
+            var scheme = req.RequestUri?.Scheme ?? "";
+            var host = req.RequestUri?.Host ?? "";
 
             Debug.WriteLine($"{msg}========Start==========");
-            Debug.WriteLine($"{msg} {req.Method} {req.RequestUri.PathAndQuery} {req.RequestUri.Scheme}/{req.Version}");
-            Debug.WriteLine($"{msg} Host: {req.RequestUri.Scheme}://{req.RequestUri.Host}");
+            Debug.WriteLine($"{msg} {req.Method} {pathAndQuery} {scheme}/{req.Version}");
+            Debug.WriteLine($"{msg} Host: {scheme}://{host}");
 
             foreach (var header in req.Headers)
             {
@@ -39,7 +42,7 @@ namespace SoftThorn.MonstercatNet.Tests
 
                 if (req.Content is StringContent || IsTextBasedContentType(req.Headers) || IsTextBasedContentType(req.Content.Headers))
                 {
-                    var result = await req.Content.ReadAsStringAsync();
+                    var result = await req.Content.ReadAsStringAsync(cancellationToken);
 
                     Debug.WriteLine($"{msg} Content:");
                     Debug.WriteLine($"{msg} {string.Join("", result.Cast<char>().Take(255))}...");
@@ -60,7 +63,7 @@ namespace SoftThorn.MonstercatNet.Tests
 
             var resp = response;
 
-            Debug.WriteLine($"{msg} {req.RequestUri.Scheme.ToUpper()}/{resp.Version} {(int)resp.StatusCode} {resp.ReasonPhrase}");
+            Debug.WriteLine($"{msg} {scheme.ToUpper()}/{resp.Version} {(int)resp.StatusCode} {resp.ReasonPhrase}");
 
             foreach (var header in resp.Headers)
             {
@@ -77,7 +80,7 @@ namespace SoftThorn.MonstercatNet.Tests
                 if (resp.Content is StringContent || IsTextBasedContentType(resp.Headers) || IsTextBasedContentType(resp.Content.Headers))
                 {
                     start = DateTime.Now;
-                    var result = await resp.Content.ReadAsStringAsync();
+                    var result = await resp.Content.ReadAsStringAsync(cancellationToken);
                     end = DateTime.Now;
 
                     Debug.WriteLine($"{msg} Content:");
@@ -87,7 +90,7 @@ namespace SoftThorn.MonstercatNet.Tests
                     }
                     else
                     {
-                        Debug.WriteLine($"{msg} {string.Join("", result.Cast<char>().Take(255))}...");
+                        Debug.WriteLine($"{msg} {string.Join("", result.Cast<char>().Take(1024))}...");
                     }
 
                     Debug.WriteLine($"{msg} Duration: {end - start}");

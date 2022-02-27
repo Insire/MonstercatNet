@@ -8,7 +8,7 @@ This library uses SDK-style project files, which means you are required to use [
 
 - Visual Studio 2019 Community (or better)
 - Windows 10 (older versions work probably too, but the repository is not configured for those)
-- [.NET Core SDK 3.1](https://dotnet.microsoft.com/download/dotnet-core/3.1)
+- [.NET Core SDK 6.0](https://dotnet.microsoft.com/download/dotnet-core/6.0)
 - [git](https://git-scm.com/)
 
 (This should be everything, but it's possible i missed something. So please tell me if that's the case.)
