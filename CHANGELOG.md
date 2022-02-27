@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this projects versioning scheme was inspired by [Semantic Versioning](https://semver.org/spec/v2.0.0.html) and can be found [here](versioning.md).
 
+## [3.0.5] - 2022-02-27
+
+### Removed
+
+- MonstercatApi.GetPlaylistTracks (endpoint gone) Tracks are included when fetching a playlist instead
+- MonstercatApi.DownloadRelease  (endpoint gone) The web frontend downloads tracks now individually, so thats what i suggest as workaround aswell
+
+### Fixed
+
+- Fetching of covers for releases - available via the new MonstercatCdn class
+- MonstercatApi.PlaylistAddTrack
+- MonstercatApi.PlaylistDeleteTrack
+- MonstercatApi.GetPlaylist
+- MonstercatApi.GetSelfPlaylists
+
+### Changed
+
+- cake build scripts to use Cake.Frosting
+- Track.Bpm int -> decimal
+- ResultBase.Skip -> ResultBase.Offset
+
 ## [2.0.32] - 2020-11-08
 
 ### Added

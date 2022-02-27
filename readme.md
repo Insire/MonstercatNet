@@ -22,7 +22,7 @@ See [here](CHANGELOG.md)
 
 ## Usage
 
-### creating the client
+### creating the api client
 
 ```cs
 using SoftThorn.MonstercatNet;
@@ -30,6 +30,17 @@ using SoftThorn.MonstercatNet;
 var httpClient  = new HttpClient().UseMonstercatApiV2();
 var client = MonstercatApi.Create(httpClient);
 ```
+
+### creating the cdn client
+
+```cs
+using SoftThorn.MonstercatNet;
+
+var httpClient  = new HttpClient().UseMonstercatCdn();
+var client = MonstercatCdn.Create(httpClient);
+```
+
+**NOTE:** The ``HttpClient`` for the CDN should be a different instance than the one for the API, as they use a different BaseAddress.
 
 ### signing in
 
@@ -78,7 +89,7 @@ var releases = await client.GetReleases(new ReleaseBrowseRequest()
 ```cs
 using SoftThorn.MonstercatNet;
 
-var release = await client.GetRelease("the release catalogId");
+var release = await client.GetRelease("the release catalogId which looks like this MCRLX001-8");
 ```
 
 ### getting release cover
@@ -86,10 +97,14 @@ var release = await client.GetRelease("the release catalogId");
 ```cs
 using SoftThorn.MonstercatNet;
 
-var releaseCover = await client.GetReleaseCoverAsByteArray(new ReleaseCoverRequest()
-{
-    ReleaseId = Guid.Parse("the releaseId"),
-};
+var cdn = MonstercatCdn.Create(new HttpClient(new HttpLoggingHandler()).UseMonstercatCdn());
+
+var builder = ReleaseCoverArtBuilder
+    .Create()
+    .ForRelease(new TrackRelease() { CatalogId = "the release catalog Id which looks like this 2FMCS1347" };);
+
+var releaseCoverBytes = await cdn.GetReleaseCoverAsByteArray(builder);
+var releaseCoverStream = await cdn.GetReleaseCoverAsStream(builder);
 ```
 
 ## Endpoints
