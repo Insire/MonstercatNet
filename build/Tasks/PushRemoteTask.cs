@@ -34,7 +34,7 @@ namespace Build
 
         public override bool ShouldRun(BuildContext context)
         {
-            if (context.BuildSystem().IsRunningOnAzurePipelines)
+            if (!context.BuildSystem().IsRunningOnAzurePipelines)
             {
                 context.Log.Information($"Skipped {nameof(PushRemoteTask)}, since task is not running on Azure.");
                 return false;

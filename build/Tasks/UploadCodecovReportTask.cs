@@ -25,7 +25,7 @@ namespace Build
                 return false;
             }
 
-            if (context.BuildSystem().IsRunningOnAzurePipelines)
+            if (!context.BuildSystem().IsRunningOnAzurePipelines)
             {
                 context.Log.Information($"Skipped {nameof(UploadCodecovReportTask)}, since task is not running on AzurePipelines (Hosted).");
                 return false;
