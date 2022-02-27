@@ -18,7 +18,7 @@ namespace Build
                 Configuration = Constants.Configuration,
                 NoBuild = false,
                 NoRestore = false,
-                HandleExitCode = (code) => { context.TestsAreFailing = code != 0;return true; },
+                HandleExitCode = (code) => { context.TestsAreFailing = code != 0; return true; },
                 ArgumentCustomization = builder => builder
                     .Append("--nologo")
                     .AppendSwitchQuoted("--results-directory", context.CoberturaFolder.FullPath)
