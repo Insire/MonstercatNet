@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Configuration.UserSecrets;
 using System.Windows;
 
 [assembly: ThemeInfo(

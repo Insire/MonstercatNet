@@ -19,6 +19,8 @@ namespace SoftThorn.MonstercatNet.Tests
         public async Task Test_Login()
         {
             await Api.Login(Credentials);
+
+            Assert.IsTrue(IsLoggedIn);
         }
 
         [Test, Order(2)]
