@@ -2,6 +2,7 @@
 
 using NUnit.Framework;
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,6 +20,8 @@ namespace SoftThorn.MonstercatNet.Tests
         public async Task Test_Login()
         {
             await Api.Login(Credentials);
+
+            Assert.IsTrue(IsLoggedIn);
         }
 
         [Test, Order(2)]
@@ -278,6 +281,59 @@ namespace SoftThorn.MonstercatNet.Tests
             }
 
             await Api.DeletePlaylist(PlaylistId.Value);
+        }
+
+        [Test, Order(19)]
+        public async Task Test_DownloadArtistPhoto()
+        {
+            var release = await Api.GetRelease("MCRLX001-8");
+
+            var artist = release.Tracks[0].Artists[0];
+
+            var builder = ArtistPhotoBuilder.Create(artist).WithHugePhoto();
+
+            using (var stream = await Cdn.GetArtistPhotoAsStream(builder))
+            {
+                using (var image = System.Drawing.Image.FromStream(stream))
+                {
+                    Assert.Greater(image.Height, 0);
+                    Assert.Greater(image.Width, 0);
+                }
+            }
+        }
+
+        [Test, Order(20)]
+        public async Task Test_DownloadReleaseCoverAsBytes()
+        {
+            var release = await Api.GetRelease("MCRLX001-8");
+            var track = release.Tracks[0];
+
+            var builder = ReleaseCoverArtBuilder.Create(track).WithHugeCoverArt();
+
+            var bytes = await Cdn.GetReleaseCoverAsByteArray(builder);
+
+            using (var stream = new MemoryStream(bytes))
+            using (var image = System.Drawing.Image.FromStream(stream))
+            {
+                Assert.Greater(image.Height, 0);
+                Assert.Greater(image.Width, 0);
+            }
+        }
+
+        [Test, Order(21)]
+        public async Task Test_DownloadReleaseCoverAsStream()
+        {
+            var release = await Api.GetRelease("MCRLX001-8");
+            var track = release.Tracks[0];
+
+            var builder = ReleaseCoverArtBuilder.Create(track).WithHugeCoverArt();
+
+            using (var stream = await Cdn.GetReleaseCoverAsStream(builder))
+            using (var image = System.Drawing.Image.FromStream(stream))
+            {
+                Assert.Greater(image.Height, 0);
+                Assert.Greater(image.Width, 0);
+            }
         }
 
         [Test, Order(999)]

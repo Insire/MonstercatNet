@@ -9,7 +9,20 @@ namespace SoftThorn.MonstercatNet
         /// </summary>
         public static ReleaseCoverArtBuilder Create()
         {
-            return Create(null);
+            return Create(default(TrackRelease));
+        }
+
+        /// <summary>
+        /// Create a new builder configured with a medium sized webp cover art
+        /// </summary>
+        public static ReleaseCoverArtBuilder Create(Track? track)
+        {
+            return new ReleaseCoverArtBuilder()
+            {
+                Encoding = ContentEncoding.WebP,
+                Size = ContentSize.Width_600,
+                Release = track?.Release,
+            };
         }
 
         /// <summary>

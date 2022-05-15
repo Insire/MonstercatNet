@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this projects versioning scheme was inspired by [Semantic Versioning](https://semver.org/spec/v2.0.0.html) and can be found [here](versioning.md).
 
+## [3.0.16] - 2022-05-15
+
+### Fixed
+
+- symbol package generation
+
+### Added
+
+- LoginValidationHandler, so that its possible to track success of logins
+- added endpoint, builder and extensions for fetching artist photos from montercat CDN
+
 ## [3.0.9] - 2022-02-27
 
 ### Removed

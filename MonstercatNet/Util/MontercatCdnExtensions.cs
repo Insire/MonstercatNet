@@ -18,5 +18,19 @@ namespace SoftThorn.MonstercatNet
 
             return await content.ReadAsStreamAsync().ConfigureAwait(false);
         }
+
+        public static async Task<byte[]> GetArtistPhotoAsByteArray(this IMonstercatCdnService api, ArtistPhotoBuilder builder)
+        {
+            var content = await api.GetArtistPhoto(builder).ConfigureAwait(false);
+
+            return await content.ReadAsByteArrayAsync().ConfigureAwait(false);
+        }
+
+        public static async Task<Stream> GetArtistPhotoAsStream(this IMonstercatCdnService api, ArtistPhotoBuilder builder)
+        {
+            var content = await api.GetArtistPhoto(builder).ConfigureAwait(false);
+
+            return await content.ReadAsStreamAsync().ConfigureAwait(false);
+        }
     }
 }
