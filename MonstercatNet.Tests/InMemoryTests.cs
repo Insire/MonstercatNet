@@ -384,5 +384,26 @@ namespace SoftThorn.MonstercatNet.Tests
                 }));
             }
         }
+
+        public sealed class UrlTests
+        {
+            [Test]
+            public void ArtistPhotoBuilder_Should_Create_Valid_Request()
+            {
+                var builder = ArtistPhotoBuilder.Create(new Artist()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "JohnDoe",
+                });
+                var request = builder.Build();
+
+                Assert.IsNotNull(request);
+                Assert.IsNotEmpty(request.Url);
+                Assert.IsNotEmpty(request.Encoding);
+                Assert.Greater(request.Width, 0);
+
+                Assert.IsTrue(Uri.TryCreate(request.Url, UriKind.RelativeOrAbsolute, out var uri));
+            }
+        }
     }
 }

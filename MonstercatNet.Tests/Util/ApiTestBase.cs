@@ -8,6 +8,7 @@ namespace SoftThorn.MonstercatNet.Tests
 {
     public abstract class ApiTestBase
     {
+        protected internal IMonstercatCdnService Cdn { get; private set; }
         protected internal IMonstercatApi Api { get; private set; }
         protected internal ApiCredentials Credentials { get; } = new ApiCredentials();
         protected internal LoginValidationHandler LoginValidationHandler { get; } = new LoginValidationHandler(new HttpLoggingHandler());
@@ -31,6 +32,7 @@ namespace SoftThorn.MonstercatNet.Tests
             Assert.IsNotNull(Credentials.Password, "For tests to be able to run, you need to provide the account password.");
 
             Api = MonstercatApi.Create(new HttpClient(LoginValidationHandler).UseMonstercatApiV2());
+            Cdn = MonstercatCdn.Create(new HttpClient(new HttpLoggingHandler()).UseMonstercatCdn());
         }
     }
 }

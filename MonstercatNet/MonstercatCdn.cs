@@ -38,5 +38,15 @@ namespace SoftThorn.MonstercatNet
 
             return _monsercatCdn.GetContent(builder.Build(), token);
         }
+
+        public Task<HttpContent> GetArtistPhoto(ArtistPhotoBuilder builder, CancellationToken token = default)
+        {
+            if (builder is null)
+            {
+                throw new ArgumentNullException(nameof(builder));
+            }
+
+            return _monsercatCdn.GetContent(builder.Build(), token);
+        }
     }
 }

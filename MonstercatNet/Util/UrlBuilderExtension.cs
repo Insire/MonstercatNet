@@ -3,7 +3,7 @@ using System.Web;
 
 namespace SoftThorn.MonstercatNet
 {
-    public static class ReleaseCoverUrlBuilderExtension
+    public static class UrlBuilderExtension
     {
         public static ReleaseCoverArtBuilder ForRelease(this ReleaseCoverArtBuilder builder, TrackRelease release)
         {
@@ -13,6 +13,39 @@ namespace SoftThorn.MonstercatNet
             }
 
             builder.Release = release;
+
+            return builder;
+        }
+
+        /// <summary>
+        /// Configure a webp image with a width of 256
+        /// </summary>
+        public static ArtistPhotoBuilder WithSmallPhoto(this ArtistPhotoBuilder builder)
+        {
+            builder.Size = ContentSize.Width_256;
+            builder.Encoding = ContentEncoding.WebP;
+
+            return builder;
+        }
+
+        /// <summary>
+        /// Configure a webp image with a width of 1024
+        /// </summary>
+        public static ArtistPhotoBuilder WithLargePhoto(this ArtistPhotoBuilder builder)
+        {
+            builder.Size = ContentSize.Width_1024;
+            builder.Encoding = ContentEncoding.WebP;
+
+            return builder;
+        }
+
+        /// <summary>
+        /// Configure a jpeg image with a width of 3000
+        /// </summary>
+        public static ArtistPhotoBuilder WithHugePhoto(this ArtistPhotoBuilder builder)
+        {
+            builder.Size = ContentSize.Width_3000;
+            builder.Encoding = ContentEncoding.JPEG;
 
             return builder;
         }
@@ -103,6 +136,34 @@ namespace SoftThorn.MonstercatNet
         public static string CreateCoverArtUri(this TrackRelease release)
         {
             return $"{MonstercatEndpoints.BASE}/release/{release.CatalogId}/cover";
+        }
+
+        /// <summary>
+        /// Create an uri to an webp image with a width of 1024
+        /// </summary>
+        public static Uri GetSmallArtistPhotoUri(this Artist artist)
+        {
+            return GetArtistPhotoUri(artist, 1024, "webp");
+        }
+
+        /// <summary>
+        /// Create an uri to an webp image with a width of 1024
+        /// </summary>
+        public static Uri GetLargeArtistPhotoUri(this Artist artist)
+        {
+            return GetArtistPhotoUri(artist, 1024, "webp");
+        }
+
+        private static Uri GetArtistPhotoUri(this Artist artist, int size, string encoding)
+        {
+            var encodedUrl = HttpUtility.UrlEncode(CreateArtistPhotoUri(artist));
+
+            return new Uri($"{MonstercatEndpoints.CDN}/?encoding={encoding}&url={encodedUrl}&width={size}", UriKind.RelativeOrAbsolute);
+        }
+
+        public static string CreateArtistPhotoUri(this Artist artist)
+        {
+            return $"{MonstercatEndpoints.BASE}/artist/{artist.Name}/photo?{artist.Id}";
         }
     }
 }
