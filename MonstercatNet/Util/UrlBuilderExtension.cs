@@ -163,7 +163,7 @@ namespace SoftThorn.MonstercatNet
 
         public static string CreateArtistPhotoUri(this Artist artist)
         {
-            return $"{MonstercatEndpoints.BASE}/artist/{artist.Name}/photo?{artist.Id}";
+            return $"{MonstercatEndpoints.BASE}/artist/{artist.Name}/photo?{artist.ArtistId}";
         }
     }
 }

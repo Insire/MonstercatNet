@@ -40,9 +40,9 @@ namespace SoftThorn.MonstercatNet
                 throw new ArgumentNullException(nameof(Artist));
             }
 
-            if (Artist.Id == Guid.Empty)
+            if (Artist.ArtistId == Guid.Empty)
             {
-                throw new ArgumentNullException(nameof(Artist.Id));
+                throw new ArgumentNullException(nameof(Artist.ArtistId));
             }
 
             if (string.IsNullOrEmpty(Artist.Name))
