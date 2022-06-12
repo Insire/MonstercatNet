@@ -13,7 +13,7 @@ namespace SoftThorn.MonstercatNet
         public Guid ReleaseId { get; set; }
         public int ArtistNumber { get; set; }
         public string URI { get; set; } = string.Empty;
-        public Guid ProfileFileId { get; set; }
+        public Guid? ProfileFileId { get; set; }
         public string Platform { get; set; } = string.Empty;
     }
 }
