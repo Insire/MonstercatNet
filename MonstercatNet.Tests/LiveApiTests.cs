@@ -55,14 +55,13 @@ namespace SoftThorn.MonstercatNet.Tests
                 Limit = 1,
                 Skip = 0,
                 Creatorfriendly = true,
-                Genres = new[] { "Drumstep" },
-                ReleaseTypes = new[] { "Album" },
-                Tags = new[] { "Uncaged", "Energetic" },
+                ReleaseTypes = new[] { "EP" },
+                Tags = new[] { "silkinitialbulkimport" },
             });
 
             Assert.IsNotNull(tracks);
             Assert.IsTrue(tracks.Results.Length >= 1);
-            Assert.AreEqual(Guid.Parse("{ab1011db-70a1-4f08-9a93-a4d9cb54ab35}"), tracks.Results[0].Id);
+            Assert.AreEqual(Guid.Parse("{65c9d857-4f34-4ad7-925c-fefb92e4d36d}"), tracks.Results[0].Id);
         }
 
         [Test, Order(5)]
@@ -286,11 +285,11 @@ namespace SoftThorn.MonstercatNet.Tests
         [Test, Order(19)]
         public async Task Test_DownloadArtistPhoto()
         {
-            var release = await Api.GetRelease("MCRLX001-8");
-
-            var artist = release.Tracks[0].Artists[0];
-
-            var builder = ArtistPhotoBuilder.Create(artist).WithHugePhoto();
+            var builder = ArtistPhotoBuilder.Create(new Artist()
+            {
+                ArtistId = Guid.Parse("{4f2c83b1-7a08-42df-bf1c-d1341b8982ae}"),
+                Name = "aftruu",
+            }).WithHugePhoto();
 
             using (var stream = await Cdn.GetArtistPhotoAsStream(builder))
             {
@@ -334,6 +333,32 @@ namespace SoftThorn.MonstercatNet.Tests
                 Assert.Greater(image.Height, 0);
                 Assert.Greater(image.Width, 0);
             }
+        }
+
+        [Test, Order(22)]
+        public async Task Test_GetRelease_Returns_All_Fields()
+        {
+            var release = await Api.GetRelease("MCRLX001-8");
+
+            Assert.AreEqual("MCRLX001-8", release.Release.CatalogId);
+
+            Assert.NotNull(release.Release.Id);
+
+            Assert.NotNull(release.Release.ArtistsTitle);
+            Assert.NotNull(release.Release.Version);
+            Assert.NotNull(release.Release.Title);
+            Assert.NotNull(release.Release.Type);
+            Assert.NotNull(release.Release.GenrePrimary);
+            Assert.NotNull(release.Release.GenreSecondary);
+
+            Assert.NotNull(release.Release.BrandId);
+            Assert.NotNull(release.Release.BrandTitle);
+
+            Assert.NotNull(release.Release.Links);
+            Assert.IsNotEmpty(release.Release.Links);
+
+            Assert.NotNull(release.Tracks);
+            Assert.IsNotEmpty(release.Tracks);
         }
 
         [Test, Order(999)]

@@ -392,7 +392,7 @@ namespace SoftThorn.MonstercatNet.Tests
             {
                 var builder = ArtistPhotoBuilder.Create(new Artist()
                 {
-                    Id = Guid.NewGuid(),
+                    ArtistId = Guid.NewGuid(),
                     Name = "JohnDoe",
                 });
                 var request = builder.Build();
