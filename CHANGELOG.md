@@ -5,6 +5,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this projects versioning scheme was inspired by [Semantic Versioning](https://semver.org/spec/v2.0.0.html) and can be found [here](versioning.md).
 
+## [3.0.26] - 2022-06-12
+
+### Fixed
+
+- Artist
+  - Id -> ArtistId
+- Release
+  - Brand -> BrandTitle
+  - Links -> ReleaseLink
+
+### Added
+
+- ReleaseLink
+- Artist
+  - ReleaseId
+  - ArtistNumber
+  - URI
+  - ProfileFileId
+  - Platform
+- Release
+  - added AlbumNotes
+  - added BrandId
+  - added Tags
+  - added Artists
+  - more misc fields
+
+### Removed
+
+- Track
+  - PlaylistSort
+
 ## [3.0.17] - 2022-05-15
 
 ### Fixed
