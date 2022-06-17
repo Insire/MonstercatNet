@@ -62,6 +62,19 @@ namespace SoftThorn.MonstercatNet.Tests
             Assert.IsNotNull(tracks);
             Assert.IsTrue(tracks.Results.Length >= 1);
             Assert.AreEqual(Guid.Parse("{65c9d857-4f34-4ad7-925c-fefb92e4d36d}"), tracks.Results[0].Id);
+
+            Assert.IsNotNull(tracks.Results[0].Artists);
+            Assert.IsNotNull(tracks.Results[0].ArtistsTitle);
+
+            Assert.IsNotNull(tracks.Results[0].Artists[0]);
+
+            Assert.AreNotEqual(Guid.Empty, tracks.Results[0].Artists[0].Id);
+            Assert.AreNotEqual(Guid.Empty, tracks.Results[0].Artists[0].ProfileFileId);
+            Assert.AreNotEqual(Guid.Empty, tracks.Results[0].Artists[0].CatalogRecordId);
+
+            Assert.AreNotEqual(string.Empty, tracks.Results[0].Artists[0].Name);
+            Assert.AreNotEqual(string.Empty, tracks.Results[0].Artists[0].Role);
+            Assert.AreNotEqual(string.Empty, tracks.Results[0].Artists[0].Uri);
         }
 
         [Test, Order(5)]

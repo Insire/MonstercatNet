@@ -21,7 +21,7 @@ namespace SoftThorn.MonstercatNet
         public string[]? Tags { get; set; }
         public string Version { get; set; } = string.Empty;
         public TrackRelease Release { get; set; } = new TrackRelease();
-        public Artist[]? Artists { get; set; }
+        public TrackArtist[]? Artists { get; set; }
         public bool Downloadable { get; set; }
         public bool InEarlyAccess { get; set; }
         public bool Streamable { get; set; }
