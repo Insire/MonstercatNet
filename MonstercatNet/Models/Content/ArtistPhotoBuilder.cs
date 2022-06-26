@@ -45,7 +45,7 @@ namespace SoftThorn.MonstercatNet
                 throw new ArgumentNullException(nameof(Artist.ArtistId));
             }
 
-            if (string.IsNullOrEmpty(Artist.Name))
+            if (string.IsNullOrEmpty(Artist.Uri))
             {
                 throw new ArgumentNullException(nameof(Artist.Name));
             }

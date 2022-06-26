@@ -39,5 +39,24 @@ namespace SoftThorn.MonstercatNet.Tests
             var result = cover.ToByteArray();
             Assert.IsTrue(result.Length > 0);
         }
+
+        [Test, Order(3)]
+        public async Task Test_GetArtistPhotoAsStream()
+        {
+            var builder = ArtistPhotoBuilder
+                            .Create(new Artist()
+                            {
+                                ArtistId = System.Guid.Parse("{bf6215c7-7dc6-45f8-873a-61973aee536b}"),
+                                Uri = "lanidaye"
+                            })
+                            .WithLargePhoto();
+
+            var cover = await Cdn.GetArtistPhotoAsStream(builder);
+
+            Assert.IsNotNull(cover);
+
+            var result = cover.ToByteArray();
+            Assert.IsTrue(result.Length > 0);
+        }
     }
 }

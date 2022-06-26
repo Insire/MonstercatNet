@@ -302,7 +302,7 @@ namespace SoftThorn.MonstercatNet.Tests
             var builder = ArtistPhotoBuilder.Create(new Artist()
             {
                 ArtistId = Guid.Parse("{4f2c83b1-7a08-42df-bf1c-d1341b8982ae}"),
-                Name = "aftruu",
+                Uri = "aftruu",
             }).WithHugePhoto();
 
             using (var stream = await Cdn.GetArtistPhotoAsStream(builder))
@@ -321,7 +321,7 @@ namespace SoftThorn.MonstercatNet.Tests
             var builder = ArtistPhotoBuilder.Create(new Artist()
             {
                 ArtistId = Guid.Parse("{4f2c83b1-7a08-42df-bf1c-d1341b8982ae}"),
-                Name = "aftruu",
+                Uri = "aftruu",
             }).WithLargePhoto();
 
             using (var stream = await Cdn.GetArtistPhotoAsStream(builder))
@@ -340,7 +340,7 @@ namespace SoftThorn.MonstercatNet.Tests
             var builder = ArtistPhotoBuilder.Create(new Artist()
             {
                 ArtistId = Guid.Parse("{4f2c83b1-7a08-42df-bf1c-d1341b8982ae}"),
-                Name = "aftruu",
+                Uri = "aftruu",
             }).WithSmallPhoto();
 
             using (var stream = await Cdn.GetArtistPhotoAsStream(builder))
@@ -444,9 +444,9 @@ namespace SoftThorn.MonstercatNet.Tests
         [Test, Order(27)]
         public async Task Test_GetRelease_Returns_All_Fields()
         {
-            var release = await Api.GetRelease("MCRLX001-8");
+            var release = await Api.GetRelease("MCS1356");
 
-            Assert.AreEqual("MCRLX001-8", release.Release.CatalogId);
+            Assert.AreEqual("MCS1356", release.Release.CatalogId);
 
             Assert.NotNull(release.Release.Id);
 

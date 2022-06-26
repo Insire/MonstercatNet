@@ -1,5 +1,5 @@
 using System;
-using System.Web;
+using System.Net;
 
 namespace SoftThorn.MonstercatNet
 {
@@ -128,7 +128,7 @@ namespace SoftThorn.MonstercatNet
 
         private static Uri GetCoverArtUri(this TrackRelease release, int size, string encoding)
         {
-            var encodedUrl = HttpUtility.UrlEncode(CreateCoverArtUri(release));
+            var encodedUrl = WebUtility.UrlEncode(CreateCoverArtUri(release));
 
             return new Uri($"{MonstercatEndpoints.CDN}/?width={size}&encoding={encoding}&url={encodedUrl}", UriKind.RelativeOrAbsolute);
         }
@@ -203,14 +203,14 @@ namespace SoftThorn.MonstercatNet
 
         private static Uri GetArtistPhotoUri(this TrackArtist artist, int size, string encoding)
         {
-            var encodedUrl = HttpUtility.UrlEncode(CreateArtistPhotoUri(artist));
+            var encodedUrl = WebUtility.UrlEncode(CreateArtistPhotoUri(artist));
 
             return new Uri($"{MonstercatEndpoints.CDN}/?encoding={encoding}&url={encodedUrl}&width={size}", UriKind.RelativeOrAbsolute);
         }
 
         private static Uri GetArtistPhotoUri(this Artist artist, int size, string encoding)
         {
-            var encodedUrl = HttpUtility.UrlEncode(CreateArtistPhotoUri(artist));
+            var encodedUrl = WebUtility.UrlEncode(CreateArtistPhotoUri(artist));
 
             return new Uri($"{MonstercatEndpoints.CDN}/?encoding={encoding}&url={encodedUrl}&width={size}", UriKind.RelativeOrAbsolute);
         }
@@ -225,7 +225,7 @@ namespace SoftThorn.MonstercatNet
                 throw new ArgumentNullException(nameof(artist));
             }
 
-            return CreateArtistPhotoUri(artist.Name, artist.Id.ToString());
+            return CreateArtistPhotoUri(artist.Uri, artist.Id.ToString());
         }
 
         /// <summary>
@@ -238,7 +238,7 @@ namespace SoftThorn.MonstercatNet
                 throw new ArgumentNullException(nameof(artist));
             }
 
-            return CreateArtistPhotoUri(artist.Name, artist.ArtistId.ToString());
+            return CreateArtistPhotoUri(artist.Uri, artist.ArtistId.ToString());
         }
 
         private static string CreateArtistPhotoUri(string name, string id)
