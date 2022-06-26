@@ -2,7 +2,7 @@
 {
     public class ReleaseLink
     {
-        public string Platform { get; set; }
-        public string Url { get; set; }
+        public string Platform { get; set; } = string.Empty;
+        public string Url { get; set; } = string.Empty;
     }
 }
