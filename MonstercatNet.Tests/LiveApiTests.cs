@@ -1,6 +1,7 @@
 #nullable disable
 
 using NUnit.Framework;
+using SixLabors.ImageSharp;
 using System;
 using System.IO;
 using System.Linq;
@@ -296,7 +297,7 @@ namespace SoftThorn.MonstercatNet.Tests
         }
 
         [Test, Order(19)]
-        public async Task Test_DownloadArtistPhoto()
+        public async Task Test_DownloadArtistPhoto_WithHugePhoto()
         {
             var builder = ArtistPhotoBuilder.Create(new Artist()
             {
@@ -306,16 +307,54 @@ namespace SoftThorn.MonstercatNet.Tests
 
             using (var stream = await Cdn.GetArtistPhotoAsStream(builder))
             {
-                using (var image = System.Drawing.Image.FromStream(stream))
+                using (var image = Image.Load(stream))
                 {
-                    Assert.Greater(image.Height, 0);
-                    Assert.Greater(image.Width, 0);
+                    Assert.GreaterOrEqual(image.Height, 3000);
+                    Assert.GreaterOrEqual(image.Width, 3000);
                 }
             }
         }
 
         [Test, Order(20)]
-        public async Task Test_DownloadReleaseCoverAsBytes()
+        public async Task Test_DownloadArtistPhoto_WithLargePhoto()
+        {
+            var builder = ArtistPhotoBuilder.Create(new Artist()
+            {
+                ArtistId = Guid.Parse("{4f2c83b1-7a08-42df-bf1c-d1341b8982ae}"),
+                Name = "aftruu",
+            }).WithLargePhoto();
+
+            using (var stream = await Cdn.GetArtistPhotoAsStream(builder))
+            {
+                using (var image = Image.Load(stream))
+                {
+                    Assert.GreaterOrEqual(image.Height, 1024);
+                    Assert.GreaterOrEqual(image.Width, 1024);
+                }
+            }
+        }
+
+        [Test, Order(21)]
+        public async Task Test_DownloadArtistPhoto_WithSmallPhoto()
+        {
+            var builder = ArtistPhotoBuilder.Create(new Artist()
+            {
+                ArtistId = Guid.Parse("{4f2c83b1-7a08-42df-bf1c-d1341b8982ae}"),
+                Name = "aftruu",
+            }).WithSmallPhoto();
+
+            using (var stream = await Cdn.GetArtistPhotoAsStream(builder))
+            {
+                using (var image = Image.Load(stream))
+                {
+                    Assert.GreaterOrEqual(image.Height, 256);
+                    Assert.GreaterOrEqual(image.Width, 256);
+                }
+            }
+        }
+
+        [Test, Order(22)]
+        public async Task Test_DownloadReleaseCoverAsBytes_WithHugeCoverArt()
         {
             var release = await Api.GetRelease("MCRLX001-8");
             var track = release.Tracks[0];
@@ -325,14 +364,68 @@ namespace SoftThorn.MonstercatNet.Tests
             var bytes = await Cdn.GetReleaseCoverAsByteArray(builder);
 
             using (var stream = new MemoryStream(bytes))
-            using (var image = System.Drawing.Image.FromStream(stream))
+            using (var image = Image.Load(stream))
             {
-                Assert.Greater(image.Height, 0);
-                Assert.Greater(image.Width, 0);
+                Assert.GreaterOrEqual(image.Height, 3000);
+                Assert.GreaterOrEqual(image.Width, 3000);
             }
         }
 
-        [Test, Order(21)]
+        [Test, Order(23)]
+        public async Task Test_DownloadReleaseCoverAsBytes_WithLargeCoverArt()
+        {
+            var release = await Api.GetRelease("MCRLX001-8");
+            var track = release.Tracks[0];
+
+            var builder = ReleaseCoverArtBuilder.Create(track).WithLargeCoverArt();
+
+            var bytes = await Cdn.GetReleaseCoverAsByteArray(builder);
+
+            using (var stream = new MemoryStream(bytes))
+            using (var image = Image.Load(stream))
+            {
+                Assert.GreaterOrEqual(image.Height, 1024);
+                Assert.GreaterOrEqual(image.Width, 1024);
+            }
+        }
+
+        [Test, Order(24)]
+        public async Task Test_DownloadReleaseCoverAsBytes_WithMediumCoverArt()
+        {
+            var release = await Api.GetRelease("MCRLX001-8");
+            var track = release.Tracks[0];
+
+            var builder = ReleaseCoverArtBuilder.Create(track).WithMediumCoverArt();
+
+            var bytes = await Cdn.GetReleaseCoverAsByteArray(builder);
+
+            using (var stream = new MemoryStream(bytes))
+            using (var image = Image.Load(stream))
+            {
+                Assert.GreaterOrEqual(image.Height, 600);
+                Assert.GreaterOrEqual(image.Width, 600);
+            }
+        }
+
+        [Test, Order(25)]
+        public async Task Test_DownloadReleaseCoverAsBytes_WithSmallCoverArt()
+        {
+            var release = await Api.GetRelease("MCRLX001-8");
+            var track = release.Tracks[0];
+
+            var builder = ReleaseCoverArtBuilder.Create(track).WithSmallCoverArt();
+
+            var bytes = await Cdn.GetReleaseCoverAsByteArray(builder);
+
+            using (var stream = new MemoryStream(bytes))
+            using (var image = Image.Load(stream))
+            {
+                Assert.GreaterOrEqual(image.Height, 300);
+                Assert.GreaterOrEqual(image.Width, 300);
+            }
+        }
+
+        [Test, Order(26)]
         public async Task Test_DownloadReleaseCoverAsStream()
         {
             var release = await Api.GetRelease("MCRLX001-8");
@@ -341,14 +434,14 @@ namespace SoftThorn.MonstercatNet.Tests
             var builder = ReleaseCoverArtBuilder.Create(track).WithHugeCoverArt();
 
             using (var stream = await Cdn.GetReleaseCoverAsStream(builder))
-            using (var image = System.Drawing.Image.FromStream(stream))
+            using (var image = Image.Load(stream))
             {
                 Assert.Greater(image.Height, 0);
                 Assert.Greater(image.Width, 0);
             }
         }
 
-        [Test, Order(22)]
+        [Test, Order(27)]
         public async Task Test_GetRelease_Returns_All_Fields()
         {
             var release = await Api.GetRelease("MCRLX001-8");

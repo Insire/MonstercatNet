@@ -133,15 +133,62 @@ namespace SoftThorn.MonstercatNet
             return new Uri($"{MonstercatEndpoints.CDN}/?width={size}&encoding={encoding}&url={encodedUrl}", UriKind.RelativeOrAbsolute);
         }
 
-        public static string CreateCoverArtUri(this TrackRelease release)
+        /// <summary>
+        /// Create base uri for fetching release cover art
+        /// </summary>
+        public static string CreateCoverArtUri(this TrackRelease track)
         {
-            return $"{MonstercatEndpoints.BASE}/release/{release.CatalogId}/cover";
+            if (track is null)
+            {
+                throw new ArgumentNullException(nameof(track));
+            }
+
+            return CreateCoverArtUri(track.CatalogId);
+        }
+
+        /// <summary>
+        /// Create base uri for fetching release cover art
+        /// </summary>
+        public static string CreateCoverArtUri(this Track track)
+        {
+            if (track is null)
+            {
+                throw new ArgumentNullException(nameof(track));
+            }
+
+            if (track.Release is null)
+            {
+                throw new ArgumentNullException(nameof(track.Release));
+            }
+
+            return CreateCoverArtUri(track.Release.CatalogId);
+        }
+
+        private static string CreateCoverArtUri(string catalogId)
+        {
+            return $"{MonstercatEndpoints.BASE}/release/{catalogId}/cover";
+        }
+
+        /// <summary>
+        /// Create an uri to an webp image with a width of 256
+        /// </summary>
+        public static Uri GetSmallArtistPhotoUri(this TrackArtist artist)
+        {
+            return GetArtistPhotoUri(artist, 256, "webp");
+        }
+
+        /// <summary>
+        /// Create an uri to an webp image with a width of 256
+        /// </summary>
+        public static Uri GetSmallArtistPhotoUri(this Artist artist)
+        {
+            return GetArtistPhotoUri(artist, 256, "webp");
         }
 
         /// <summary>
         /// Create an uri to an webp image with a width of 1024
         /// </summary>
-        public static Uri GetSmallArtistPhotoUri(this Artist artist)
+        public static Uri GetLargeArtistPhotoUri(this TrackArtist artist)
         {
             return GetArtistPhotoUri(artist, 1024, "webp");
         }
@@ -154,6 +201,13 @@ namespace SoftThorn.MonstercatNet
             return GetArtistPhotoUri(artist, 1024, "webp");
         }
 
+        private static Uri GetArtistPhotoUri(this TrackArtist artist, int size, string encoding)
+        {
+            var encodedUrl = HttpUtility.UrlEncode(CreateArtistPhotoUri(artist));
+
+            return new Uri($"{MonstercatEndpoints.CDN}/?encoding={encoding}&url={encodedUrl}&width={size}", UriKind.RelativeOrAbsolute);
+        }
+
         private static Uri GetArtistPhotoUri(this Artist artist, int size, string encoding)
         {
             var encodedUrl = HttpUtility.UrlEncode(CreateArtistPhotoUri(artist));
@@ -161,9 +215,35 @@ namespace SoftThorn.MonstercatNet
             return new Uri($"{MonstercatEndpoints.CDN}/?encoding={encoding}&url={encodedUrl}&width={size}", UriKind.RelativeOrAbsolute);
         }
 
+        /// <summary>
+        /// Create base uri for fetching artist photo
+        /// </summary>
+        public static string CreateArtistPhotoUri(this TrackArtist artist)
+        {
+            if (artist is null)
+            {
+                throw new ArgumentNullException(nameof(artist));
+            }
+
+            return CreateArtistPhotoUri(artist.Name, artist.Id.ToString());
+        }
+
+        /// <summary>
+        /// Create base uri for fetching artist photo
+        /// </summary>
         public static string CreateArtistPhotoUri(this Artist artist)
         {
-            return $"{MonstercatEndpoints.BASE}/artist/{artist.Name}/photo?{artist.ArtistId}";
+            if (artist is null)
+            {
+                throw new ArgumentNullException(nameof(artist));
+            }
+
+            return CreateArtistPhotoUri(artist.Name, artist.ArtistId.ToString());
+        }
+
+        private static string CreateArtistPhotoUri(string name, string id)
+        {
+            return $"{MonstercatEndpoints.BASE}/artist/{name}/photo?{id}";
         }
     }
 }
