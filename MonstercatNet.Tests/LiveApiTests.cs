@@ -53,7 +53,7 @@ namespace SoftThorn.MonstercatNet.Tests
         {
             var tracks = await Api.SearchTracks(new TrackSearchRequest()
             {
-                Limit = 1,
+                Limit = 100,
                 Skip = 0,
                 Creatorfriendly = true,
                 ReleaseTypes = new[] { "EP" },
@@ -62,23 +62,73 @@ namespace SoftThorn.MonstercatNet.Tests
 
             Assert.IsNotNull(tracks);
             Assert.IsTrue(tracks.Results.Length >= 1);
-            Assert.AreEqual(Guid.Parse("{65c9d857-4f34-4ad7-925c-fefb92e4d36d}"), tracks.Results[0].Id);
+            var entry = tracks.Results.Single(p => p.Id == Guid.Parse("65c9d857-4f34-4ad7-925c-fefb92e4d36d"));
 
-            Assert.IsNotNull(tracks.Results[0].Artists);
-            Assert.IsNotNull(tracks.Results[0].ArtistsTitle);
+            Assert.IsNotNull(entry.Artists);
+            Assert.IsNotNull(entry.ArtistsTitle);
 
             Assert.IsNotNull(tracks.Results[0].Artists[0]);
 
-            Assert.AreNotEqual(Guid.Empty, tracks.Results[0].Artists[0].Id);
-            Assert.AreNotEqual(Guid.Empty, tracks.Results[0].Artists[0].ProfileFileId);
-            Assert.AreNotEqual(Guid.Empty, tracks.Results[0].Artists[0].CatalogRecordId);
+            Assert.AreNotEqual(Guid.Empty, entry.Artists[0].Id);
+            Assert.AreNotEqual(Guid.Empty, entry.Artists[0].ProfileFileId);
+            Assert.AreNotEqual(Guid.Empty, entry.Artists[0].CatalogRecordId);
 
-            Assert.AreNotEqual(string.Empty, tracks.Results[0].Artists[0].Name);
-            Assert.AreNotEqual(string.Empty, tracks.Results[0].Artists[0].Role);
-            Assert.AreNotEqual(string.Empty, tracks.Results[0].Artists[0].Uri);
+            Assert.AreNotEqual(string.Empty, entry.Artists[0].Name);
+            Assert.AreNotEqual(string.Empty, entry.Artists[0].Role);
+            Assert.AreNotEqual(string.Empty, entry.Artists[0].Uri);
         }
 
         [Test, Order(5)]
+        public async Task Test_SearchAllTracks()
+        {
+            var results = await Api.SearchTracks(new TrackSearchRequest()
+            {
+                Limit = 100,
+                Skip = 0,
+            });
+
+            Validate(results);
+
+            var total = results.Total;
+            var localLimit = results.Limit;
+            var skip = results.Offset + localLimit;
+
+            while (skip < total)
+            {
+                results = await Api.SearchTracks(new TrackSearchRequest()
+                {
+                    Limit = localLimit,
+                    Skip = skip,
+                });
+                skip += localLimit;
+
+                Validate(results);
+            }
+
+            static void Validate(TrackSearchResult results)
+            {
+                Assert.IsNotNull(results);
+                Assert.IsTrue(results.Results.Length >= 1);
+
+                foreach (var entry in results.Results)
+                {
+                    Assert.IsNotNull(entry.Artists);
+                    Assert.IsNotNull(entry.ArtistsTitle);
+
+                    Assert.IsNotNull(results.Results[0].Artists[0]);
+
+                    Assert.AreNotEqual(Guid.Empty, entry.Artists[0].Id);
+                    Assert.AreNotEqual(Guid.Empty, entry.Artists[0].ProfileFileId);
+                    Assert.AreNotEqual(Guid.Empty, entry.Artists[0].CatalogRecordId);
+
+                    Assert.AreNotEqual(string.Empty, entry.Artists[0].Name);
+                    Assert.AreNotEqual(string.Empty, entry.Artists[0].Role);
+                    Assert.AreNotEqual(string.Empty, entry.Artists[0].Uri);
+                }
+            }
+        }
+
+        [Test, Order(6)]
         public async Task Test_GetReleases()
         {
             var releases = await Api.GetReleases(new ReleaseBrowseRequest()
@@ -92,7 +142,7 @@ namespace SoftThorn.MonstercatNet.Tests
             Assert.IsNotNull(releases.Results.Data[0]);
         }
 
-        [Test, Order(6)]
+        [Test, Order(7)]
         public async Task Test_GetRelease()
         {
             var release = await Api.GetRelease("MCRLX001-8");
@@ -104,7 +154,7 @@ namespace SoftThorn.MonstercatNet.Tests
         }
 
         // requires active gold subscription
-        [Test, Order(7)]
+        [Test, Order(8)]
         public async Task Test_DownloadTrackAsByteArray()
         {
             var release = await Api.DownloadTrackAsByteArray(new TrackDownloadRequest()
@@ -118,7 +168,7 @@ namespace SoftThorn.MonstercatNet.Tests
         }
 
         // requires active gold subscription
-        [Test, Order(8)]
+        [Test, Order(9)]
         public async Task Test_DownloadTrackAsStream()
         {
             var release = await Api.DownloadTrackAsStream(new TrackDownloadRequest()
@@ -133,7 +183,7 @@ namespace SoftThorn.MonstercatNet.Tests
             Assert.IsTrue(result.Length > 0);
         }
 
-        [Test, Order(9)]
+        [Test, Order(10)]
         public async Task Test_StreamTrackAsStream()
         {
             var release = await Api.StreamTrackAsStream(new TrackStreamRequest()
@@ -148,7 +198,7 @@ namespace SoftThorn.MonstercatNet.Tests
             Assert.IsTrue(result.Length > 0);
         }
 
-        [Test, Order(10)]
+        [Test, Order(11)]
         public async Task Test_CreatePlaylist()
         {
             var response = await Api.CreatePlaylist(new PlaylistCreateRequest()
@@ -161,7 +211,7 @@ namespace SoftThorn.MonstercatNet.Tests
             PlaylistId = response.Id;
         }
 
-        [Test, Order(11)]
+        [Test, Order(12)]
         public async Task Test_PlaylistAddTrack()
         {
             if (PlaylistId is null)
@@ -183,7 +233,7 @@ namespace SoftThorn.MonstercatNet.Tests
             });
         }
 
-        [Test, Order(12)]
+        [Test, Order(13)]
         public async Task Test_PlaylistDeleteTrack()
         {
             if (PlaylistId is null)
@@ -205,7 +255,7 @@ namespace SoftThorn.MonstercatNet.Tests
             });
         }
 
-        [Test, Order(13)]
+        [Test, Order(14)]
         public async Task Test_GetSelfPlaylists()
         {
             var playlists = await Api.GetSelfPlaylists();
@@ -216,7 +266,7 @@ namespace SoftThorn.MonstercatNet.Tests
             Assert.IsTrue(playlists.Playlists.Data.Any(p => p.Id == PlaylistId));
         }
 
-        [Test, Order(14)]
+        [Test, Order(15)]
         public async Task Test_GetPlaylist()
         {
             if (PlaylistId is null)
@@ -229,7 +279,7 @@ namespace SoftThorn.MonstercatNet.Tests
             Assert.IsNotNull(playlist);
         }
 
-        [Test, Order(15)]
+        [Test, Order(16)]
         public async Task Test_UpdatePlaylist()
         {
             if (PlaylistId is null)
@@ -247,7 +297,7 @@ namespace SoftThorn.MonstercatNet.Tests
             Assert.AreEqual("MyRenameTestPlaylist", playlist.Title);
         }
 
-        [Test, Order(16)]
+        [Test, Order(17)]
         public async Task Test_MakePlaylistPublic()
         {
             if (PlaylistId is null)
@@ -266,7 +316,7 @@ namespace SoftThorn.MonstercatNet.Tests
             Assert.AreEqual(true, playlist.IsPublic);
         }
 
-        [Test, Order(17)]
+        [Test, Order(18)]
         public async Task Test_MakePlaylistPrivate()
         {
             if (PlaylistId is null)
@@ -285,7 +335,7 @@ namespace SoftThorn.MonstercatNet.Tests
             Assert.AreEqual(false, playlist.IsPublic);
         }
 
-        [Test, Order(18)]
+        [Test, Order(19)]
         public async Task Test_DeletePlaylist()
         {
             if (PlaylistId is null)
@@ -296,7 +346,7 @@ namespace SoftThorn.MonstercatNet.Tests
             await Api.DeletePlaylist(PlaylistId.Value);
         }
 
-        [Test, Order(19)]
+        [Test, Order(20)]
         public async Task Test_DownloadArtistPhoto_WithHugePhoto()
         {
             var builder = ArtistPhotoBuilder.Create(new Artist()
@@ -315,7 +365,7 @@ namespace SoftThorn.MonstercatNet.Tests
             }
         }
 
-        [Test, Order(20)]
+        [Test, Order(21)]
         public async Task Test_DownloadArtistPhoto_WithLargePhoto()
         {
             var builder = ArtistPhotoBuilder.Create(new Artist()
@@ -334,7 +384,7 @@ namespace SoftThorn.MonstercatNet.Tests
             }
         }
 
-        [Test, Order(21)]
+        [Test, Order(22)]
         public async Task Test_DownloadArtistPhoto_WithSmallPhoto()
         {
             var builder = ArtistPhotoBuilder.Create(new Artist()
@@ -353,7 +403,7 @@ namespace SoftThorn.MonstercatNet.Tests
             }
         }
 
-        [Test, Order(22)]
+        [Test, Order(23)]
         public async Task Test_DownloadReleaseCoverAsBytes_WithHugeCoverArt()
         {
             var release = await Api.GetRelease("MCRLX001-8");
@@ -371,7 +421,7 @@ namespace SoftThorn.MonstercatNet.Tests
             }
         }
 
-        [Test, Order(23)]
+        [Test, Order(24)]
         public async Task Test_DownloadReleaseCoverAsBytes_WithLargeCoverArt()
         {
             var release = await Api.GetRelease("MCRLX001-8");
@@ -389,7 +439,7 @@ namespace SoftThorn.MonstercatNet.Tests
             }
         }
 
-        [Test, Order(24)]
+        [Test, Order(25)]
         public async Task Test_DownloadReleaseCoverAsBytes_WithMediumCoverArt()
         {
             var release = await Api.GetRelease("MCRLX001-8");
@@ -407,7 +457,7 @@ namespace SoftThorn.MonstercatNet.Tests
             }
         }
 
-        [Test, Order(25)]
+        [Test, Order(26)]
         public async Task Test_DownloadReleaseCoverAsBytes_WithSmallCoverArt()
         {
             var release = await Api.GetRelease("MCRLX001-8");
@@ -425,7 +475,7 @@ namespace SoftThorn.MonstercatNet.Tests
             }
         }
 
-        [Test, Order(26)]
+        [Test, Order(27)]
         public async Task Test_DownloadReleaseCoverAsStream()
         {
             var release = await Api.GetRelease("MCRLX001-8");
@@ -441,7 +491,7 @@ namespace SoftThorn.MonstercatNet.Tests
             }
         }
 
-        [Test, Order(27)]
+        [Test, Order(28)]
         public async Task Test_GetRelease_Returns_All_Fields()
         {
             var release = await Api.GetRelease("MCS1356");
