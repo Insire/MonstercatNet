@@ -41,7 +41,12 @@ namespace SoftThorn.MonstercatNet
         public DateTime? PresaveDate { get; set; }
         public string ReleaseDateTimezone { get; set; } = string.Empty;
         public object? SpotifyId { get; set; }
+
+        /// <summary>
+        /// Universal Product Code code of the release
+        /// </summary>
         public string UPC { get; set; } = string.Empty;
+
         public string YouTubeUrl { get; set; } = string.Empty;
         public object? Tracks { get; set; }
     }
