@@ -16,8 +16,8 @@ namespace SoftThorn.MonstercatNet
         public decimal Bpm { get; set; }
 
         public bool CreatorFriendly { get; set; }
-        public DateTime DebutDate { get; set; }
 
+        public DateTime? DebutDate { get; set; }
 
         public int Duration { get; set; }
 
