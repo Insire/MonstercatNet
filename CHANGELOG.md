@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this projects versioning scheme was inspired by [Semantic Versioning](https://semver.org/spec/v2.0.0.html) and can be found [here](versioning.md).
 
+## [3.0.36] - 2022-07-30
+
+### Fixed
+
+- Track.DebutDate not being nullable
+
 ## [3.0.32] - 2022-06-26
 
 ### Fixed
