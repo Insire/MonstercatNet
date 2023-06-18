@@ -1,5 +1,5 @@
 using Cake.Common.Tools.DotNet;
-using Cake.Common.Tools.DotNetCore.Test;
+using Cake.Common.Tools.DotNet.Test;
 using Cake.Core;
 using Cake.Core.Diagnostics;
 using Cake.Frosting;
@@ -12,7 +12,7 @@ namespace Build
     {
         public override void Run(BuildContext context)
         {
-            var testSettings = new DotNetCoreTestSettings
+            var testSettings = new DotNetTestSettings
             {
                 Framework = Constants.TargetFramework,
                 Configuration = Constants.Configuration,
