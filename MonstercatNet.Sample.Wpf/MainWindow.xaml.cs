@@ -14,10 +14,10 @@ namespace MonstercatNet.Sample.Wpf
 {
     public partial class MainWindow : Window
     {
-        private volatile bool fullyDownloaded;
-        private VolumeWaveProvider16 volumeProvider;
-        private BufferedWaveProvider bufferedWaveProvider;
-        private IWavePlayer waveOut;
+        private volatile bool _fullyDownloaded;
+        private VolumeWaveProvider16? _volumeProvider;
+        private BufferedWaveProvider? _bufferedWaveProvider;
+        private IWavePlayer? _waveOut;
 
         private readonly DispatcherTimer _timer;
         private volatile StreamingPlaybackState playbackState;
@@ -26,8 +26,8 @@ namespace MonstercatNet.Sample.Wpf
 
         protected internal ApiCredentials Credentials { get; } = new ApiCredentials();
 
-        private bool IsBufferNearlyFull => bufferedWaveProvider != null
-            && bufferedWaveProvider.BufferLength - bufferedWaveProvider.BufferedBytes < bufferedWaveProvider.WaveFormat.AverageBytesPerSecond / 4;
+        private bool IsBufferNearlyFull => _bufferedWaveProvider != null
+            && _bufferedWaveProvider.BufferLength - _bufferedWaveProvider.BufferedBytes < _bufferedWaveProvider.WaveFormat.AverageBytesPerSecond / 4;
 
         private static IMp3FrameDecompressor CreateFrameDecompressor(Mp3Frame frame)
         {
@@ -59,7 +59,7 @@ namespace MonstercatNet.Sample.Wpf
 
         private async Task Play(Stream stream)
         {
-            IMp3FrameDecompressor decompressor = null;
+            IMp3FrameDecompressor? decompressor = null;
             var buffer = new byte[16384 * 4]; // needs to be big enough to hold a decompressed frame
 
             try
@@ -83,7 +83,7 @@ namespace MonstercatNet.Sample.Wpf
                         }
                         catch (EndOfStreamException)
                         {
-                            fullyDownloaded = true;
+                            _fullyDownloaded = true;
                             // reached the end of the MP3 file / stream
                             break;
                         }
@@ -97,7 +97,7 @@ namespace MonstercatNet.Sample.Wpf
                             // however, the buffered provider doesn't know what sample rate it is working at
                             // until we have a frame
                             decompressor = CreateFrameDecompressor(frame);
-                            bufferedWaveProvider = new BufferedWaveProvider(decompressor.OutputFormat)
+                            _bufferedWaveProvider = new BufferedWaveProvider(decompressor.OutputFormat)
                             {
                                 BufferDuration = TimeSpan.FromSeconds(20) // allow us to get well ahead of ourselves
                             };
@@ -106,14 +106,14 @@ namespace MonstercatNet.Sample.Wpf
 
                         var decompressed = decompressor.DecompressFrame(frame, buffer, 0);
                         Debug.WriteLine(string.Format("Decompressed a frame {0}", decompressed));
-                        bufferedWaveProvider.AddSamples(buffer, 0, decompressed);
+                        _bufferedWaveProvider?.AddSamples(buffer, 0, decompressed);
                     }
                 } while (playbackState != StreamingPlaybackState.Stopped);
 
                 Debug.WriteLine("Exiting");
                 // was doing this in a finally block, but for some reason
                 // we are hanging on response stream .Dispose so never get there
-                decompressor.Dispose();
+                decompressor?.Dispose();
             }
             finally
             {
@@ -126,7 +126,7 @@ namespace MonstercatNet.Sample.Wpf
             return new WaveOut();
         }
 
-        private void OnPlaybackStopped(object sender, StoppedEventArgs e)
+        private void OnPlaybackStopped(object? sender, StoppedEventArgs e)
         {
             Debug.WriteLine("Playback Stopped");
             if (e.Exception != null)
@@ -135,28 +135,28 @@ namespace MonstercatNet.Sample.Wpf
             }
         }
 
-        private void timer1_Tick(object sender, EventArgs e)
+        private void timer1_Tick(object? sender, EventArgs e)
         {
             if (playbackState != StreamingPlaybackState.Stopped)
             {
-                if (waveOut == null && bufferedWaveProvider != null)
+                if (_waveOut == null && _bufferedWaveProvider != null)
                 {
                     Debug.WriteLine("Creating WaveOut Device");
 
-                    waveOut = CreateWaveOut();
-                    waveOut.PlaybackStopped += OnPlaybackStopped;
-                    volumeProvider = new VolumeWaveProvider16(bufferedWaveProvider)
+                    _waveOut = CreateWaveOut();
+                    _waveOut.PlaybackStopped += OnPlaybackStopped;
+                    _volumeProvider = new VolumeWaveProvider16(_bufferedWaveProvider)
                     {
                         Volume = 0.5f
                     };
-                    waveOut.Init(volumeProvider);
+                    _waveOut.Init(_volumeProvider);
                 }
-                else if (bufferedWaveProvider != null)
+                else if (_bufferedWaveProvider != null)
                 {
-                    var bufferedSeconds = bufferedWaveProvider.BufferedDuration.TotalSeconds;
+                    var bufferedSeconds = _bufferedWaveProvider.BufferedDuration.TotalSeconds;
 
                     // make it stutter less if we buffer up a decent amount before playing
-                    if (bufferedSeconds < 0.5 && playbackState == StreamingPlaybackState.Playing && !fullyDownloaded)
+                    if (bufferedSeconds < 0.5 && playbackState == StreamingPlaybackState.Playing && !_fullyDownloaded)
                     {
                         Pause();
                     }
@@ -164,7 +164,7 @@ namespace MonstercatNet.Sample.Wpf
                     {
                         Play();
                     }
-                    else if (fullyDownloaded && bufferedSeconds == 0)
+                    else if (_fullyDownloaded && bufferedSeconds == 0)
                     {
                         Debug.WriteLine("Reached end of stream");
                         StopPlayback();
@@ -175,16 +175,16 @@ namespace MonstercatNet.Sample.Wpf
 
         private void Play()
         {
-            waveOut.Play();
-            Debug.WriteLine(string.Format("Started playing, waveOut.PlaybackState={0}", waveOut.PlaybackState));
+            _waveOut?.Play();
+            Debug.WriteLine(string.Format("Started playing, waveOut.PlaybackState={0}", _waveOut?.PlaybackState));
             playbackState = StreamingPlaybackState.Playing;
         }
 
         private void Pause()
         {
             playbackState = StreamingPlaybackState.Buffering;
-            waveOut.Pause();
-            Debug.WriteLine(string.Format("Paused to buffer, waveOut.PlaybackState={0}", waveOut.PlaybackState));
+            _waveOut?.Pause();
+            Debug.WriteLine(string.Format("Paused to buffer, waveOut.PlaybackState={0}", _waveOut?.PlaybackState));
         }
 
         private void StopPlayback()
@@ -192,21 +192,21 @@ namespace MonstercatNet.Sample.Wpf
             if (playbackState != StreamingPlaybackState.Stopped)
             {
                 playbackState = StreamingPlaybackState.Stopped;
-                if (waveOut != null)
+                if (_waveOut != null)
                 {
-                    waveOut.Stop();
-                    waveOut.Dispose();
-                    waveOut = null;
+                    _waveOut.Stop();
+                    _waveOut.Dispose();
+                    _waveOut = null;
                 }
             }
         }
 
-        private async void buttonPlay_Click(object sender, RoutedEventArgs e)
+        private async void buttonPlay_Click(object? sender, RoutedEventArgs e)
         {
             if (playbackState == StreamingPlaybackState.Stopped)
             {
                 playbackState = StreamingPlaybackState.Buffering;
-                bufferedWaveProvider = null;
+                _bufferedWaveProvider = null;
 
                 var stream = await _api.StreamTrackAsStream(new TrackStreamRequest()
                 {
@@ -224,12 +224,12 @@ namespace MonstercatNet.Sample.Wpf
             }
         }
 
-        private async void Window_Loaded(object sender, RoutedEventArgs e)
+        private async void Window_Loaded(object? sender, RoutedEventArgs e)
         {
             await _api.Login(Credentials);
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Button_Click(object? sender, RoutedEventArgs e)
         {
             ReportGeneratorUtility.Generate();
         }
