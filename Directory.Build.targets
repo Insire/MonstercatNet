@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-
     <ItemGroup>
         <Compile Include="..\SharedAssemblyInfo.cs" Link="Properties\SharedAssemblyInfo.cs" />
     </ItemGroup>
@@ -12,8 +11,8 @@
         <CodeAnalysisRuleSet>..\MonstercatNet.ruleset</CodeAnalysisRuleSet>
     </PropertyGroup>
 
-    <ItemGroup Condition=" '$(Configuration)'=='Debug' ">
-        <PackageReference Include="Roslynator.Analyzers" Version="4.1.1">
+    <ItemGroup Condition="'$(Configuration)'=='Debug'">
+        <PackageReference Include="Roslynator.Analyzers">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>

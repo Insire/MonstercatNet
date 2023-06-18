@@ -18,7 +18,7 @@ namespace Build
                     .AppendQuoted(Constants.ProjectPath)
                     .Append($"-c {Constants.Configuration}")
                     .Append($"--output \"{Constants.PackagesPath}\"")
-                    .Append($"-p:PackageVersion={context.GitVersion.SemVer2}")
+                    .Append($"-p:PackageVersion={context.GitVersion?.SemVer2}")
                     .Append($"-p:PublicRelease={context.IsPublicRelease}") // Nerdbank.GitVersioning - omit git commit ID
 
                     // Creating symbol packages

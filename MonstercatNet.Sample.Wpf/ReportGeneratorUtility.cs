@@ -52,8 +52,8 @@ namespace MonstercatNet.Sample.Wpf
         [DebuggerDisplay("{" + nameof(GetDebuggerDisplay) + "(),nq}")]
         private sealed class RenderDto
         {
-            public string Path { get; set; }
-            public string Method { get; set; }
+            public string? Path { get; set; }
+            public string? Method { get; set; }
 
             private string GetDebuggerDisplay()
             {
@@ -63,7 +63,7 @@ namespace MonstercatNet.Sample.Wpf
 
         private sealed class RenderDtoEqualityComparer : IEqualityComparer<RenderDto>
         {
-            public bool Equals(RenderDto b1, RenderDto b2)
+            public bool Equals(RenderDto? b1, RenderDto? b2)
             {
                 if (b2 == null && b1 == null)
                     return true;
@@ -77,7 +77,7 @@ namespace MonstercatNet.Sample.Wpf
 
             public int GetHashCode(RenderDto bx)
             {
-                var hCode = bx.Method.GetHashCode() ^ bx.Path.GetHashCode();
+                var hCode = bx.Method?.GetHashCode() ^ bx.Path?.GetHashCode();
                 return hCode.GetHashCode();
             }
         }

@@ -51,7 +51,7 @@ namespace Build
                     new AssemblyInfoMetadataAttribute()
                     {
                         Key = "Version",
-                        Value = context.GitVersion.SemVer2,
+                        Value = context.GitVersion?.SemVer2,
                     },
                 }
             };
