@@ -1,13 +1,13 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace SoftThorn.MonstercatNet
 {
     public sealed class ApiCredentials
     {
-        [JsonProperty("email")]
+        [JsonPropertyName("email")]
         public string Email { get; set; } = string.Empty;
 
-        [JsonProperty("password")]
+        [JsonPropertyName("password")]
         public string Password { get; set; } = string.Empty;
     }
 }

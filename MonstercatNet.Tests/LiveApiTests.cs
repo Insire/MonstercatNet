@@ -234,6 +234,40 @@ namespace SoftThorn.MonstercatNet.Tests
         }
 
         [Test, Order(13)]
+        public async Task Test_GetPlaylist()
+        {
+            if (PlaylistId is null)
+            {
+                Assert.Inconclusive("The test case that should create a valid playlist either didn't run or did failed to complete.");
+            }
+
+            var result = await Api.GetPlaylist(PlaylistId.Value);
+
+            Assert.NotNull(result);
+            Assert.IsTrue(result.Total > 0);
+
+            Assert.NotNull(result.Tracks);
+            Assert.IsTrue(result.Tracks.Length > 0);
+
+            Assert.AreEqual(result.Total, result.Tracks.Length);
+
+            foreach (var playist in result.Tracks)
+            {
+            }
+        }
+
+        [Test, Order(14)]
+        public async Task Test_GetSelfPlaylists()
+        {
+            var playlists = await Api.GetSelfPlaylists();
+
+            Assert.IsNotNull(playlists);
+
+            Assert.IsTrue(playlists.Playlists.Data.Length >= 1);
+            Assert.IsTrue(playlists.Playlists.Data.Any(p => p.Id == PlaylistId));
+        }
+
+        [Test, Order(15)]
         public async Task Test_PlaylistDeleteTrack()
         {
             if (PlaylistId is null)
@@ -253,30 +287,6 @@ namespace SoftThorn.MonstercatNet.Tests
                     }
                 }
             });
-        }
-
-        [Test, Order(14)]
-        public async Task Test_GetSelfPlaylists()
-        {
-            var playlists = await Api.GetSelfPlaylists();
-
-            Assert.IsNotNull(playlists);
-
-            Assert.IsTrue(playlists.Playlists.Data.Length >= 1);
-            Assert.IsTrue(playlists.Playlists.Data.Any(p => p.Id == PlaylistId));
-        }
-
-        [Test, Order(15)]
-        public async Task Test_GetPlaylist()
-        {
-            if (PlaylistId is null)
-            {
-                Assert.Inconclusive("The test case that should create a valid playlist either didn't run or did failed to complete.");
-            }
-
-            var playlist = await Api.GetPlaylist(PlaylistId.Value);
-
-            Assert.IsNotNull(playlist);
         }
 
         [Test, Order(16)]

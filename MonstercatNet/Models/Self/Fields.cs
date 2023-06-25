@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace SoftThorn.MonstercatNet
 {
@@ -7,13 +7,13 @@ namespace SoftThorn.MonstercatNet
         /// <summary>
         /// System.Collections.Generic.KeyValuePair<int, bool>[]
         /// </summary>
-        [JsonProperty("archived")]
+        [JsonPropertyName("archived")]
         public string[]? Archived { get; set; }
 
         /// <summary>
         /// System.Collections.Generic.KeyValuePair<int, bool>[]
         /// </summary>
-        [JsonProperty("mylibrary")]
+        [JsonPropertyName("mylibrary")]
         public string[]? Mylibrary { get; set; }
     }
 }

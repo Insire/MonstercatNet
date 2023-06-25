@@ -6,7 +6,7 @@ namespace SoftThorn.MonstercatNet
     {
         protected static RefitSettings Settings { get; } = new RefitSettings
         {
-            ContentSerializer = new NewtonsoftJsonContentSerializer()
+            ContentSerializer = new SystemTextJsonContentSerializer()
         };
     }
 }

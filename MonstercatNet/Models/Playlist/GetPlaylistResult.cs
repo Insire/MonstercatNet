@@ -1,30 +1,11 @@
-using Refit;
 using System;
+using System.Text.Json.Serialization;
 
 namespace SoftThorn.MonstercatNet
 {
-    public sealed class GetPlaylistResult
+    public sealed class GetPlaylistResult : ResultBase
     {
-        public bool Archived { get; set; }
-
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
-        public Guid Id { get; set; }
-
-        public bool IsPublic { get; set; }
-
-        public bool MyLibrary { get; set; }
-        public int NumRecords { get; set; }
-
-        public string Title { get; set; } = "";
-        public string Description { get; set; } = "";
-
-        public Guid UserId { get; set; }
-
-        [AliasAs("Items")]
-        public PlaylistRecord[] Tracks { get; set; } = Array.Empty<PlaylistRecord>();
-
-        public string TileFileId { get; set; } = "";
-        public string BackgroundFileId { get; set; } = "";
+        [JsonPropertyName("Data")]
+        public GetPlaylistResultTrack[] Tracks { get; set; } = Array.Empty<GetPlaylistResultTrack>();
     }
 }
