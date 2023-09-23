@@ -1,5 +1,6 @@
 #nullable disable
 
+using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
 using System.Net.Http;
@@ -28,8 +29,8 @@ namespace SoftThorn.MonstercatNet.Tests
 
             section.Bind(Credentials);
 
-            Assert.IsNotNull(Credentials.Email, "For tests to be able to run, you need to provide a monstercat account via the usersecrets of the MonstercatNet.Tests project.");
-            Assert.IsNotNull(Credentials.Password, "For tests to be able to run, you need to provide the account password.");
+            Credentials.Email.Should().NotBeNullOrWhiteSpace("For tests to be able to run, you need to provide a monstercat account via the usersecrets of the MonstercatNet.Tests project.");
+            Credentials.Password.Should().NotBeNullOrWhiteSpace("For tests to be able to run, you need to provide the account password.");
 
             Api = MonstercatApi.Create(new HttpClient(LoginValidationHandler).UseMonstercatApiV2());
             Cdn = MonstercatCdn.Create(new HttpClient(new HttpLoggingHandler()).UseMonstercatCdn());

@@ -12,7 +12,7 @@
     <ItemGroup>
         <PackageReference Include="refit" />
 
-        <PackageReference Include="Nerdbank.GitVersioning" >
+        <PackageReference Include="Nerdbank.GitVersioning">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>

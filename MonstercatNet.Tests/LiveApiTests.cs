@@ -1,5 +1,6 @@
 #nullable disable
 
+using FluentAssertions;
 using NUnit.Framework;
 using SixLabors.ImageSharp;
 using System;
@@ -236,23 +237,60 @@ namespace SoftThorn.MonstercatNet.Tests
         [Test, Order(13)]
         public async Task Test_GetPlaylist()
         {
-            if (PlaylistId is null)
-            {
-                Assert.Inconclusive("The test case that should create a valid playlist either didn't run or did failed to complete.");
-            }
+            // call of the wild playlist with 500++ entries
+            var playlistId = Guid.Parse("{5a68f0b7-4d98-4f9b-ae83-b9228e5af980}");
 
-            var result = await Api.GetPlaylist(PlaylistId.Value);
+            var request = new GetPlaylistRequest()
+            {
+                Creatorfriendly = false,
+                Limit = 100,
+                NoGold = false,
+                Skip = 0,
+                StreamerMode = false,
+            };
+            var result = await Api.GetPlaylist(playlistId, request);
 
             Assert.NotNull(result);
-            Assert.IsTrue(result.Total > 0);
+            Assert.IsTrue(result.Total > 500);
 
             Assert.NotNull(result.Tracks);
             Assert.IsTrue(result.Tracks.Length > 0);
 
-            Assert.AreEqual(result.Total, result.Tracks.Length);
+            result.Total.Should().BeGreaterThanOrEqualTo(result.Tracks.Length);
 
-            foreach (var playist in result.Tracks)
+            var total = result.Total;
+            var localLimit = result.Limit;
+            var skip = result.Offset + localLimit;
+            while (skip < total)
             {
+                request.Limit = localLimit;
+                request.Skip = skip;
+                result = await Api.GetPlaylist(playlistId, request);
+                skip += localLimit;
+
+                Validate(result);
+            }
+
+            static void Validate(GetPlaylistResult results)
+            {
+                Assert.IsNotNull(results);
+                Assert.IsTrue(results.Tracks.Length >= 1);
+
+                foreach (var entry in results.Tracks)
+                {
+                    Assert.IsNotNull(entry.Artists);
+                    Assert.IsNotNull(entry.ArtistsTitle);
+
+                    Assert.IsNotNull(results.Tracks[0].Artists[0]);
+
+                    Assert.AreNotEqual(Guid.Empty, entry.Artists[0].Id);
+                    Assert.AreNotEqual(Guid.Empty, entry.Artists[0].ProfileFileId);
+                    Assert.AreNotEqual(Guid.Empty, entry.Artists[0].CatalogRecordId);
+
+                    Assert.AreNotEqual(string.Empty, entry.Artists[0].Name);
+                    Assert.AreNotEqual(string.Empty, entry.Artists[0].Role);
+                    Assert.AreNotEqual(string.Empty, entry.Artists[0].Uri);
+                }
             }
         }
 

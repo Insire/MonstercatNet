@@ -98,7 +98,7 @@ namespace SoftThorn.MonstercatNet
         /// fetch one of your playlists. requires login.
         /// </summary>
         [Get("/playlist/{playlistId}/catalog")]
-        Task<GetPlaylistResult> GetPlaylist([Query] Guid playlistId, CancellationToken token = default);
+        Task<GetPlaylistResult> GetPlaylist([Query] Guid playlistId, GetPlaylistRequest request, CancellationToken token = default);
 
         /// <summary>
         /// add one track to the end of a playlist
