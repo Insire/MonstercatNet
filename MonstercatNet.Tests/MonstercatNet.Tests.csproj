@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net70</TargetFramework>
+        <TargetFramework>net80</TargetFramework>
 
         <IsPackable>false</IsPackable>
         <AssemblyName>MonstercatNet.Tests</AssemblyName>
@@ -22,6 +22,10 @@
         <PackageReference Include="nunit" />
         <PackageReference Include="NUnit3TestAdapter" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" />
+        <PackageReference Include="NUnit.Analyzers">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+        </PackageReference>
 
         <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Binder" />
@@ -29,7 +33,6 @@
         <PackageReference Include="Microsoft.Extensions.Configuration.Json" />
         <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" />
         <PackageReference Include="SixLabors.ImageSharp" />
-        <PackageReference Include="Newtonsoft.Json" />
     </ItemGroup>
 
     <ItemGroup>

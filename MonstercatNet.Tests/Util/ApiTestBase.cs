@@ -35,5 +35,11 @@ namespace SoftThorn.MonstercatNet.Tests
             Api = MonstercatApi.Create(new HttpClient(LoginValidationHandler).UseMonstercatApiV2());
             Cdn = MonstercatCdn.Create(new HttpClient(new HttpLoggingHandler()).UseMonstercatCdn());
         }
+
+        [OneTimeTearDown]
+        public void Teardown()
+        {
+            LoginValidationHandler.Dispose();
+        }
     }
 }

@@ -4,7 +4,7 @@ namespace Build
     {
         public const string Configuration = "Release";
         public const string Platform = "AnyCPU";
-        public const string TargetFramework = "net70";
+        public const string TargetFramework = "net80";
 
         public const string SolutionPath = "./MonstercatNet.sln";
         public const string AssemblyInfoPath = "./SharedAssemblyInfo.cs";

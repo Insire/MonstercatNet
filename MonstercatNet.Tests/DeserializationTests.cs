@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using SoftThorn.MonstercatNet.Tests.Resources;
 using System.IO;
+using System.Text.Json;
 
 namespace SoftThorn.MonstercatNet.Tests
 {
@@ -13,7 +14,7 @@ namespace SoftThorn.MonstercatNet.Tests
 
             using var reader = new StreamReader(stream);
             var text = reader.ReadToEnd();
-            Newtonsoft.Json.JsonConvert.DeserializeObject<SelfPlaylistsResult>(text);
+            JsonSerializer.Deserialize<SelfPlaylistsResult>(text);
         }
     }
 }

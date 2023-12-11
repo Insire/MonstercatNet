@@ -23,7 +23,7 @@ namespace SoftThorn.MonstercatNet.Tests
         {
             await Api.Login(Credentials);
 
-            Assert.IsTrue(IsLoggedIn);
+            Assert.That(IsLoggedIn, Is.True);
         }
 
         [Test, Order(2)]
@@ -31,9 +31,12 @@ namespace SoftThorn.MonstercatNet.Tests
         {
             var self = await Api.GetSelf();
 
-            Assert.IsNotNull(self);
-            Assert.AreEqual(Credentials.Email, self.User.Email);
-            Assert.IsTrue(self.User.HasGold, "The test account should have an active gold subscription, otherwise some tests are bound to fail.");
+            Assert.That(self, Is.Not.Null);
+            Assert.Multiple(() =>
+            {
+                Assert.That(self.User.Email, Is.EqualTo(Credentials.Email));
+                Assert.That(self.User.HasGold, Is.True, "The test account should have an active gold subscription, otherwise some tests are bound to fail.");
+            });
 
             UserId = self.User.Id;
         }
@@ -43,10 +46,13 @@ namespace SoftThorn.MonstercatNet.Tests
         {
             var filters = await Api.GetTrackSearchFilters();
 
-            Assert.IsNotNull(filters);
-            Assert.IsTrue(filters.Genres.Length > 0);
-            Assert.IsTrue(filters.Tags.Length > 0);
-            Assert.IsTrue(filters.Types.Length > 0);
+            Assert.That(filters, Is.Not.Null);
+            Assert.Multiple(() =>
+            {
+                Assert.That(filters.Genres, Is.Not.Empty);
+                Assert.That(filters.Tags, Is.Not.Empty);
+                Assert.That(filters.Types, Is.Not.Empty);
+            });
         }
 
         [Test, Order(4)]
@@ -61,22 +67,28 @@ namespace SoftThorn.MonstercatNet.Tests
                 Tags = new[] { "silkinitialbulkimport" },
             });
 
-            Assert.IsNotNull(tracks);
-            Assert.IsTrue(tracks.Results.Length >= 1);
+            Assert.That(tracks, Is.Not.Null);
+            Assert.That(tracks.Results, Is.Not.Empty);
             var entry = tracks.Results.Single(p => p.Id == Guid.Parse("65c9d857-4f34-4ad7-925c-fefb92e4d36d"));
 
-            Assert.IsNotNull(entry.Artists);
-            Assert.IsNotNull(entry.ArtistsTitle);
+            Assert.Multiple(() =>
+            {
+                Assert.That(entry.Artists, Is.Not.Null);
+                Assert.That(entry.ArtistsTitle, Is.Not.Null);
 
-            Assert.IsNotNull(tracks.Results[0].Artists[0]);
+                Assert.That(tracks.Results[0].Artists[0], Is.Not.Null);
+            });
 
-            Assert.AreNotEqual(Guid.Empty, entry.Artists[0].Id);
-            Assert.AreNotEqual(Guid.Empty, entry.Artists[0].ProfileFileId);
-            Assert.AreNotEqual(Guid.Empty, entry.Artists[0].CatalogRecordId);
+            Assert.Multiple(() =>
+            {
+                Assert.That(entry.Artists[0].Id, Is.Not.EqualTo(Guid.Empty));
+                Assert.That(entry.Artists[0].ProfileFileId, Is.Not.EqualTo(Guid.Empty));
+                Assert.That(entry.Artists[0].CatalogRecordId, Is.Not.EqualTo(Guid.Empty));
 
-            Assert.AreNotEqual(string.Empty, entry.Artists[0].Name);
-            Assert.AreNotEqual(string.Empty, entry.Artists[0].Role);
-            Assert.AreNotEqual(string.Empty, entry.Artists[0].Uri);
+                Assert.That(entry.Artists[0].Name, Is.Not.EqualTo(string.Empty));
+                Assert.That(entry.Artists[0].Role, Is.Not.EqualTo(string.Empty));
+                Assert.That(entry.Artists[0].Uri, Is.Not.EqualTo(string.Empty));
+            });
         }
 
         [Test, Order(5)]
@@ -108,23 +120,29 @@ namespace SoftThorn.MonstercatNet.Tests
 
             static void Validate(TrackSearchResult results)
             {
-                Assert.IsNotNull(results);
-                Assert.IsTrue(results.Results.Length >= 1);
+                Assert.That(results, Is.Not.Null);
+                Assert.That(results.Results, Is.Not.Empty);
 
                 foreach (var entry in results.Results)
                 {
-                    Assert.IsNotNull(entry.Artists);
-                    Assert.IsNotNull(entry.ArtistsTitle);
+                    Assert.Multiple(() =>
+                    {
+                        Assert.That(entry.Artists, Is.Not.Null);
+                        Assert.That(entry.ArtistsTitle, Is.Not.Null);
 
-                    Assert.IsNotNull(results.Results[0].Artists[0]);
+                        Assert.That(results.Results[0].Artists[0], Is.Not.Null);
+                    });
 
-                    Assert.AreNotEqual(Guid.Empty, entry.Artists[0].Id);
-                    Assert.AreNotEqual(Guid.Empty, entry.Artists[0].ProfileFileId);
-                    Assert.AreNotEqual(Guid.Empty, entry.Artists[0].CatalogRecordId);
+                    Assert.Multiple(() =>
+                    {
+                        Assert.That(entry.Artists[0].Id, Is.Not.EqualTo(Guid.Empty));
+                        Assert.That(entry.Artists[0].ProfileFileId, Is.Not.EqualTo(Guid.Empty));
+                        Assert.That(entry.Artists[0].CatalogRecordId, Is.Not.EqualTo(Guid.Empty));
 
-                    Assert.AreNotEqual(string.Empty, entry.Artists[0].Name);
-                    Assert.AreNotEqual(string.Empty, entry.Artists[0].Role);
-                    Assert.AreNotEqual(string.Empty, entry.Artists[0].Uri);
+                        Assert.That(entry.Artists[0].Name, Is.Not.EqualTo(string.Empty));
+                        Assert.That(entry.Artists[0].Role, Is.Not.EqualTo(string.Empty));
+                        Assert.That(entry.Artists[0].Uri, Is.Not.EqualTo(string.Empty));
+                    });
                 }
             }
         }
@@ -138,9 +156,12 @@ namespace SoftThorn.MonstercatNet.Tests
                 Skip = 0
             });
 
-            Assert.IsNotNull(releases);
-            Assert.IsTrue(releases.Results.Data.Length == 1);
-            Assert.IsNotNull(releases.Results.Data[0]);
+            Assert.That(releases, Is.Not.Null);
+            Assert.Multiple(() =>
+            {
+                Assert.That(releases.Results.Data, Has.Length.EqualTo(1));
+                Assert.That(releases.Results.Data[0], Is.Not.Null);
+            });
         }
 
         [Test, Order(7)]
@@ -148,10 +169,13 @@ namespace SoftThorn.MonstercatNet.Tests
         {
             var release = await Api.GetRelease("MCRLX001-8");
 
-            Assert.IsNotNull(release);
-            Assert.IsNotNull(release.Release);
-            Assert.IsNotNull(release.Tracks);
-            Assert.IsTrue(release.Tracks.Length == 1);
+            Assert.That(release, Is.Not.Null);
+            Assert.Multiple(() =>
+            {
+                Assert.That(release.Release, Is.Not.Null);
+                Assert.That(release.Tracks, Is.Not.Null);
+            });
+            Assert.That(release.Tracks, Has.Length.EqualTo(1));
         }
 
         // requires active gold subscription
@@ -164,8 +188,8 @@ namespace SoftThorn.MonstercatNet.Tests
                 TrackId = Guid.Parse("c8d3abc3-1668-42de-b832-b58ca6cc883f")
             });
 
-            Assert.IsNotNull(release);
-            Assert.IsTrue(release.Length > 0);
+            Assert.That(release, Is.Not.Null);
+            Assert.That(release, Is.Not.Empty);
         }
 
         // requires active gold subscription
@@ -178,10 +202,10 @@ namespace SoftThorn.MonstercatNet.Tests
                 TrackId = Guid.Parse("c8d3abc3-1668-42de-b832-b58ca6cc883f")
             });
 
-            Assert.IsNotNull(release);
+            Assert.That(release, Is.Not.Null);
 
             var result = release.ToByteArray();
-            Assert.IsTrue(result.Length > 0);
+            Assert.That(result, Is.Not.Empty);
         }
 
         [Test, Order(10)]
@@ -193,10 +217,10 @@ namespace SoftThorn.MonstercatNet.Tests
                 TrackId = Guid.Parse("c8d3abc3-1668-42de-b832-b58ca6cc883f")
             });
 
-            Assert.IsNotNull(release);
+            Assert.That(release, Is.Not.Null);
 
             var result = release.ToByteArray();
-            Assert.IsTrue(result.Length > 0);
+            Assert.That(result, Is.Not.Empty);
         }
 
         [Test, Order(11)]
@@ -207,7 +231,7 @@ namespace SoftThorn.MonstercatNet.Tests
                 Title = "MyTestPlaylist",
             });
 
-            Assert.IsNotNull(response);
+            Assert.That(response, Is.Not.Null);
 
             PlaylistId = response.Id;
         }
@@ -250,11 +274,14 @@ namespace SoftThorn.MonstercatNet.Tests
             };
             var result = await Api.GetPlaylist(playlistId, request);
 
-            Assert.NotNull(result);
-            Assert.IsTrue(result.Total > 500);
+            Assert.That(result, Is.Not.Null);
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.Total, Is.GreaterThan(500));
 
-            Assert.NotNull(result.Tracks);
-            Assert.IsTrue(result.Tracks.Length > 0);
+                Assert.That(result.Tracks, Is.Not.Null);
+            });
+            Assert.That(result.Tracks, Is.Not.Empty);
 
             result.Total.Should().BeGreaterThanOrEqualTo(result.Tracks.Length);
 
@@ -273,23 +300,29 @@ namespace SoftThorn.MonstercatNet.Tests
 
             static void Validate(GetPlaylistResult results)
             {
-                Assert.IsNotNull(results);
-                Assert.IsTrue(results.Tracks.Length >= 1);
+                Assert.That(results, Is.Not.Null);
+                Assert.That(results.Tracks, Is.Not.Empty);
 
                 foreach (var entry in results.Tracks)
                 {
-                    Assert.IsNotNull(entry.Artists);
-                    Assert.IsNotNull(entry.ArtistsTitle);
+                    Assert.Multiple(() =>
+                    {
+                        Assert.That(entry.Artists, Is.Not.Null);
+                        Assert.That(entry.ArtistsTitle, Is.Not.Null);
 
-                    Assert.IsNotNull(results.Tracks[0].Artists[0]);
+                        Assert.That(results.Tracks[0].Artists[0], Is.Not.Null);
+                    });
 
-                    Assert.AreNotEqual(Guid.Empty, entry.Artists[0].Id);
-                    Assert.AreNotEqual(Guid.Empty, entry.Artists[0].ProfileFileId);
-                    Assert.AreNotEqual(Guid.Empty, entry.Artists[0].CatalogRecordId);
+                    Assert.Multiple(() =>
+                    {
+                        Assert.That(entry.Artists[0].Id, Is.Not.EqualTo(Guid.Empty));
+                        Assert.That(entry.Artists[0].ProfileFileId, Is.Not.EqualTo(Guid.Empty));
+                        Assert.That(entry.Artists[0].CatalogRecordId, Is.Not.EqualTo(Guid.Empty));
 
-                    Assert.AreNotEqual(string.Empty, entry.Artists[0].Name);
-                    Assert.AreNotEqual(string.Empty, entry.Artists[0].Role);
-                    Assert.AreNotEqual(string.Empty, entry.Artists[0].Uri);
+                        Assert.That(entry.Artists[0].Name, Is.Not.EqualTo(string.Empty));
+                        Assert.That(entry.Artists[0].Role, Is.Not.EqualTo(string.Empty));
+                        Assert.That(entry.Artists[0].Uri, Is.Not.EqualTo(string.Empty));
+                    });
                 }
             }
         }
@@ -299,10 +332,13 @@ namespace SoftThorn.MonstercatNet.Tests
         {
             var playlists = await Api.GetSelfPlaylists();
 
-            Assert.IsNotNull(playlists);
+            Assert.That(playlists, Is.Not.Null);
 
-            Assert.IsTrue(playlists.Playlists.Data.Length >= 1);
-            Assert.IsTrue(playlists.Playlists.Data.Any(p => p.Id == PlaylistId));
+            Assert.Multiple(() =>
+            {
+                Assert.That(playlists.Playlists.Data, Is.Not.Empty);
+                Assert.That(playlists.Playlists.Data.Any(p => p.Id == PlaylistId), Is.True);
+            });
         }
 
         [Test, Order(15)]
@@ -342,7 +378,7 @@ namespace SoftThorn.MonstercatNet.Tests
                 UserId = UserId.Value,
             });
 
-            Assert.AreEqual("MyRenameTestPlaylist", playlist.Title);
+            Assert.That(playlist.Title, Is.EqualTo("MyRenameTestPlaylist"));
         }
 
         [Test, Order(17)]
@@ -361,7 +397,7 @@ namespace SoftThorn.MonstercatNet.Tests
                 IsPublic = true,
             });
 
-            Assert.AreEqual(true, playlist.IsPublic);
+            Assert.That(playlist.IsPublic, Is.EqualTo(true));
         }
 
         [Test, Order(18)]
@@ -380,7 +416,7 @@ namespace SoftThorn.MonstercatNet.Tests
                 IsPublic = false,
             });
 
-            Assert.AreEqual(false, playlist.IsPublic);
+            Assert.That(playlist.IsPublic, Is.EqualTo(false));
         }
 
         [Test, Order(19)]
@@ -407,8 +443,11 @@ namespace SoftThorn.MonstercatNet.Tests
             {
                 using (var image = Image.Load(stream))
                 {
-                    Assert.GreaterOrEqual(image.Height, 3000);
-                    Assert.GreaterOrEqual(image.Width, 3000);
+                    Assert.Multiple(() =>
+                    {
+                        Assert.That(image.Height, Is.GreaterThanOrEqualTo(3000));
+                        Assert.That(image.Width, Is.GreaterThanOrEqualTo(3000));
+                    });
                 }
             }
         }
@@ -426,8 +465,11 @@ namespace SoftThorn.MonstercatNet.Tests
             {
                 using (var image = Image.Load(stream))
                 {
-                    Assert.GreaterOrEqual(image.Height, 1024);
-                    Assert.GreaterOrEqual(image.Width, 1024);
+                    Assert.Multiple(() =>
+                    {
+                        Assert.That(image.Height, Is.GreaterThanOrEqualTo(1024));
+                        Assert.That(image.Width, Is.GreaterThanOrEqualTo(1024));
+                    });
                 }
             }
         }
@@ -445,8 +487,11 @@ namespace SoftThorn.MonstercatNet.Tests
             {
                 using (var image = Image.Load(stream))
                 {
-                    Assert.GreaterOrEqual(image.Height, 256);
-                    Assert.GreaterOrEqual(image.Width, 256);
+                    Assert.Multiple(() =>
+                    {
+                        Assert.That(image.Height, Is.GreaterThanOrEqualTo(256));
+                        Assert.That(image.Width, Is.GreaterThanOrEqualTo(256));
+                    });
                 }
             }
         }
@@ -464,8 +509,11 @@ namespace SoftThorn.MonstercatNet.Tests
             using (var stream = new MemoryStream(bytes))
             using (var image = Image.Load(stream))
             {
-                Assert.GreaterOrEqual(image.Height, 3000);
-                Assert.GreaterOrEqual(image.Width, 3000);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(image.Height, Is.GreaterThanOrEqualTo(3000));
+                    Assert.That(image.Width, Is.GreaterThanOrEqualTo(3000));
+                });
             }
         }
 
@@ -482,8 +530,11 @@ namespace SoftThorn.MonstercatNet.Tests
             using (var stream = new MemoryStream(bytes))
             using (var image = Image.Load(stream))
             {
-                Assert.GreaterOrEqual(image.Height, 1024);
-                Assert.GreaterOrEqual(image.Width, 1024);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(image.Height, Is.GreaterThanOrEqualTo(1024));
+                    Assert.That(image.Width, Is.GreaterThanOrEqualTo(1024));
+                });
             }
         }
 
@@ -500,8 +551,11 @@ namespace SoftThorn.MonstercatNet.Tests
             using (var stream = new MemoryStream(bytes))
             using (var image = Image.Load(stream))
             {
-                Assert.GreaterOrEqual(image.Height, 600);
-                Assert.GreaterOrEqual(image.Width, 600);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(image.Height, Is.GreaterThanOrEqualTo(600));
+                    Assert.That(image.Width, Is.GreaterThanOrEqualTo(600));
+                });
             }
         }
 
@@ -518,8 +572,11 @@ namespace SoftThorn.MonstercatNet.Tests
             using (var stream = new MemoryStream(bytes))
             using (var image = Image.Load(stream))
             {
-                Assert.GreaterOrEqual(image.Height, 300);
-                Assert.GreaterOrEqual(image.Width, 300);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(image.Height, Is.GreaterThanOrEqualTo(300));
+                    Assert.That(image.Width, Is.GreaterThanOrEqualTo(300));
+                });
             }
         }
 
@@ -534,8 +591,11 @@ namespace SoftThorn.MonstercatNet.Tests
             using (var stream = await Cdn.GetReleaseCoverAsStream(builder))
             using (var image = Image.Load(stream))
             {
-                Assert.Greater(image.Height, 0);
-                Assert.Greater(image.Width, 0);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(image.Height, Is.GreaterThan(0));
+                    Assert.That(image.Width, Is.GreaterThan(0));
+                });
             }
         }
 
@@ -544,25 +604,28 @@ namespace SoftThorn.MonstercatNet.Tests
         {
             var release = await Api.GetRelease("MCS1356");
 
-            Assert.AreEqual("MCS1356", release.Release.CatalogId);
+            Assert.Multiple(() =>
+            {
+                Assert.That(release.Release?.CatalogId, Is.EqualTo("MCS1356"));
 
-            Assert.NotNull(release.Release.Id);
+                Assert.That(release.Release?.Id, Is.Not.Null);
 
-            Assert.NotNull(release.Release.ArtistsTitle);
-            Assert.NotNull(release.Release.Version);
-            Assert.NotNull(release.Release.Title);
-            Assert.NotNull(release.Release.Type);
-            Assert.NotNull(release.Release.GenrePrimary);
-            Assert.NotNull(release.Release.GenreSecondary);
+                Assert.That(release.Release?.ArtistsTitle, Is.Not.Null);
+                Assert.That(release.Release?.Version, Is.Not.Null);
+                Assert.That(release.Release?.Title, Is.Not.Null);
+                Assert.That(release.Release?.Type, Is.Not.Null);
+                Assert.That(release.Release?.GenrePrimary, Is.Not.Null);
+                Assert.That(release.Release?.GenreSecondary, Is.Not.Null);
 
-            Assert.NotNull(release.Release.BrandId);
-            Assert.NotNull(release.Release.BrandTitle);
+                Assert.That(release.Release?.BrandId, Is.Not.Null);
+                Assert.That(release.Release?.BrandTitle, Is.Not.Null);
 
-            Assert.NotNull(release.Release.Links);
-            Assert.IsNotEmpty(release.Release.Links);
+                Assert.That(release.Release?.Links, Is.Not.Null);
+                Assert.That(release.Release?.Links, Is.Not.Empty);
 
-            Assert.NotNull(release.Tracks);
-            Assert.IsNotEmpty(release.Tracks);
+                Assert.That(release.Tracks, Is.Not.Null);
+                Assert.That(release.Tracks, Is.Not.Empty);
+            });
         }
 
         [Test, Order(999)]
