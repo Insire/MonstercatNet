@@ -1,4 +1,5 @@
-using Newtonsoft.Json;
+using System;
+using System.Text.Json.Serialization;
 
 namespace SoftThorn.MonstercatNet
 {
@@ -7,8 +8,8 @@ namespace SoftThorn.MonstercatNet
     /// </summary>
     public sealed class TrackSearchResult : ResultBase
     {
-        [JsonProperty("Data")]
-        public Track[] Results { get; set; } = new Track[0] { };
+        [JsonPropertyName("Data")]
+        public Track[] Results { get; set; } = Array.Empty<Track>();
 
         public object? NotFound { get; set; }
     }

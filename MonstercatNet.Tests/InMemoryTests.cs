@@ -64,30 +64,30 @@ namespace SoftThorn.MonstercatNet.Tests
             public void Test_LimitCantExceedMaxLimit()
             {
                 var request = new TestRequest();
-                Assert.AreEqual(RequestBase.MaxLimit, request.Limit);
+                Assert.That(request.Limit, Is.EqualTo(RequestBase.MaxLimit));
 
                 request.Limit = RequestBase.MaxLimit + 1;
-                Assert.AreEqual(RequestBase.MaxLimit, request.Limit);
+                Assert.That(request.Limit, Is.EqualTo(RequestBase.MaxLimit));
             }
 
             [Test]
             public void Test_LimitCantBeLowerThanMinLimit()
             {
                 var request = new TestRequest();
-                Assert.AreEqual(RequestBase.MaxLimit, request.Limit);
+                Assert.That(request.Limit, Is.EqualTo(RequestBase.MaxLimit));
 
                 request.Limit = RequestBase.MinLimit - 1;
-                Assert.AreEqual(RequestBase.MinLimit, request.Limit);
+                Assert.That(request.Limit, Is.EqualTo(RequestBase.MinLimit));
             }
 
             [Test]
             public void Test_SkipCantBeLowerThanMinSkip()
             {
                 var request = new TestRequest();
-                Assert.AreEqual(RequestBase.MinSkip, request.Skip);
+                Assert.That(request.Skip, Is.EqualTo(RequestBase.MinSkip));
 
                 request.Skip = RequestBase.MinSkip - 1;
-                Assert.AreEqual(RequestBase.MinSkip, request.Skip);
+                Assert.That(request.Skip, Is.EqualTo(RequestBase.MinSkip));
             }
 
             private sealed class TestRequest : RequestBase
@@ -356,7 +356,7 @@ namespace SoftThorn.MonstercatNet.Tests
             [Test]
             public void Test_PlaylistGetPlaylistNullPlaylistId()
             {
-                Assert.ThrowsAsync<ArgumentNullException>(() => Api.GetPlaylist(Guid.Empty));
+                Assert.ThrowsAsync<ArgumentNullException>(() => Api.GetPlaylist(Guid.Empty, new GetPlaylistRequest()));
             }
 
             [Test]
@@ -397,12 +397,15 @@ namespace SoftThorn.MonstercatNet.Tests
                 });
                 var request = builder.Build();
 
-                Assert.IsNotNull(request);
-                Assert.IsNotEmpty(request.Url);
-                Assert.IsNotEmpty(request.Encoding);
-                Assert.Greater(request.Width, 0);
+                Assert.That(request, Is.Not.Null);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(request.Url, Is.Not.Empty);
+                    Assert.That(request.Encoding, Is.Not.Empty);
+                    Assert.That(request.Width, Is.GreaterThan(0));
 
-                Assert.IsTrue(Uri.TryCreate(request.Url, UriKind.RelativeOrAbsolute, out var uri));
+                    Assert.That(Uri.TryCreate(request.Url, UriKind.RelativeOrAbsolute, out var uri), Is.True);
+                });
             }
         }
     }

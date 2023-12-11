@@ -1,5 +1,5 @@
-using Newtonsoft.Json;
 using System;
+using System.Text.Json.Serialization;
 
 namespace SoftThorn.MonstercatNet
 {
@@ -7,7 +7,7 @@ namespace SoftThorn.MonstercatNet
     {
         public Guid Id { get; set; }
 
-        [JsonProperty("URI")]
+        [JsonPropertyName("URI")]
         public string Uri { get; set; } = string.Empty;
 
         public string Name { get; set; } = string.Empty;

@@ -1,4 +1,6 @@
 using Refit;
+using SoftThorn.MonstercatNet.Util;
+using System.Text.Json;
 
 namespace SoftThorn.MonstercatNet
 {
@@ -6,7 +8,15 @@ namespace SoftThorn.MonstercatNet
     {
         protected static RefitSettings Settings { get; } = new RefitSettings
         {
-            ContentSerializer = new NewtonsoftJsonContentSerializer()
+            ContentSerializer = new SystemTextJsonContentSerializer(CreateOptions())
         };
+
+        protected static JsonSerializerOptions CreateOptions()
+        {
+            var options = new JsonSerializerOptions();
+            options.AddContext<MonstercatContext>();
+
+            return options;
+        }
     }
 }

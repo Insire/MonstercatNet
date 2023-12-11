@@ -284,14 +284,19 @@ namespace SoftThorn.MonstercatNet
             return _service.PlaylistDeleteTrack(playlistId, request, token);
         }
 
-        public Task<GetPlaylistResult> GetPlaylist(Guid playlistId, CancellationToken token = default)
+        public Task<GetPlaylistResult> GetPlaylist(Guid playlistId, GetPlaylistRequest request, CancellationToken token = default)
         {
+            if (request is null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
             if (playlistId == Guid.Empty)
             {
                 throw new ArgumentNullException(nameof(playlistId));
             }
 
-            return _service.GetPlaylist(playlistId, token);
+            return _service.GetPlaylist(playlistId, request, token);
         }
 
         public Task<UpdatePlaylistResult> UpdatePlaylist(UpdatePlaylistRequest request, CancellationToken token = default)

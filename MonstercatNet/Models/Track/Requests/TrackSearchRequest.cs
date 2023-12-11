@@ -36,13 +36,13 @@ namespace SoftThorn.MonstercatNet
         /// true by default, because there are more tracks that are creatorfriendly than unfriendly, so it doesnt make sense to exclude them by default
         /// </remarks>
         [AliasAs("creatorfriendly")]
-        public bool Creatorfriendly { get; set; } = true;
+        public bool? Creatorfriendly { get; set; } = true;
 
         [AliasAs("Released")]
-        public bool Released { get; set; } = true;
+        public bool? Released { get; set; } = true;
 
         [AliasAs("nogold")]
-        public bool NoGold { get; set; } = true;
+        public bool? NoGold { get; set; } = true;
 
         [AliasAs("sort")]
         public string Sort { get; set; } = "-date";

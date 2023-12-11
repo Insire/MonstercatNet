@@ -1,5 +1,5 @@
-using Newtonsoft.Json;
 using System;
+using System.Text.Json.Serialization;
 
 namespace SoftThorn.MonstercatNet
 {
@@ -11,7 +11,7 @@ namespace SoftThorn.MonstercatNet
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
-        [JsonProperty("Id")]
+        [JsonPropertyName("Id")]
         public Guid PlaylistId { get; set; }
 
         public bool? IsPublic { get; set; }

@@ -18,8 +18,8 @@ namespace SoftThorn.MonstercatNet.Tests
 
             var cover = await Cdn.GetReleaseCoverAsByteArray(builder);
 
-            Assert.IsNotNull(cover);
-            Assert.IsTrue(cover.Length > 0);
+            Assert.That(cover, Is.Not.Null);
+            Assert.That(cover, Is.Not.Empty);
         }
 
         [Test, Order(2)]
@@ -34,10 +34,10 @@ namespace SoftThorn.MonstercatNet.Tests
 
             var cover = await Cdn.GetReleaseCoverAsStream(builder);
 
-            Assert.IsNotNull(cover);
+            Assert.That(cover, Is.Not.Null);
 
             var result = cover.ToByteArray();
-            Assert.IsTrue(result.Length > 0);
+            Assert.That(result, Is.Not.Empty);
         }
 
         [Test, Order(3)]
@@ -53,10 +53,10 @@ namespace SoftThorn.MonstercatNet.Tests
 
             var cover = await Cdn.GetArtistPhotoAsStream(builder);
 
-            Assert.IsNotNull(cover);
+            Assert.That(cover, Is.Not.Null);
 
             var result = cover.ToByteArray();
-            Assert.IsTrue(result.Length > 0);
+            Assert.That(result, Is.Not.Empty);
         }
     }
 }

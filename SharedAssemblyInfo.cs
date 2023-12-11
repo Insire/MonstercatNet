@@ -7,13 +7,13 @@ using System.Reflection;
 
 [assembly: AssemblyCompany("SoftThorn")]
 [assembly: AssemblyProduct("MonstercatNet")]
-[assembly: AssemblyCopyright("© 2020 Insire")]
+[assembly: AssemblyCopyright("© 2023 Insire")]
 [assembly: AssemblyTrademark("")]
 
 // Metadata Attributes
 [assembly: AssemblyMetadata("Platform", "AnyCPU")]
-[assembly: AssemblyMetadata("CompileDate", "[UTC]20.09.2020 10:12:57")]
-[assembly: AssemblyMetadata("PublicRelease", "True")]
-[assembly: AssemblyMetadata("Branch", "master")]
-[assembly: AssemblyMetadata("Commit", "79a03140dcb0cc811ab11d81b6ac5d98cdf45dad")]
-[assembly: AssemblyMetadata("Version", "2.0.12")]
+[assembly: AssemblyMetadata("CompileDate", "[UTC]11.12.2023 21:00:56")]
+[assembly: AssemblyMetadata("PublicRelease", "False")]
+[assembly: AssemblyMetadata("Branch", "drop_newtonsoftjson")]
+[assembly: AssemblyMetadata("Commit", "4f9f78afb8ccaa5a9e52eabe1f25aa5005f228de")]
+[assembly: AssemblyMetadata("Version", "3.0.50-g4f9f78afb8")]

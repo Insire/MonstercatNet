@@ -46,7 +46,7 @@ namespace MonstercatNet.Sample.Wpf
 
             var result = builder.ToString();
             Debug.WriteLine(result);
-            File.WriteAllText(@"E:\Code\Monstercat.Net\endpoints.md", result);
+            File.WriteAllText(@"D:\Code\Monstercat.Net\endpoints.md", result);
         }
 
         [DebuggerDisplay("{" + nameof(GetDebuggerDisplay) + "(),nq}")]
