@@ -32,11 +32,11 @@ namespace SoftThorn.MonstercatNet.Tests
             var self = await Api.GetSelf();
 
             Assert.That(self, Is.Not.Null);
-            Assert.Multiple(() =>
+            Assert.Multiple((TestDelegate)(() =>
             {
-                Assert.That(self.User.Email, Is.EqualTo(Credentials.Email));
+                Assert.That((string)self.User.Email, Is.EqualTo(Credentials.Email));
                 Assert.That(self.User.HasGold, Is.True, "The test account should have an active gold subscription, otherwise some tests are bound to fail.");
-            });
+            }));
 
             UserId = self.User.Id;
         }

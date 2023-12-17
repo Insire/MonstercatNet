@@ -1,0 +1,16 @@
+@hostname=www.monstercat.com
+@host=https://{{hostname}}/api
+
+###
+
+POST {{host}}/sign-in
+Accept-Language: en-US,en
+Accept: application/json
+
+{
+    "email": "",
+    "password": "",
+    "Auth": {
+        "TOTP": ""
+    }
+}

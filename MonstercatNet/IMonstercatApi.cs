@@ -12,25 +12,13 @@ namespace SoftThorn.MonstercatNet
         /// authenticate the given HttpClient instance with the provided credentials
         /// </summary>
         [Post("/sign-in")]
-        Task Login([Body(BodySerializationMethod.Serialized)] ApiCredentials credentials, CancellationToken token = default);
+        Task<LoginResponse> Login([Body(BodySerializationMethod.Serialized)] ApiCredentials credentials, CancellationToken token = default);
 
         /// <summary>
         /// signout
         /// </summary>
         [Post("/sign-out")]
         Task Logout(CancellationToken token = default);
-
-        /// <summary>
-        /// 2FA Authorization
-        /// </summary>
-        [Post("/signin/token")]
-        Task Login(string twoFactorAuthToken, CancellationToken token = default);
-
-        /// <summary>
-        /// resend 2FA Authorization
-        /// </summary>
-        [Post("/signin/token/resend")]
-        Task Resend(string twoFactorAuthToken, CancellationToken token = default);
 
         /// <summary>
         /// fetch account info

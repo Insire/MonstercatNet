@@ -1,5 +1,6 @@
 using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace SoftThorn.MonstercatNet
 {
@@ -11,6 +12,8 @@ namespace SoftThorn.MonstercatNet
         public static HttpClient UseMonstercatApiV2(this HttpClient client)
         {
             client.BaseAddress = _apiUri;
+
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             return client;
         }

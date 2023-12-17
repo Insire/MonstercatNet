@@ -113,30 +113,6 @@ namespace SoftThorn.MonstercatNet.Tests
             }
 
             [Test]
-            public void Test_Login2FAForNull()
-            {
-                Assert.ThrowsAsync<ArgumentNullException>(() => Api.Login(default(string)));
-            }
-
-            [Test]
-            public void Test_Login2FAForEmpty()
-            {
-                Assert.ThrowsAsync<ArgumentNullException>(() => Api.Login(string.Empty));
-            }
-
-            [Test]
-            public void Test_Resend2FAForNull()
-            {
-                Assert.ThrowsAsync<ArgumentNullException>(() => Api.Resend(default(string)));
-            }
-
-            [Test]
-            public void Test_Resend2FAForEmpty()
-            {
-                Assert.ThrowsAsync<ArgumentNullException>(() => Api.Resend(string.Empty));
-            }
-
-            [Test]
             public void Test_SearchTracksRequestForNull()
             {
                 Assert.ThrowsAsync<ArgumentNullException>(() => Api.SearchTracks(null));
