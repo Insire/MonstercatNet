@@ -1,3 +1,4 @@
+using Cake.Common;
 using Cake.Common.Tools.DotNet;
 using Cake.Common.Tools.DotNet.Test;
 using Cake.Core;
@@ -35,13 +36,13 @@ namespace Build
 
         public override bool ShouldRun(BuildContext context)
         {
-            if (string.IsNullOrEmpty(context.Environment.GetEnvironmentVariable("ApiCredentials__Email")))
+            if (string.IsNullOrEmpty(context.EnvironmentVariable("ApiCredentials__Email")))
             {
                 context.Log.Information($"Skipped {nameof(TestTask)}, since environment variable ApiCredentials__Email missing or empty.");
                 return false;
             }
 
-            if (string.IsNullOrEmpty(context.Environment.GetEnvironmentVariable("ApiCredentials__Password")))
+            if (string.IsNullOrEmpty(context.EnvironmentVariable("ApiCredentials__Password")))
             {
                 context.Log.Information($"Skipped  {nameof(TestTask)}, since environment variable ApiCredentials__Password missing or empty.");
                 return false;

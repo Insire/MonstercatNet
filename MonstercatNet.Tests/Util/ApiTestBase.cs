@@ -20,7 +20,9 @@ namespace SoftThorn.MonstercatNet.Tests
         public void Setup()
         {
             var configuration = new ConfigurationBuilder()
+#if DEBUG
                 .AddUserSecrets<ApiTestBase>()
+#endif
                 .AddEnvironmentVariables()
                 .Build();
 
@@ -29,7 +31,7 @@ namespace SoftThorn.MonstercatNet.Tests
 
             section.Bind(Credentials);
 
-            Credentials.Email.Should().NotBeNullOrWhiteSpace("For tests to be able to run, you need to provide a monstercat account via the usersecrets of the MonstercatNet.Tests project.");
+            Credentials.Email.Should().NotBeNullOrWhiteSpace("For tests to be able to run, you need to provide a monstercat account via the usersecrets of the MonstercatNet.Tests project or environment variables.");
             Credentials.Password.Should().NotBeNullOrWhiteSpace("For tests to be able to run, you need to provide the account password.");
 
             Api = MonstercatApi.Create(new HttpClient(LoginValidationHandler).UseMonstercatApiV2());
