@@ -12,7 +12,14 @@ namespace Build
     {
         public override void Run(BuildContext context)
         {
-            context.Codecov(new[] { context.CoberturaResultFile.FullPath }, context.Environment.GetEnvironmentVariable("CODECOV_TOKEN"));
+            var settings = new CodecovSettings()
+            {
+                SearchDirectory = context.CoberturaFolder,
+                //Files = new[] { context.CoberturaResultFile.FullPath },
+                Token = context.Environment.GetEnvironmentVariable("CODECOV_TOKEN"),
+            };
+
+            context.Codecov(settings);
 
             base.Run(context);
         }
