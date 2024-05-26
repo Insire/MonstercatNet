@@ -14,7 +14,7 @@ namespace Build
                 .InstallTool(new Uri("nuget:?package=CodecovUploader&version=0.7.3"))
                 .InstallTool(new Uri("nuget:?package=NUnit.ConsoleRunner&version=3.17.0"))
                 .InstallTool(new Uri("nuget:?package=ReportGenerator&version=5.3.4"))
-                .InstallTool(new Uri("nuget:?package=Microsoft.CodeCoverage&version=17.10.0"))
+                .InstallTool(new Uri("nuget:?package=dotnet-coverage&version=17.11.0"))
                 .UseContext<BuildContext>()
                 .UseLifetime<BuildLifetime>()
                 .UseWorkingDirectory("..")
