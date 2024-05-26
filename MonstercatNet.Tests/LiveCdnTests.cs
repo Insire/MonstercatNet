@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 
 namespace SoftThorn.MonstercatNet.Tests
 {
+    [Category(Categories.IntegrationTest)]
     public sealed class LiveCdnTests : CdnTestBase
     {
         [Test, Order(1)]

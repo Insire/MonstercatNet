@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace SoftThorn.MonstercatNet.Tests
 {
+    [Category(Categories.IntegrationTest)]
     public sealed class LiveApiTests : ApiTestBase
     {
         internal Guid ReleaseId { get; } = Guid.Parse("75c1a74c-27bc-4ef6-884b-0b56515ea6e0");

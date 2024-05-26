@@ -32,7 +32,7 @@ namespace Build
 
             context.Information($"nuget.exe ({context.Tools.Resolve("nuget.exe")}) {(context.FileExists(context.Tools.Resolve("nuget.exe")) ? "was found" : "is missing")}.");
             context.Information($"dotnet.exe ({context.Tools.Resolve("dotnet.exe")}) {(context.FileExists(context.Tools.Resolve("dotnet.exe")) ? "was found" : "is missing")}.");
-            context.Information($"CodeCoverage.exe ({context.Tools.Resolve("CodeCoverage.exe")}) {(context.FileExists(context.Tools.Resolve("CodeCoverage.exe")) ? "was found" : "is missing")}.");
+            context.Information($"dotnet-coverage ({context.Tools.Resolve("dotnet-coverage.dll")}) {(context.FileExists(context.Tools.Resolve("dotnet-coverage.dll")) ? "was found" : "is missing")}.");
 
             context.Information($"NUGETORG_APIKEY was{(string.IsNullOrEmpty(context.EnvironmentVariable("NUGETORG_APIKEY")) ? " not" : "")} set.");
             context.Information($"CODECOV_TOKEN was{(string.IsNullOrEmpty(context.EnvironmentVariable("CODECOV_TOKEN")) ? " not" : "")} set.");

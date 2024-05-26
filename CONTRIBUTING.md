@@ -9,6 +9,7 @@ This library uses SDK-style project files, which means you are required to use [
 - Visual Studio 2019 Community (or better)
 - Windows 10 (older versions work probably too, but the repository is not configured for those)
 - [.NET Core SDK 6.0](https://dotnet.microsoft.com/download/dotnet-core/6.0)
+- [.NET Core SDK 8.0](https://dotnet.microsoft.com/download/dotnet-core/8.0)
 - [git](https://git-scm.com/)
 
 (This should be everything, but it's possible i missed something. So please tell me if that's the case.)
@@ -22,7 +23,7 @@ The monstercat api has endpoints that are only available to you, if you have an 
 You can check coverage locally by running [build.ps1](build.ps1).
 
 ```ps1
-powershell -ExecutionPolicy ByPass -File build.ps1 -script ".\build.cake" -target "Default" -verbosity normal
+powershell -ExecutionPolicy ByPass -File build.ps1 -target "Default" -verbosity normal
 
 # the workingdirectory should be the root of this repository for the command to work
 ```

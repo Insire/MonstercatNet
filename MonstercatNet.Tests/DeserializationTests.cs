@@ -5,6 +5,7 @@ using System.Text.Json;
 
 namespace SoftThorn.MonstercatNet.Tests
 {
+    [Category(Categories.UnitTest)]
     public sealed class DeserializationTests
     {
         [Test]

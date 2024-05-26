@@ -15,6 +15,7 @@ namespace Build
         {
             var testSettings = new DotNetTestSettings
             {
+                Filter = "TestCategory=Unit-Test|TestCategory=Integration-Test",
                 Framework = Constants.TargetFramework,
                 Configuration = Constants.Configuration,
                 NoBuild = false,

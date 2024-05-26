@@ -5,6 +5,7 @@ using System;
 
 namespace SoftThorn.MonstercatNet.Tests
 {
+    [Category(Categories.UnitTest)]
     public sealed class InMemoryTests
     {
         public sealed class LoginRequestValidation : ApiTestBase

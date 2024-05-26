@@ -1,12 +1,20 @@
 {
-    "profiles": {
-        "Build": {
-            "commandName": "Project",
-            "commandLineArgs": "",
-            "environmentVariables": {
-                "ApiCredentials__Password": "",
-                "ApiCredentials__Email": ""
-            }
-        }
+  "profiles": {
+    "Build": {
+      "commandName": "Project",
+      "commandLineArgs": "-t Default",
+      "environmentVariables": {
+        "ApiCredentials__Password": "",
+        "ApiCredentials__Email": ""
+      }
+    },
+    "ConvertCoverage": {
+      "commandName": "Project",
+      "commandLineArgs": "-t ConvertCoverage",
+      "environmentVariables": {
+        "ApiCredentials__Password": "",
+        "ApiCredentials__Email": ""
+      }
     }
+  }
 }
