@@ -25,6 +25,13 @@ namespace SoftThorn.MonstercatNet
             return new MonstercatApi(RestService.For<IMonstercatApi>(client, Settings));
         }
 
+        public static IMonstercatApi Create()
+        {
+            var httpClient = new HttpClient(new HttpClientCookieHandler(NullCookieProcessor.Instance, ApiUriProvider.Instance)).UseMonstercatApiV2();
+
+            return new MonstercatApi(RestService.For<IMonstercatApi>(httpClient, Settings));
+        }
+
         private readonly IMonstercatApi _service;
 
         private MonstercatApi(IMonstercatApi service)

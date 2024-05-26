@@ -6,8 +6,8 @@ namespace SoftThorn.MonstercatNet
 {
     public static class HttpClientExtensions
     {
-        private static readonly Uri _cdnUri = new Uri(MonstercatEndpoints.CDN);
-        private static readonly Uri _apiUri = new Uri(MonstercatEndpoints.API);
+        private static readonly Uri _cdnUri = CdnUriProvider.Instance.GetUri();
+        private static readonly Uri _apiUri = ApiUriProvider.Instance.GetUri();
 
         public static HttpClient UseMonstercatApiV2(this HttpClient client)
         {
