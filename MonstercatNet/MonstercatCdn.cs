@@ -11,15 +11,22 @@ namespace SoftThorn.MonstercatNet
         /// <summary>
         /// Generate the client to be able to interact with the monstercat CDN
         /// </summary>
-        /// <param name="client">the httpclient to use for all requests</param>
-        public static IMonstercatCdnService Create(HttpClient client)
+        /// <param name="httpClient">the httpclient to use for all requests</param>
+        public static IMonstercatCdnService Create(HttpClient httpClient)
         {
-            if (client is null)
+            if (httpClient is null)
             {
-                throw new ArgumentNullException(nameof(client));
+                throw new ArgumentNullException(nameof(httpClient));
             }
 
-            return new MonstercatCdn(RestService.For<IMonstercatCdn>(client, Settings));
+            return new MonstercatCdn(RestService.For<IMonstercatCdn>(httpClient, Settings));
+        }
+
+        public static IMonstercatCdnService Create()
+        {
+            var httpClient = new HttpClient(new HttpClientCookieHandler(NullCookieProcessor.Instance, CdnUriProvider.Instance)).UseMonstercatCdn();
+
+            return new MonstercatCdn(RestService.For<IMonstercatCdn>(httpClient, Settings));
         }
 
         private readonly IMonstercatCdn _monsercatCdn;

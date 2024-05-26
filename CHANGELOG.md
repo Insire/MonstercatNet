@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this projects versioning scheme was inspired by [Semantic Versioning](https://semver.org/spec/v2.0.0.html) and can be found [here](versioning.md).
 
+## [3.0.56] - 2024-05-26
+
+### Added
+
+- IUriProvider(s) for overriding Uris for monstercat API and CDN
+- HttpClientCookieHandler for pre- and post processing (login) cookie(s)
+
+### Fixed
+
+- TOTP requests and responses
+
+### Removed
+
+- unsupported /signin/token Endpoint
+- unsupported /signin/token/resend Endpoint
+
 ## [3.0.52] - 2023-12-11
 
 ### Added

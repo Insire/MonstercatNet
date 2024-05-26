@@ -10,9 +10,9 @@
         <PackageReference Include="Cake.Frosting" />
         <PackageReference Include="Cake.GitVersioning" />
         <PackageReference Include="Cake.Incubator" />
-
-        <PackageReference Include="Codecov" />
+        <PackageReference Include="CodecovUploader" />
         <PackageReference Include="Microsoft.CodeCoverage" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" />
         <PackageReference Include="NUnit.ConsoleRunner" />
         <PackageReference Include="ReportGenerator" />
     </ItemGroup>

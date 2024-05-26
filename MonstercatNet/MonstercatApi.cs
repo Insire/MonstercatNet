@@ -25,6 +25,13 @@ namespace SoftThorn.MonstercatNet
             return new MonstercatApi(RestService.For<IMonstercatApi>(client, Settings));
         }
 
+        public static IMonstercatApi Create()
+        {
+            var httpClient = new HttpClient(new HttpClientCookieHandler(NullCookieProcessor.Instance, ApiUriProvider.Instance)).UseMonstercatApiV2();
+
+            return new MonstercatApi(RestService.For<IMonstercatApi>(httpClient, Settings));
+        }
+
         private readonly IMonstercatApi _service;
 
         private MonstercatApi(IMonstercatApi service)
@@ -32,7 +39,7 @@ namespace SoftThorn.MonstercatNet
             _service = service;
         }
 
-        public Task Login([Body(BodySerializationMethod.Serialized)] ApiCredentials credentials, CancellationToken token = default)
+        public Task<LoginResponse> Login([Body(BodySerializationMethod.Serialized)] ApiCredentials credentials, CancellationToken token = default)
         {
             if (credentials is null)
             {
@@ -65,36 +72,6 @@ namespace SoftThorn.MonstercatNet
         public Task Logout(CancellationToken token = default)
         {
             return _service.Logout(token);
-        }
-
-        public Task Login(string twoFactorAuthToken, CancellationToken token = default)
-        {
-            if (twoFactorAuthToken is null)
-            {
-                throw new ArgumentNullException(nameof(twoFactorAuthToken));
-            }
-
-            if (twoFactorAuthToken.Length == 0)
-            {
-                throw new ArgumentNullException(nameof(twoFactorAuthToken));
-            }
-
-            return _service.Login(twoFactorAuthToken, token);
-        }
-
-        public Task Resend(string twoFactorAuthToken, CancellationToken token = default)
-        {
-            if (twoFactorAuthToken is null)
-            {
-                throw new ArgumentNullException(nameof(twoFactorAuthToken));
-            }
-
-            if (twoFactorAuthToken.Length == 0)
-            {
-                throw new ArgumentNullException(nameof(twoFactorAuthToken));
-            }
-
-            return _service.Resend(twoFactorAuthToken, token);
         }
 
         public Task<Self> GetSelf(CancellationToken token = default)

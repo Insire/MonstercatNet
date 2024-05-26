@@ -18,5 +18,3 @@
 |GET|/releases|
 |POST|/sign-in|
 |POST|/sign-out|
-|POST|/signin/token|
-|POST|/signin/token/resend|

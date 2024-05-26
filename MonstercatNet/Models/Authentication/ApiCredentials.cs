@@ -9,5 +9,8 @@ namespace SoftThorn.MonstercatNet
 
         [JsonPropertyName("password")]
         public string Password { get; set; } = string.Empty;
+
+        [JsonPropertyName("Auth.TOTP")]
+        public string? TOTP { get; set; }
     }
 }

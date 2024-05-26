@@ -3,6 +3,8 @@ using System.Text.Json.Serialization;
 namespace SoftThorn.MonstercatNet.Util
 {
     [JsonSourceGenerationOptions(GenerationMode = JsonSourceGenerationMode.Default)]
+    [JsonSerializable(typeof(LoginResponse))]
+    [JsonSerializable(typeof(AuthenticationRequirements))]
     [JsonSerializable(typeof(Artist))]
     [JsonSerializable(typeof(Link))]
     [JsonSerializable(typeof(Release))]
