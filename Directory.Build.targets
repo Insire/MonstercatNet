@@ -6,8 +6,9 @@
 
     <PropertyGroup>
         <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
         <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-        <LangVersion>12.0</LangVersion>
+        <LangVersion>13.0</LangVersion>
         <CodeAnalysisRuleSet>..\MonstercatNet.ruleset</CodeAnalysisRuleSet>
     </PropertyGroup>
 

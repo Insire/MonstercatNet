@@ -13,8 +13,10 @@ namespace SoftThorn.MonstercatNet
 
         protected static JsonSerializerOptions CreateOptions()
         {
-            var options = new JsonSerializerOptions();
-            options.AddContext<MonstercatContext>();
+            var options = new JsonSerializerOptions
+            {
+                TypeInfoResolver = MonstercatContext.Default
+            };
 
             return options;
         }

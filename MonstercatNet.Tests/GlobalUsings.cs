@@ -1,0 +1,9 @@
+﻿global using Microsoft.Extensions.Configuration;
+global using Microsoft.Extensions.Configuration.UserSecrets;
+global using MonstercatNet.Utilities;
+global using System.Text.Json;
+global using Xunit;
+global using Xunit.Categories;
+global using SoftThorn.MonstercatNet.Tests.Util;
+global using Xunit.Abstractions;
+global using Xunit.Sdk;

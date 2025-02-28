@@ -1,12 +1,7 @@
-using System;
 using System.Diagnostics;
-using System.Linq;
-using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace SoftThorn.MonstercatNet.Tests
+namespace MonstercatNet.Utilities
 {
     public sealed class HttpLoggingHandler : DelegatingHandler
     {

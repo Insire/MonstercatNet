@@ -1,11 +1,18 @@
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace SoftThorn.MonstercatNet
 {
     public static class MontercatCdnExtensions
     {
+        public static IServiceCollection Register(this IServiceCollection services)
+        {
+            services
+                .AddHttpClient<IMonstercatCdnService>()
+                .AddPolicyHandler(HttpClientPolicies.DefaultRetryPolicy());
+
+            return services;
+        }
+
         public static async Task<byte[]> GetReleaseCoverAsByteArray(this IMonstercatCdnService api, ReleaseCoverArtBuilder builder, CancellationToken token = default)
         {
             var content = await api.GetReleaseCoverArt(builder, token).ConfigureAwait(false);

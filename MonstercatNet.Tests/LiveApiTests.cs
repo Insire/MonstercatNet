@@ -1,101 +1,100 @@
 #nullable disable
 
-using FluentAssertions;
-using NUnit.Framework;
 using SixLabors.ImageSharp;
-using System;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SoftThorn.MonstercatNet.Tests
 {
     [Category(Categories.IntegrationTest)]
-    public sealed class LiveApiTests : ApiTestBase
+    public sealed class LiveApiTests(ApiTestFixture apiTextApiTextFixture, CdnTestFixture cdnTestFixture) : IClassFixture<ApiTestFixture>, IClassFixture<CdnTestFixture>
     {
+        private readonly ApiTestFixture _apiTextFixture = apiTextApiTextFixture;
+        private readonly CdnTestFixture _cdnTestFixture = cdnTestFixture;
         internal Guid ReleaseId { get; } = Guid.Parse("75c1a74c-27bc-4ef6-884b-0b56515ea6e0");
         internal Guid TrackId { get; } = Guid.Parse("f2db30c8-1547-4c41-93d9-dca2bc822cac");
 
         internal Guid? PlaylistId { get; private set; }
         internal Guid? UserId { get; private set; }
 
-        [Test, Order(1)]
+        [Fact, TestPriority(1)]
         public async Task Test_Login()
         {
-            await Api.Login(Credentials);
+            await _apiTextFixture.Api.Login(_apiTextFixture.Credentials);
 
-            Assert.That(IsLoggedIn, Is.True);
+            Assert.True(_apiTextFixture.IsLoggedIn);
         }
 
-        [Test, Order(2)]
+        [Fact, TestPriority(2)]
         public async Task Test_GetSelf()
         {
-            var self = await Api.GetSelf();
+            var self = await _apiTextFixture.Api.GetSelf();
 
-            Assert.That(self, Is.Not.Null);
-            Assert.Multiple((TestDelegate)(() =>
+            Assert.Multiple(() =>
             {
-                Assert.That((string)self.User.Email, Is.EqualTo(Credentials.Email));
-                Assert.That(self.User.HasGold, Is.True, "The test account should have an active gold subscription, otherwise some tests are bound to fail.");
-            }));
+                Assert.NotNull(self);
+                Assert.NotNull(self.User);
+                Assert.Equal(self.User.Email, _apiTextFixture.Credentials.Email);
+
+                // The test account should have an active gold subscription, otherwise some tests are bound to fail.
+                Assert.True(self.User.HasGold);
+            });
 
             UserId = self.User.Id;
         }
 
-        [Test, Order(3)]
+        [Fact, TestPriority(3)]
         public async Task Test_GetTrackSearchFilters()
         {
-            var filters = await Api.GetTrackSearchFilters();
+            var filters = await _apiTextFixture.Api.GetTrackSearchFilters();
 
-            Assert.That(filters, Is.Not.Null);
+            Assert.NotNull(filters);
             Assert.Multiple(() =>
             {
-                Assert.That(filters.Genres, Is.Not.Empty);
-                Assert.That(filters.Tags, Is.Not.Empty);
-                Assert.That(filters.Types, Is.Not.Empty);
+                Assert.NotEmpty(filters.Genres);
+                Assert.NotEmpty(filters.Tags);
+                Assert.NotEmpty(filters.Types);
             });
         }
 
-        [Test, Order(4)]
+        [Fact, TestPriority(4)]
         public async Task Test_SearchTracks()
         {
-            var tracks = await Api.SearchTracks(new TrackSearchRequest()
+            var tracks = await _apiTextFixture.Api.SearchTracks(new TrackSearchRequest()
             {
                 Limit = 100,
                 Skip = 0,
                 Creatorfriendly = true,
-                ReleaseTypes = new[] { "EP" },
-                Tags = new[] { "silkinitialbulkimport" },
+                ReleaseTypes = ["EP"],
+                Tags = ["silkinitialbulkimport"],
             });
 
-            Assert.That(tracks, Is.Not.Null);
-            Assert.That(tracks.Results, Is.Not.Empty);
+            Assert.NotNull(tracks);
+            Assert.NotEmpty(tracks.Results);
             var entry = tracks.Results.Single(p => p.Id == Guid.Parse("65c9d857-4f34-4ad7-925c-fefb92e4d36d"));
 
             Assert.Multiple(() =>
             {
-                Assert.That(entry.Artists, Is.Not.Null);
-                Assert.That(entry.ArtistsTitle, Is.Not.Null);
+                Assert.NotNull(entry.Artists);
+                Assert.NotNull(entry.ArtistsTitle);
 
-                Assert.That(tracks.Results[0].Artists[0], Is.Not.Null);
+                Assert.NotNull(tracks.Results[0].Artists[0]);
             });
 
             Assert.Multiple(() =>
             {
-                Assert.That(entry.Artists[0].Id, Is.Not.EqualTo(Guid.Empty));
-                Assert.That(entry.Artists[0].ProfileFileId, Is.Not.EqualTo(Guid.Empty));
-                Assert.That(entry.Artists[0].CatalogRecordId, Is.Not.EqualTo(Guid.Empty));
+                Assert.NotEqual(entry.Artists[0].Id, Guid.Empty);
+                Assert.NotEqual(entry.Artists[0].ProfileFileId, Guid.Empty);
+                Assert.NotEqual(entry.Artists[0].CatalogRecordId, Guid.Empty);
 
-                Assert.That(entry.Artists[0].Name, Is.Not.EqualTo(string.Empty));
-                Assert.That(entry.Artists[0].Role, Is.Not.EqualTo(string.Empty));
-                Assert.That(entry.Artists[0].Uri, Is.Not.EqualTo(string.Empty));
+                Assert.NotEmpty(entry.Artists[0].Name);
+                Assert.NotEmpty(entry.Artists[0].Role);
+                Assert.NotEmpty(entry.Artists[0].Uri);
             });
         }
 
-        [Test, Order(5)]
+        [Fact, TestPriority(5)]
         public async Task Test_SearchAllTracks()
         {
-            var results = await Api.SearchTracks(new TrackSearchRequest()
+            var results = await _apiTextFixture.Api.SearchTracks(new TrackSearchRequest()
             {
                 Limit = 100,
                 Skip = 0,
@@ -109,7 +108,7 @@ namespace SoftThorn.MonstercatNet.Tests
 
             while (skip < total)
             {
-                results = await Api.SearchTracks(new TrackSearchRequest()
+                results = await _apiTextFixture.Api.SearchTracks(new TrackSearchRequest()
                 {
                     Limit = localLimit,
                     Skip = skip,
@@ -121,145 +120,140 @@ namespace SoftThorn.MonstercatNet.Tests
 
             static void Validate(TrackSearchResult results)
             {
-                Assert.That(results, Is.Not.Null);
-                Assert.That(results.Results, Is.Not.Empty);
+                Assert.NotNull(results);
+                Assert.NotEmpty(results.Results);
 
                 foreach (var entry in results.Results)
                 {
                     Assert.Multiple(() =>
                     {
-                        Assert.That(entry.Artists, Is.Not.Null);
-                        Assert.That(entry.ArtistsTitle, Is.Not.Null);
+                        Assert.NotNull(entry.Artists);
+                        Assert.NotNull(entry.ArtistsTitle);
 
-                        Assert.That(results.Results[0].Artists[0], Is.Not.Null);
+                        Assert.NotNull(results.Results[0].Artists[0]);
                     });
 
                     Assert.Multiple(() =>
                     {
-                        Assert.That(entry.Artists[0].Id, Is.Not.EqualTo(Guid.Empty));
-                        Assert.That(entry.Artists[0].ProfileFileId, Is.Not.EqualTo(Guid.Empty));
-                        Assert.That(entry.Artists[0].CatalogRecordId, Is.Not.EqualTo(Guid.Empty));
+                        Assert.NotEqual(entry.Artists[0].Id, Guid.Empty);
+                        Assert.NotEqual(entry.Artists[0].ProfileFileId, Guid.Empty);
+                        Assert.NotEqual(entry.Artists[0].CatalogRecordId, Guid.Empty);
 
-                        Assert.That(entry.Artists[0].Name, Is.Not.EqualTo(string.Empty));
-                        Assert.That(entry.Artists[0].Role, Is.Not.EqualTo(string.Empty));
-                        Assert.That(entry.Artists[0].Uri, Is.Not.EqualTo(string.Empty));
+                        Assert.NotEmpty(entry.Artists[0].Name);
+                        Assert.NotEmpty(entry.Artists[0].Role);
+                        Assert.NotEmpty(entry.Artists[0].Uri);
                     });
                 }
             }
         }
 
-        [Test, Order(6)]
+        [Fact, TestPriority(6)]
         public async Task Test_GetReleases()
         {
-            var releases = await Api.GetReleases(new ReleaseBrowseRequest()
+            var releases = await _apiTextFixture.Api.GetReleases(new ReleaseBrowseRequest()
             {
                 Limit = 1,
                 Skip = 0
             });
 
-            Assert.That(releases, Is.Not.Null);
+            Assert.NotNull(releases);
             Assert.Multiple(() =>
             {
-                Assert.That(releases.Results.Data, Has.Length.EqualTo(1));
-                Assert.That(releases.Results.Data[0], Is.Not.Null);
+                Assert.NotNull(releases.Results);
+                Assert.NotNull(releases.Results.Data);
+                Assert.Single(releases.Results.Data);
+                Assert.NotNull(releases.Results.Data[0]);
             });
         }
 
-        [Test, Order(7)]
+        [Fact, TestPriority(7)]
         public async Task Test_GetRelease()
         {
-            var release = await Api.GetRelease("MCRLX001-8");
+            var release = await _apiTextFixture.Api.GetRelease("MCRLX001-8");
 
-            Assert.That(release, Is.Not.Null);
+            Assert.NotNull(release);
             Assert.Multiple(() =>
             {
-                Assert.That(release.Release, Is.Not.Null);
-                Assert.That(release.Tracks, Is.Not.Null);
+                Assert.NotNull(release.Release);
+                Assert.NotNull(release.Tracks);
             });
-            Assert.That(release.Tracks, Has.Length.EqualTo(1));
+            Assert.Single(release.Tracks);
         }
 
-        // requires active gold subscription
-        [Test, Order(8)]
+        [Fact, TestPriority(8), Category(Categories.GoldMembershipRequired)]
         public async Task Test_DownloadTrackAsByteArray()
         {
-            var release = await Api.DownloadTrackAsByteArray(new TrackDownloadRequest()
+            var release = await _apiTextFixture.Api.DownloadTrackAsByteArray(new TrackDownloadRequest()
             {
                 ReleaseId = Guid.Parse("09497970-9679-4ea6-930d-e1bf22cfc994"),
                 TrackId = Guid.Parse("c8d3abc3-1668-42de-b832-b58ca6cc883f")
             });
 
-            Assert.That(release, Is.Not.Null);
-            Assert.That(release, Is.Not.Empty);
+            Assert.NotNull(release);
+            Assert.NotEmpty(release);
         }
 
-        // requires active gold subscription
-        [Test, Order(9)]
+        [Fact, TestPriority(9), Category(Categories.GoldMembershipRequired)]
         public async Task Test_DownloadTrackAsStream()
         {
-            var release = await Api.DownloadTrackAsStream(new TrackDownloadRequest()
+            var release = await _apiTextFixture.Api.DownloadTrackAsStream(new TrackDownloadRequest()
             {
                 ReleaseId = Guid.Parse("09497970-9679-4ea6-930d-e1bf22cfc994"),
                 TrackId = Guid.Parse("c8d3abc3-1668-42de-b832-b58ca6cc883f")
             });
 
-            Assert.That(release, Is.Not.Null);
+            Assert.NotNull(release);
 
             var result = release.ToByteArray();
-            Assert.That(result, Is.Not.Empty);
+            Assert.NotEmpty(result);
         }
 
-        [Test, Order(10)]
+        [Fact, TestPriority(10)]
         public async Task Test_StreamTrackAsStream()
         {
-            var release = await Api.StreamTrackAsStream(new TrackStreamRequest()
+            var release = await _apiTextFixture.Api.StreamTrackAsStream(new TrackStreamRequest()
             {
                 ReleaseId = Guid.Parse("09497970-9679-4ea6-930d-e1bf22cfc994"),
                 TrackId = Guid.Parse("c8d3abc3-1668-42de-b832-b58ca6cc883f")
             });
 
-            Assert.That(release, Is.Not.Null);
+            Assert.NotNull(release);
 
             var result = release.ToByteArray();
-            Assert.That(result, Is.Not.Empty);
+            Assert.NotEmpty(result);
         }
 
-        [Test, Order(11)]
+        [Fact, TestPriority(11)]
         public async Task Test_CreatePlaylist()
         {
-            var response = await Api.CreatePlaylist(new PlaylistCreateRequest()
+            var response = await _apiTextFixture.Api.CreatePlaylist(new PlaylistCreateRequest()
             {
                 Title = "MyTestPlaylist",
             });
 
-            Assert.That(response, Is.Not.Null);
+            Assert.NotNull(response);
 
             PlaylistId = response.Id;
         }
 
-        [Test, Order(12)]
+        [Fact, TestPriority(12)]
         public async Task Test_PlaylistAddTrack()
         {
-            if (PlaylistId is null)
+            await _apiTextFixture.Api.PlaylistAddTrack(PlaylistId.Value, new PlaylistAddTrackRequest()
             {
-                Assert.Inconclusive("The test case that should create a valid playlist either didn't run or did failed to complete.");
-            }
-
-            await Api.PlaylistAddTrack(PlaylistId.Value, new PlaylistAddTrackRequest()
-            {
-                Records = new[]
-                {
+                Records =
+                [
                     new PlaylistRecord()
                     {
                         PlaylistId = PlaylistId.Value,
                         ReleaseId = ReleaseId,
                         TrackId = TrackId,
                     }
-                }
+                ]
             });
         }
 
-        [Test, Order(13)]
+        [Fact, TestPriority(13)]
         public async Task Test_GetPlaylist()
         {
             // call of the wild playlist with 500++ entries
@@ -273,18 +267,18 @@ namespace SoftThorn.MonstercatNet.Tests
                 Skip = 0,
                 StreamerMode = false,
             };
-            var result = await Api.GetPlaylist(playlistId, request);
+            var result = await _apiTextFixture.Api.GetPlaylist(playlistId, request);
 
-            Assert.That(result, Is.Not.Null);
+            Assert.NotNull(result);
             Assert.Multiple(() =>
             {
-                Assert.That(result.Total, Is.GreaterThan(500));
+                Assert.True(result.Total > 500);
 
-                Assert.That(result.Tracks, Is.Not.Null);
+                Assert.NotNull(result.Tracks);
             });
-            Assert.That(result.Tracks, Is.Not.Empty);
+            Assert.NotEmpty(result.Tracks);
 
-            result.Total.Should().BeGreaterThanOrEqualTo(result.Tracks.Length);
+            Assert.True(result.Total >= result.Tracks.Length);
 
             var total = result.Total;
             var localLimit = result.Limit;
@@ -293,7 +287,7 @@ namespace SoftThorn.MonstercatNet.Tests
             {
                 request.Limit = localLimit;
                 request.Skip = skip;
-                result = await Api.GetPlaylist(playlistId, request);
+                result = await _apiTextFixture.Api.GetPlaylist(playlistId, request);
                 skip += localLimit;
 
                 Validate(result);
@@ -301,96 +295,84 @@ namespace SoftThorn.MonstercatNet.Tests
 
             static void Validate(GetPlaylistResult results)
             {
-                Assert.That(results, Is.Not.Null);
-                Assert.That(results.Tracks, Is.Not.Empty);
+                Assert.NotNull(results);
+                Assert.NotEmpty(results.Tracks);
 
                 foreach (var entry in results.Tracks)
                 {
                     Assert.Multiple(() =>
                     {
-                        Assert.That(entry.Artists, Is.Not.Null);
-                        Assert.That(entry.ArtistsTitle, Is.Not.Null);
+                        Assert.NotNull(entry.Artists);
+                        Assert.NotNull(entry.ArtistsTitle);
 
-                        Assert.That(results.Tracks[0].Artists[0], Is.Not.Null);
+                        Assert.NotNull(results.Tracks[0].Artists[0]);
                     });
 
                     Assert.Multiple(() =>
                     {
-                        Assert.That(entry.Artists[0].Id, Is.Not.EqualTo(Guid.Empty));
-                        Assert.That(entry.Artists[0].ProfileFileId, Is.Not.EqualTo(Guid.Empty));
-                        Assert.That(entry.Artists[0].CatalogRecordId, Is.Not.EqualTo(Guid.Empty));
+                        Assert.NotEqual(entry.Artists[0].Id, Guid.Empty);
+                        Assert.NotEqual(entry.Artists[0].ProfileFileId, Guid.Empty);
+                        Assert.NotEqual(entry.Artists[0].CatalogRecordId, Guid.Empty);
 
-                        Assert.That(entry.Artists[0].Name, Is.Not.EqualTo(string.Empty));
-                        Assert.That(entry.Artists[0].Role, Is.Not.EqualTo(string.Empty));
-                        Assert.That(entry.Artists[0].Uri, Is.Not.EqualTo(string.Empty));
+                        Assert.NotEmpty(entry.Artists[0].Name);
+                        Assert.NotEmpty(entry.Artists[0].Role);
+                        Assert.NotEmpty(entry.Artists[0].Uri);
                     });
                 }
             }
         }
 
-        [Test, Order(14)]
+        [Fact, TestPriority(14)]
         public async Task Test_GetSelfPlaylists()
         {
-            var playlists = await Api.GetSelfPlaylists();
+            var playlists = await _apiTextFixture.Api.GetSelfPlaylists();
 
-            Assert.That(playlists, Is.Not.Null);
+            Assert.NotNull(playlists);
 
             Assert.Multiple(() =>
             {
-                Assert.That(playlists.Playlists.Data, Is.Not.Empty);
-                Assert.That(playlists.Playlists.Data.Any(p => p.Id == PlaylistId), Is.True);
+                Assert.NotNull(playlists.Playlists);
+                Assert.NotNull(playlists.Playlists.Data);
+                Assert.NotEmpty(playlists.Playlists.Data);
+                Assert.Contains(playlists.Playlists.Data, p => p.Id == PlaylistId);
             });
         }
 
-        [Test, Order(15)]
+        [Fact, TestPriority(15)]
         public async Task Test_PlaylistDeleteTrack()
         {
-            if (PlaylistId is null)
+            await _apiTextFixture.Api.PlaylistDeleteTrack(PlaylistId.Value, new PlaylistDeleteTrackRequest()
             {
-                Assert.Inconclusive("The test case that should create a valid playlist either didn't run or did failed to complete.");
-            }
-
-            await Api.PlaylistDeleteTrack(PlaylistId.Value, new PlaylistDeleteTrackRequest()
-            {
-                Records = new[]
-                {
+                Records =
+                [
                     new PlaylistRecord()
                     {
                         PlaylistId = PlaylistId.Value,
                         ReleaseId = ReleaseId,
                         TrackId = TrackId,
                     }
-                }
+                ]
             });
         }
 
-        [Test, Order(16)]
+        [Fact, TestPriority(16)]
         public async Task Test_UpdatePlaylist()
         {
-            if (PlaylistId is null)
-            {
-                Assert.Inconclusive("The test case that should create a valid playlist either didn't run or did failed to complete.");
-            }
-
-            var playlist = await Api.UpdatePlaylist(new UpdatePlaylistRequest()
+            var playlist = await _apiTextFixture.Api.UpdatePlaylist(new UpdatePlaylistRequest()
             {
                 Title = "MyRenameTestPlaylist",
                 PlaylistId = PlaylistId.Value,
                 UserId = UserId.Value,
             });
 
-            Assert.That(playlist.Title, Is.EqualTo("MyRenameTestPlaylist"));
+            Assert.NotNull(playlist);
+            Assert.Equal("MyRenameTestPlaylist", playlist.Title);
         }
 
-        [Test, Order(17)]
+        [Fact, TestPriority(17)]
         public async Task Test_MakePlaylistPublic()
         {
-            if (PlaylistId is null)
-            {
-                Assert.Inconclusive("The test case that should create a valid playlist either didn't run or did failed to complete.");
-            }
-
-            var playlist = await Api.UpdatePlaylist(new UpdatePlaylistRequest()
+            var playlist = await _apiTextFixture.Api.UpdatePlaylist(new UpdatePlaylistRequest()
             {
                 Title = null,
                 PlaylistId = PlaylistId.Value,
@@ -398,18 +380,13 @@ namespace SoftThorn.MonstercatNet.Tests
                 IsPublic = true,
             });
 
-            Assert.That(playlist.IsPublic, Is.EqualTo(true));
+            Assert.True(playlist.IsPublic);
         }
 
-        [Test, Order(18)]
+        [Fact, TestPriority(18)]
         public async Task Test_MakePlaylistPrivate()
         {
-            if (PlaylistId is null)
-            {
-                Assert.Inconclusive("The test case that should create a valid playlist either didn't run or did failed to complete.");
-            }
-
-            var playlist = await Api.UpdatePlaylist(new UpdatePlaylistRequest()
+            var playlist = await _apiTextFixture.Api.UpdatePlaylist(new UpdatePlaylistRequest()
             {
                 Title = null,
                 PlaylistId = PlaylistId.Value,
@@ -417,21 +394,16 @@ namespace SoftThorn.MonstercatNet.Tests
                 IsPublic = false,
             });
 
-            Assert.That(playlist.IsPublic, Is.EqualTo(false));
+            Assert.False(playlist.IsPublic);
         }
 
-        [Test, Order(19)]
+        [Fact, TestPriority(19)]
         public async Task Test_DeletePlaylist()
         {
-            if (PlaylistId is null)
-            {
-                Assert.Inconclusive("The test case that should create a valid playlist either didn't run or did failed to complete.");
-            }
-
-            await Api.DeletePlaylist(PlaylistId.Value);
+            await _apiTextFixture.Api.DeletePlaylist(PlaylistId.Value);
         }
 
-        [Test, Order(20)]
+        [Fact, TestPriority(20)]
         public async Task Test_DownloadArtistPhoto_WithHugePhoto()
         {
             var builder = ArtistPhotoBuilder.Create(new Artist()
@@ -440,20 +412,14 @@ namespace SoftThorn.MonstercatNet.Tests
                 Uri = "aftruu",
             }).WithHugePhoto();
 
-            using (var stream = await Cdn.GetArtistPhotoAsStream(builder))
-            {
-                using (var image = Image.Load(stream))
-                {
-                    Assert.Multiple(() =>
-                    {
-                        Assert.That(image.Height, Is.GreaterThanOrEqualTo(3000));
-                        Assert.That(image.Width, Is.GreaterThanOrEqualTo(3000));
-                    });
-                }
-            }
+            await using var stream = await _cdnTestFixture.Cdn.GetArtistPhotoAsStream(builder);
+            using var image = await Image.LoadAsync(stream);
+
+            Assert.True(image.Height >= 3000);
+            Assert.True(image.Width >= 3000);
         }
 
-        [Test, Order(21)]
+        [Fact, TestPriority(21)]
         public async Task Test_DownloadArtistPhoto_WithLargePhoto()
         {
             var builder = ArtistPhotoBuilder.Create(new Artist()
@@ -462,20 +428,14 @@ namespace SoftThorn.MonstercatNet.Tests
                 Uri = "aftruu",
             }).WithLargePhoto();
 
-            using (var stream = await Cdn.GetArtistPhotoAsStream(builder))
-            {
-                using (var image = Image.Load(stream))
-                {
-                    Assert.Multiple(() =>
-                    {
-                        Assert.That(image.Height, Is.GreaterThanOrEqualTo(1024));
-                        Assert.That(image.Width, Is.GreaterThanOrEqualTo(1024));
-                    });
-                }
-            }
+            await using var stream = await _cdnTestFixture.Cdn.GetArtistPhotoAsStream(builder);
+            using var image = await Image.LoadAsync(stream);
+
+            Assert.True(image.Height >= 1024);
+            Assert.True(image.Width >= 1024);
         }
 
-        [Test, Order(22)]
+        [Fact, TestPriority(22)]
         public async Task Test_DownloadArtistPhoto_WithSmallPhoto()
         {
             var builder = ArtistPhotoBuilder.Create(new Artist()
@@ -484,155 +444,130 @@ namespace SoftThorn.MonstercatNet.Tests
                 Uri = "aftruu",
             }).WithSmallPhoto();
 
-            using (var stream = await Cdn.GetArtistPhotoAsStream(builder))
-            {
-                using (var image = Image.Load(stream))
-                {
-                    Assert.Multiple(() =>
-                    {
-                        Assert.That(image.Height, Is.GreaterThanOrEqualTo(256));
-                        Assert.That(image.Width, Is.GreaterThanOrEqualTo(256));
-                    });
-                }
-            }
+            await using var stream = await _cdnTestFixture.Cdn.GetArtistPhotoAsStream(builder);
+            using var image = await Image.LoadAsync(stream);
+
+            Assert.True(image.Height >= 256);
+            Assert.True(image.Width >= 256);
         }
 
-        [Test, Order(23)]
+        [Fact, TestPriority(23)]
         public async Task Test_DownloadReleaseCoverAsBytes_WithHugeCoverArt()
         {
-            var release = await Api.GetRelease("MCRLX001-8");
+            var release = await _apiTextFixture.Api.GetRelease("MCRLX001-8");
             var track = release.Tracks[0];
 
             var builder = ReleaseCoverArtBuilder.Create(track).WithHugeCoverArt();
 
-            var bytes = await Cdn.GetReleaseCoverAsByteArray(builder);
+            var bytes = await _cdnTestFixture.Cdn.GetReleaseCoverAsByteArray(builder);
 
-            using (var stream = new MemoryStream(bytes))
-            using (var image = Image.Load(stream))
-            {
-                Assert.Multiple(() =>
-                {
-                    Assert.That(image.Height, Is.GreaterThanOrEqualTo(3000));
-                    Assert.That(image.Width, Is.GreaterThanOrEqualTo(3000));
-                });
-            }
+            await using var stream = new MemoryStream(bytes);
+            using var image = await Image.LoadAsync(stream);
+
+            Assert.True(image.Height >= 3000);
+            Assert.True(image.Width >= 3000);
         }
 
-        [Test, Order(24)]
+        [Fact, TestPriority(24)]
         public async Task Test_DownloadReleaseCoverAsBytes_WithLargeCoverArt()
         {
-            var release = await Api.GetRelease("MCRLX001-8");
+            var release = await _apiTextFixture.Api.GetRelease("MCRLX001-8");
             var track = release.Tracks[0];
 
             var builder = ReleaseCoverArtBuilder.Create(track).WithLargeCoverArt();
 
-            var bytes = await Cdn.GetReleaseCoverAsByteArray(builder);
+            var bytes = await _cdnTestFixture.Cdn.GetReleaseCoverAsByteArray(builder);
 
-            using (var stream = new MemoryStream(bytes))
-            using (var image = Image.Load(stream))
-            {
-                Assert.Multiple(() =>
-                {
-                    Assert.That(image.Height, Is.GreaterThanOrEqualTo(1024));
-                    Assert.That(image.Width, Is.GreaterThanOrEqualTo(1024));
-                });
-            }
+            await using var stream = new MemoryStream(bytes);
+            using var image = await Image.LoadAsync(stream);
+
+            Assert.True(image.Height >= 1024);
+            Assert.True(image.Width >= 1024);
         }
 
-        [Test, Order(25)]
+        [Fact, TestPriority(25)]
         public async Task Test_DownloadReleaseCoverAsBytes_WithMediumCoverArt()
         {
-            var release = await Api.GetRelease("MCRLX001-8");
+            var release = await _apiTextFixture.Api.GetRelease("MCRLX001-8");
             var track = release.Tracks[0];
 
             var builder = ReleaseCoverArtBuilder.Create(track).WithMediumCoverArt();
 
-            var bytes = await Cdn.GetReleaseCoverAsByteArray(builder);
+            var bytes = await _cdnTestFixture.Cdn.GetReleaseCoverAsByteArray(builder);
 
-            using (var stream = new MemoryStream(bytes))
-            using (var image = Image.Load(stream))
-            {
-                Assert.Multiple(() =>
-                {
-                    Assert.That(image.Height, Is.GreaterThanOrEqualTo(600));
-                    Assert.That(image.Width, Is.GreaterThanOrEqualTo(600));
-                });
-            }
+            await using var stream = new MemoryStream(bytes);
+            using var image = await Image.LoadAsync(stream);
+
+            Assert.True(image.Height >= 600);
+            Assert.True(image.Width >= 600);
         }
 
-        [Test, Order(26)]
+        [Fact, TestPriority(26)]
         public async Task Test_DownloadReleaseCoverAsBytes_WithSmallCoverArt()
         {
-            var release = await Api.GetRelease("MCRLX001-8");
+            var release = await _apiTextFixture.Api.GetRelease("MCRLX001-8");
             var track = release.Tracks[0];
 
             var builder = ReleaseCoverArtBuilder.Create(track).WithSmallCoverArt();
 
-            var bytes = await Cdn.GetReleaseCoverAsByteArray(builder);
+            var bytes = await _cdnTestFixture.Cdn.GetReleaseCoverAsByteArray(builder);
 
-            using (var stream = new MemoryStream(bytes))
-            using (var image = Image.Load(stream))
-            {
-                Assert.Multiple(() =>
-                {
-                    Assert.That(image.Height, Is.GreaterThanOrEqualTo(300));
-                    Assert.That(image.Width, Is.GreaterThanOrEqualTo(300));
-                });
-            }
+            await using var stream = new MemoryStream(bytes);
+            using var image = await Image.LoadAsync(stream);
+
+            Assert.True(image.Height >= 300);
+            Assert.True(image.Width >= 300);
         }
 
-        [Test, Order(27)]
+        [Fact, TestPriority(27)]
         public async Task Test_DownloadReleaseCoverAsStream()
         {
-            var release = await Api.GetRelease("MCRLX001-8");
+            var release = await _apiTextFixture.Api.GetRelease("MCRLX001-8");
             var track = release.Tracks[0];
 
             var builder = ReleaseCoverArtBuilder.Create(track).WithHugeCoverArt();
 
-            using (var stream = await Cdn.GetReleaseCoverAsStream(builder))
-            using (var image = Image.Load(stream))
-            {
-                Assert.Multiple(() =>
-                {
-                    Assert.That(image.Height, Is.GreaterThan(0));
-                    Assert.That(image.Width, Is.GreaterThan(0));
-                });
-            }
+            await using var stream = await _cdnTestFixture.Cdn.GetReleaseCoverAsStream(builder);
+            using var image = await Image.LoadAsync(stream);
+
+            Assert.True(image.Height > 0);
+            Assert.True(image.Width > 0);
         }
 
-        [Test, Order(28)]
+        [Fact, TestPriority(28)]
         public async Task Test_GetRelease_Returns_All_Fields()
         {
-            var release = await Api.GetRelease("MCS1356");
+            var release = await _apiTextFixture.Api.GetRelease("MCS1356");
 
             Assert.Multiple(() =>
             {
-                Assert.That(release.Release?.CatalogId, Is.EqualTo("MCS1356"));
+                Assert.Equal("MCS1356", release.Release?.CatalogId);
 
-                Assert.That(release.Release?.Id, Is.Not.Null);
+                Assert.NotNull(release.Release?.Id);
 
-                Assert.That(release.Release?.ArtistsTitle, Is.Not.Null);
-                Assert.That(release.Release?.Version, Is.Not.Null);
-                Assert.That(release.Release?.Title, Is.Not.Null);
-                Assert.That(release.Release?.Type, Is.Not.Null);
-                Assert.That(release.Release?.GenrePrimary, Is.Not.Null);
-                Assert.That(release.Release?.GenreSecondary, Is.Not.Null);
+                Assert.NotNull(release.Release?.ArtistsTitle);
+                Assert.NotNull(release.Release?.Version);
+                Assert.NotNull(release.Release?.Title);
+                Assert.NotNull(release.Release?.Type);
+                Assert.NotNull(release.Release?.GenrePrimary);
+                Assert.NotNull(release.Release?.GenreSecondary);
 
-                Assert.That(release.Release?.BrandId, Is.Not.Null);
-                Assert.That(release.Release?.BrandTitle, Is.Not.Null);
+                Assert.NotNull(release.Release?.BrandId);
+                Assert.NotNull(release.Release?.BrandTitle);
 
-                Assert.That(release.Release?.Links, Is.Not.Null);
-                Assert.That(release.Release?.Links, Is.Not.Empty);
+                Assert.NotNull(release.Release);
+                Assert.NotNull(release.Release.Links);
+                Assert.NotEmpty(release.Release.Links);
 
-                Assert.That(release.Tracks, Is.Not.Null);
-                Assert.That(release.Tracks, Is.Not.Empty);
+                Assert.NotNull(release.Tracks);
+                Assert.NotEmpty(release.Tracks);
             });
         }
 
-        [Test, Order(999)]
+        [Fact, TestPriority(999)]
         public async Task Test_Logout()
         {
-            await Api.Logout();
+            await _apiTextFixture.Api.Logout();
         }
     }
 }

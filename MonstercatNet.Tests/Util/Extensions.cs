@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace SoftThorn.MonstercatNet.Tests
+﻿namespace SoftThorn.MonstercatNet.Tests.Util
 {
     public static class Extensions
     {

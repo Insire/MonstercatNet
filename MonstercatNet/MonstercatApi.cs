@@ -1,8 +1,4 @@
 using Refit;
-using System;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace SoftThorn.MonstercatNet
 {
@@ -177,7 +173,7 @@ namespace SoftThorn.MonstercatNet
                 throw new ArgumentNullException(nameof(request.Title));
             }
 
-            return _service.CreatePlaylist(request);
+            return _service.CreatePlaylist(request, token);
         }
 
         public Task DeletePlaylist(Guid playlistId, CancellationToken token = default)

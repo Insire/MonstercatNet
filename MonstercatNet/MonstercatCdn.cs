@@ -1,8 +1,5 @@
+using Microsoft.Extensions.DependencyInjection;
 using Refit;
-using System;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace SoftThorn.MonstercatNet
 {
@@ -28,6 +25,8 @@ namespace SoftThorn.MonstercatNet
 
             return new MonstercatCdn(RestService.For<IMonstercatCdn>(httpClient, Settings));
         }
+
+
 
         private readonly IMonstercatCdn _monsercatCdn;
 

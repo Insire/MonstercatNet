@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SoftThorn.MonstercatNet
+﻿namespace SoftThorn.MonstercatNet
 {
     public sealed class ApiUriProvider : IUriProvider
     {

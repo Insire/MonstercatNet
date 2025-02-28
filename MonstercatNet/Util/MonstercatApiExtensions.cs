@@ -1,11 +1,18 @@
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace SoftThorn.MonstercatNet
 {
     public static class MonstercatApiExtensions
     {
+        public static IServiceCollection Register(this IServiceCollection services)
+        {
+            services
+                .AddHttpClient<IMonstercatApi>()
+                .AddPolicyHandler(HttpClientPolicies.DefaultRetryPolicy());
+
+            return services;
+        }
+
         /// <summary>
         /// gold membership required
         /// </summary>

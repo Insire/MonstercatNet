@@ -1,12 +1,11 @@
-using NUnit.Framework;
-using System.Threading.Tasks;
-
 namespace SoftThorn.MonstercatNet.Tests
 {
     [Category(Categories.IntegrationTest)]
-    public sealed class LiveCdnTests : CdnTestBase
+    public sealed class LiveCdnTests(CdnTestFixture fixture) : IClassFixture<CdnTestFixture>
     {
-        [Test, Order(1)]
+        private readonly CdnTestFixture _fixture = fixture;
+
+        [Fact, TestPriority(1)]
         public async Task Test_GetReleaseCoverAsByteArray()
         {
             var release = new TrackRelease()
@@ -17,13 +16,13 @@ namespace SoftThorn.MonstercatNet.Tests
                             .Create()
                             .ForRelease(release);
 
-            var cover = await Cdn.GetReleaseCoverAsByteArray(builder);
+            var cover = await _fixture.Cdn.GetReleaseCoverAsByteArray(builder);
 
-            Assert.That(cover, Is.Not.Null);
-            Assert.That(cover, Is.Not.Empty);
+            Assert.NotNull(cover);
+            Assert.NotEmpty(cover);
         }
 
-        [Test, Order(2)]
+        [Fact, TestPriority(2)]
         public async Task Test_GetReleaseCoverAsStream()
         {
             var builder = ReleaseCoverArtBuilder
@@ -33,31 +32,31 @@ namespace SoftThorn.MonstercatNet.Tests
                                 CatalogId = "MCS1346",
                             });
 
-            var cover = await Cdn.GetReleaseCoverAsStream(builder);
+            var cover = await _fixture.Cdn.GetReleaseCoverAsStream(builder);
 
-            Assert.That(cover, Is.Not.Null);
+            Assert.NotNull(cover);
 
             var result = cover.ToByteArray();
-            Assert.That(result, Is.Not.Empty);
+            Assert.NotEmpty(result);
         }
 
-        [Test, Order(3)]
+        [Fact, TestPriority(3)]
         public async Task Test_GetArtistPhotoAsStream()
         {
             var builder = ArtistPhotoBuilder
                             .Create(new Artist()
                             {
-                                ArtistId = System.Guid.Parse("{bf6215c7-7dc6-45f8-873a-61973aee536b}"),
+                                ArtistId = Guid.Parse("{bf6215c7-7dc6-45f8-873a-61973aee536b}"),
                                 Uri = "lanidaye"
                             })
                             .WithLargePhoto();
 
-            var cover = await Cdn.GetArtistPhotoAsStream(builder);
+            var cover = await _fixture.Cdn.GetArtistPhotoAsStream(builder);
 
-            Assert.That(cover, Is.Not.Null);
+            Assert.NotNull(cover);
 
             var result = cover.ToByteArray();
-            Assert.That(result, Is.Not.Empty);
+            Assert.NotEmpty(result);
         }
     }
 }

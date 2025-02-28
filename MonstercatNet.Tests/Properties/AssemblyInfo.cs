@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Configuration.UserSecrets;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
@@ -18,3 +17,4 @@ using System.Runtime.InteropServices;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("7b115a38-4e40-48f8-8c7e-001e1aee9e56")]
 [assembly: UserSecretsId("9dfbdf72-99cd-4fca-8738-65ff4a71d20d")]
+[assembly: TestCaseOrderer("SoftThorn.MonstercatNet.Tests.Util.PriorityOrderer", "MonstercatNet.Tests")]

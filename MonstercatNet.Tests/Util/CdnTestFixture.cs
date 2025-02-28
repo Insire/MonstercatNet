@@ -1,21 +1,17 @@
 #nullable disable
 
-using NUnit.Framework;
-using System.Net.Http;
-
-namespace SoftThorn.MonstercatNet.Tests
+namespace SoftThorn.MonstercatNet.Tests.Util
 {
-    public abstract class CdnTestBase
+    public sealed class CdnTestFixture
     {
         private static IMonstercatCdnService Create()
         {
             return MonstercatCdn.Create(new HttpClient(new HttpLoggingHandler()).UseMonstercatCdn());
         }
 
-        protected internal IMonstercatCdnService Cdn { get; private set; }
+        internal IMonstercatCdnService Cdn { get; private set; }
 
-        [OneTimeSetUp]
-        public void Setup()
+        public CdnTestFixture()
         {
             Cdn = Create();
         }

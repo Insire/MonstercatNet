@@ -1,15 +1,12 @@
-using NUnit.Framework;
 using SoftThorn.MonstercatNet.Tests.Resources;
-using System.IO;
-using System.Text.Json;
 
 namespace SoftThorn.MonstercatNet.Tests
 {
     [Category(Categories.UnitTest)]
     public sealed class DeserializationTests
     {
-        [Test]
-        public void Should_DeSerialize_GetPlaylists_Reposnse()
+        [Fact]
+        public void Should_DeSerialize_GetPlaylists_Response()
         {
             using var stream = typeof(DeserializationTests).Assembly.GetManifestResourceStream(typeof(MonstercatNetResources), "GetPlaylists.json")!;
 

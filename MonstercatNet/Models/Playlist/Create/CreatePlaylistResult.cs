@@ -1,5 +1,3 @@
-using System;
-
 namespace SoftThorn.MonstercatNet
 {
     public sealed class CreatePlaylistResult

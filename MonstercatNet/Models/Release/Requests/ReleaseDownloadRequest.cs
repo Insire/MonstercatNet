@@ -1,5 +1,4 @@
 using Refit;
-using System;
 
 namespace SoftThorn.MonstercatNet
 {
