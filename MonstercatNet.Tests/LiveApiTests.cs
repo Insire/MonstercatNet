@@ -26,6 +26,8 @@ namespace SoftThorn.MonstercatNet.Tests
         [Fact, TestPriority(2)]
         public async Task Test_GetSelf()
         {
+            Assert.True(_apiTextFixture.IsLoggedIn);
+
             var self = await _apiTextFixture.Api.GetSelf();
 
             Assert.Multiple(() =>
@@ -50,7 +52,7 @@ namespace SoftThorn.MonstercatNet.Tests
             Assert.Multiple(() =>
             {
                 Assert.NotEmpty(filters.Genres);
-                Assert.NotEmpty(filters.Tags);
+                Assert.NotEmpty(filters.Brands);
                 Assert.NotEmpty(filters.Types);
             });
         }
@@ -69,7 +71,7 @@ namespace SoftThorn.MonstercatNet.Tests
 
             Assert.NotNull(tracks);
             Assert.NotEmpty(tracks.Results);
-            var entry = tracks.Results.Single(p => p.Id == Guid.Parse("65c9d857-4f34-4ad7-925c-fefb92e4d36d"));
+            var entry = tracks.Results.Single(p => p.Id == Guid.Parse("3d184df8-5ad5-4b69-8250-36363d16a6b8"));
 
             Assert.Multiple(() =>
             {
@@ -183,6 +185,8 @@ namespace SoftThorn.MonstercatNet.Tests
         [Fact, TestPriority(8), Category(Categories.GoldMembershipRequired)]
         public async Task Test_DownloadTrackAsByteArray()
         {
+            Assert.True(_apiTextFixture.IsLoggedIn);
+
             var release = await _apiTextFixture.Api.DownloadTrackAsByteArray(new TrackDownloadRequest()
             {
                 ReleaseId = Guid.Parse("09497970-9679-4ea6-930d-e1bf22cfc994"),
@@ -196,6 +200,8 @@ namespace SoftThorn.MonstercatNet.Tests
         [Fact, TestPriority(9), Category(Categories.GoldMembershipRequired)]
         public async Task Test_DownloadTrackAsStream()
         {
+            Assert.True(_apiTextFixture.IsLoggedIn);
+
             var release = await _apiTextFixture.Api.DownloadTrackAsStream(new TrackDownloadRequest()
             {
                 ReleaseId = Guid.Parse("09497970-9679-4ea6-930d-e1bf22cfc994"),
@@ -226,6 +232,8 @@ namespace SoftThorn.MonstercatNet.Tests
         [Fact, TestPriority(11)]
         public async Task Test_CreatePlaylist()
         {
+            Assert.True(_apiTextFixture.IsLoggedIn);
+
             var response = await _apiTextFixture.Api.CreatePlaylist(new PlaylistCreateRequest()
             {
                 Title = "MyTestPlaylist",
@@ -239,6 +247,8 @@ namespace SoftThorn.MonstercatNet.Tests
         [Fact, TestPriority(12)]
         public async Task Test_PlaylistAddTrack()
         {
+            Assert.NotNull(PlaylistId);
+
             await _apiTextFixture.Api.PlaylistAddTrack(PlaylistId.Value, new PlaylistAddTrackRequest()
             {
                 Records =
@@ -325,6 +335,8 @@ namespace SoftThorn.MonstercatNet.Tests
         [Fact, TestPriority(14)]
         public async Task Test_GetSelfPlaylists()
         {
+            Assert.True(_apiTextFixture.IsLoggedIn);
+
             var playlists = await _apiTextFixture.Api.GetSelfPlaylists();
 
             Assert.NotNull(playlists);
@@ -341,6 +353,8 @@ namespace SoftThorn.MonstercatNet.Tests
         [Fact, TestPriority(15)]
         public async Task Test_PlaylistDeleteTrack()
         {
+            Assert.NotNull(PlaylistId);
+
             await _apiTextFixture.Api.PlaylistDeleteTrack(PlaylistId.Value, new PlaylistDeleteTrackRequest()
             {
                 Records =
@@ -358,6 +372,8 @@ namespace SoftThorn.MonstercatNet.Tests
         [Fact, TestPriority(16)]
         public async Task Test_UpdatePlaylist()
         {
+            Assert.NotNull(PlaylistId);
+
             var playlist = await _apiTextFixture.Api.UpdatePlaylist(new UpdatePlaylistRequest()
             {
                 Title = "MyRenameTestPlaylist",
@@ -372,6 +388,8 @@ namespace SoftThorn.MonstercatNet.Tests
         [Fact, TestPriority(17)]
         public async Task Test_MakePlaylistPublic()
         {
+            Assert.NotNull(PlaylistId);
+
             var playlist = await _apiTextFixture.Api.UpdatePlaylist(new UpdatePlaylistRequest()
             {
                 Title = null,
@@ -386,6 +404,8 @@ namespace SoftThorn.MonstercatNet.Tests
         [Fact, TestPriority(18)]
         public async Task Test_MakePlaylistPrivate()
         {
+            Assert.NotNull(PlaylistId);
+
             var playlist = await _apiTextFixture.Api.UpdatePlaylist(new UpdatePlaylistRequest()
             {
                 Title = null,
@@ -400,6 +420,8 @@ namespace SoftThorn.MonstercatNet.Tests
         [Fact, TestPriority(19)]
         public async Task Test_DeletePlaylist()
         {
+            Assert.NotNull(PlaylistId);
+
             await _apiTextFixture.Api.DeletePlaylist(PlaylistId.Value);
         }
 
@@ -567,6 +589,8 @@ namespace SoftThorn.MonstercatNet.Tests
         [Fact, TestPriority(999)]
         public async Task Test_Logout()
         {
+            Assert.True(_apiTextFixture.IsLoggedIn);
+
             await _apiTextFixture.Api.Logout();
         }
     }

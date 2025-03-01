@@ -5,8 +5,12 @@ namespace MonstercatNet.Utilities
 {
     public sealed class HttpLoggingHandler : DelegatingHandler
     {
-        public HttpLoggingHandler(HttpMessageHandler? innerHandler = null)
-            : base(innerHandler ?? new HttpClientHandler())
+        public static HttpLoggingHandler Create() => new HttpLoggingHandler()
+        {
+            InnerHandler = new HttpClientHandler()
+        };
+
+        public HttpLoggingHandler()
         {
         }
 

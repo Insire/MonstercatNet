@@ -165,7 +165,7 @@ namespace SoftThorn.MonstercatNet
 
         private static string CreateCoverArtUri(string catalogId)
         {
-            return $"{MonstercatEndpoints.BASE}/release/{catalogId}/cover";
+            return $"{MonstercatEndpoints.ALTERNATE}/release/{catalogId}/cover";
         }
 
         /// <summary>
@@ -242,7 +242,7 @@ namespace SoftThorn.MonstercatNet
 
         private static string CreateArtistPhotoUri(string name, string id)
         {
-            return $"{MonstercatEndpoints.BASE}/artist/{name}/photo?{id}";
+            return $"{MonstercatEndpoints.ALTERNATE}/artist/{name}/photo?{id}";
         }
     }
 }

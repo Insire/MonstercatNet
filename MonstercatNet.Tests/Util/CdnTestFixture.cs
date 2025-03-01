@@ -6,7 +6,7 @@ namespace SoftThorn.MonstercatNet.Tests.Util
     {
         private static IMonstercatCdnService Create()
         {
-            return MonstercatCdn.Create(new HttpClient(new HttpLoggingHandler()).UseMonstercatCdn());
+            return MonstercatCdn.Create(new HttpClient(HttpLoggingHandler.Create()).UseMonstercatCdn());
         }
 
         internal IMonstercatCdnService Cdn { get; private set; }

@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Threading;
 using SoftThorn.MonstercatNet;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using MonstercatNet.Utilities;
 
 namespace MonstercatNet.Sample.Wpf
@@ -17,9 +18,10 @@ namespace MonstercatNet.Sample.Wpf
         private BufferedWaveProvider? _bufferedWaveProvider;
         private IWavePlayer? _waveOut;
 
+        private readonly ServiceProvider _serviceProvider;
+        private readonly IServiceScope _scope;
         private readonly DispatcherTimer _timer;
         private volatile StreamingPlaybackState _playbackState;
-        private readonly HttpClient _httpClient;
         private readonly IMonstercatApi _api;
 
         protected internal ApiCredentials Credentials { get; } = new ApiCredentials();
@@ -35,8 +37,25 @@ namespace MonstercatNet.Sample.Wpf
 
         public MainWindow()
         {
-            _httpClient = new HttpClient(new HttpLoggingHandler()).UseMonstercatApiV2();
-            _api = MonstercatApi.Create(_httpClient);
+            var services = new ServiceCollection();
+            services
+                .AddScoped(provider =>
+                {
+                    var factory = provider.GetRequiredService<IHttpClientFactory>();
+                    var httpClient = factory.CreateClient("my-httpclient");
+
+                    return MonstercatApi.Create(httpClient);
+                })
+                .AddTransient<HttpLoggingHandler>()
+                .AddHttpClient("my-httpclient", httpclient => httpclient.UseMonstercatApiV2())
+                .AddPolicyHandler(HttpClientPolicies.DefaultRetryPolicy())
+                .AddHttpMessageHandler<HttpLoggingHandler>();
+
+            _serviceProvider = services.BuildServiceProvider();
+            _scope = _serviceProvider.CreateScope();
+
+            _api = _scope.ServiceProvider
+                .GetRequiredService<IMonstercatApi>();
 
             var configuration = new ConfigurationBuilder()
                 .AddUserSecrets<MainWindow>()

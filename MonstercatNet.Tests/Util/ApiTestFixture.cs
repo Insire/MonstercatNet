@@ -5,9 +5,12 @@ namespace SoftThorn.MonstercatNet.Tests.Util
     public sealed class ApiTestFixture : IDisposable
     {
         internal IMonstercatCdnService Cdn { get; private set; }
+
         internal IMonstercatApi Api { get; private set; }
+
         internal ApiCredentials Credentials { get; } = new ApiCredentials();
-        internal LoginValidationHandler LoginValidationHandler { get; } = new LoginValidationHandler(new HttpLoggingHandler());
+
+        internal LoginValidationHandler LoginValidationHandler { get; } = new LoginValidationHandler(HttpLoggingHandler.Create());
 
         public bool IsLoggedIn => LoginValidationHandler.HasMonstercatLogin();
 
@@ -30,7 +33,7 @@ namespace SoftThorn.MonstercatNet.Tests.Util
             Assert.NotNull(Credentials.Password);
 
             Api = MonstercatApi.Create(new HttpClient(LoginValidationHandler).UseMonstercatApiV2());
-            Cdn = MonstercatCdn.Create(new HttpClient(new HttpLoggingHandler()).UseMonstercatCdn());
+            Cdn = MonstercatCdn.Create(new HttpClient(HttpLoggingHandler.Create()).UseMonstercatCdn());
         }
 
         public void Dispose()
