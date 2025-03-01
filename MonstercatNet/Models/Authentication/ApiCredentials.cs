@@ -11,6 +11,15 @@ namespace SoftThorn.MonstercatNet
         public string Password { get; set; } = string.Empty;
 
         [JsonPropertyName("Auth.TOTP")]
-        public string? TOTP { get; set; }
+        public string? AuthTOTP { get; set; }
+
+        [JsonPropertyName("Auth.SMS")]
+        public string? AuthSMS { get; set; }
+
+        [JsonPropertyName("Auth.Email")]
+        public string? AuthEmail { get; set; }
+
+        [JsonPropertyName("CaptchaToken")]
+        public string CaptchaToken { get; set; }
     }
 }
