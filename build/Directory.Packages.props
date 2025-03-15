@@ -1,17 +1,18 @@
 <Project>
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="Cake.Codecov" Version="3.0.0" />
-    <PackageVersion Include="Cake.Frosting" Version="4.0.0" />
-    <PackageVersion Include="Cake.GitVersioning" Version="3.6.133" />
+    <PackageVersion Include="Cake.Frosting" Version="5.0.0" />
+    <PackageVersion Include="Cake.GitVersioning" Version="3.7.115" />
     <PackageVersion Include="Cake.Incubator" Version="8.0.0" />
-    <PackageVersion Include="CodecovUploader" Version="0.7.3" />
-    <PackageVersion Include="Microsoft.CodeCoverage" Version="17.10.0" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
-    <PackageVersion Include="NUnit.ConsoleRunner" Version="3.17.0" />
-    <PackageVersion Include="ReportGenerator" Version="5.3.4" />
-    <PackageVersion Include="Roslynator.Analyzers" Version="4.12.3" />
+    <PackageVersion Include="CodecovUploader" Version="0.8.0" />
+    <PackageVersion Include="Microsoft.CodeCoverage" Version="17.13.0" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.3" />
+    <PackageVersion Include="NUnit.ConsoleRunner" Version="3.19.2" />
+    <PackageVersion Include="ReportGenerator" Version="5.4.4" />
+    <PackageVersion Include="Roslynator.Analyzers" Version="4.13.1" />
   </ItemGroup>
 </Project>
