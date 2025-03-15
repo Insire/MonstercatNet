@@ -6,7 +6,7 @@ namespace Build
         public const string Platform = "AnyCPU";
         public const string TargetFramework = "net80";
 
-        public const string SolutionPath = "./MonstercatNet.sln";
+        public const string SolutionPath = "./MonstercatNet.slnx";
         public const string AssemblyInfoPath = "./SharedAssemblyInfo.cs";
 
         public const string PackagesPath = "./tmp_build/packages";

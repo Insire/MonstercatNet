@@ -14,7 +14,7 @@
         ":!cake.config",
         ":!SharedAssemblyInfo.cs",
         ":!MonstercatNet.ruleset",
-        ":!MonstercatNet.sln",
+        ":!MonstercatNet.slnx",
         ":!codecov.yml"
     ]
 }

@@ -1,0 +1,20 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path="CHANGELOG.md" />
+    <File Path="CONTRIBUTING.md" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Build.targets" />
+    <File Path="Directory.Packages.props" />
+    <File Path="endpoints.md" />
+    <File Path="MonstercatNet.ruleset" />
+    <File Path="readme.md" />
+    <File Path="SharedAssemblyInfo.cs" />
+    <File Path="version.json" />
+    <File Path="versioning.md" />
+  </Folder>
+  <Project Path="MonstercatNet.Sample.Wpf/MonstercatNet.Sample.Wpf.csproj" />
+  <Project Path="MonstercatNet.Tests/MonstercatNet.Tests.csproj" />
+  <Project Path="MonstercatNet.Utilities/MonstercatNet.Utilities.csproj" />
+  <Project Path="MonstercatNet/MonstercatNet.csproj" />
+</Solution>
